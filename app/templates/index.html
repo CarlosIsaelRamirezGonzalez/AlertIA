@@ -1,0 +1,88 @@
+{% import 'macros.html' as macros%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AlertAI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    
+
+    <link rel="preload" href="{{ url_for('static', filename='css/normalize.css') }}" as="style">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/normalize.css') }}">
+
+    <link rel="preload" href="{{ url_for('static', filename='css/style.css') }}" as="style">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    {{ macros.show_flashes() }}
+</head>
+<body>
+    <header class="header">
+        <div class="contenedor">
+            <div class="barra">
+                <a class="logo" href="{{ url_for('index') }}">
+                    <h1 class="logo__nombre noMargin centrarTexto">Alert<span class="logo__bold">AI</span></h1>
+                </a>
+
+                <nav class="navegacion">
+                    <a class="navegacion__enlace conFondo" href="{{ url_for('auth.signup') }}">Crear cuenta</a>
+                    <a class="navegacion__enlace conFondo" href="{{ url_for('auth.login') }}">Iniciar sesión</a>
+                </nav>
+            </div>
+        </div>
+        <div class="header__texto">
+            <h2 class="noMargin">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</h2>
+            <p class="noMargin">Proin consectetur odio risus, ut consequat odio elementum vitae.</p>
+        </div>
+    </header>
+
+    <main class="contenedor">
+
+        <h3 class="centrarTexto">Información del modelo</h3>
+
+        <div class="informacion">
+            <div class="informacion__imagen">
+                <img loading="lazy" src="{{ url_for('static', filename='img/imagen1.jpg') }}" alt="imagen pagina principal">
+            </div>
+
+            <div class="informacion__texto">
+                <h4 class="noMargin">In dignissim vel lorem eu vehicula.</h4>
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto ipsa neque nesciunt, illo, cum sed repudiandae sequi earum sapiente vel itaque distinctio fuga ratione dolor repellendus esse autem magnam. Amet. Sed in leo aliquet, facilisis elit eu, commodo magna. Integer vitae magna tincidunt, finibus enim vel, sollicitudin eros. Vivamus egestas pharetra est sit amet sagittis. Aliquam erat volutpat. In sed facilisis tellus. Etiam rutrum eros vel est rutrum egestas.
+                </p>
+            </div>
+        </div><!--.informacion-->
+
+        <div class="informacion informacion__segunda">
+            <div class="informacion__imagen--segunda">
+                <img loading="lazy" src="{{ url_for('static', filename='img/imagen1.jpg') }}" alt="imagen pagina principal">
+            </div>
+
+            <div class="informacion__texto--segunda">
+                <h4 class="noMargin">In dignissim vel lorem eu vehicula.</h4>
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto ipsa neque nesciunt, illo, cum sed repudiandae sequi earum sapiente vel itaque distinctio fuga ratione dolor repellendus esse autem magnam. Amet. Sed in leo aliquet, facilisis elit eu, commodo magna. Integer vitae magna tincidunt, finibus enim vel, sollicitudin eros. Vivamus egestas pharetra est sit amet sagittis. Aliquam erat volutpat. In sed facilisis tellus. Etiam rutrum eros vel est rutrum egestas.
+                </p>
+            </div>
+        </div><!--.informacion-->
+    </main>
+
+    <footer class="footer">
+        <div class="contenedor">
+            <div class="barra">
+                <a class="logo" href="{{ url_for('index') }}">
+                    <h1 class="logo__nombre noMargin centrarTexto">Alert<span class="logo__bold">AI</span></h1>
+                </a>
+    
+                <nav class="navegacion">
+                    <a class="navegacion__enlace conFondo" href="{{ url_for('auth.signup') }}">Crear cuenta</a>
+                    <a class="navegacion__enlace conFondo" href="{{ url_for('auth.login') }}">Iniciar sesión</a>
+                </nav>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

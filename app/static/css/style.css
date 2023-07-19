@@ -1,0 +1,234 @@
+:root{
+    --fuentePersonalizada: 'Kanit', sans-serif;
+
+    --amarillo: #FFD700;
+    --grisOscuro: #333333;
+    --grisClaro: #CCCCCC;
+    --blanco: #FFFFFF;
+    --azul: #002366;
+}
+
+/* apply a natural box layout model to all elements, but allowing components to change */
+html {
+  box-sizing: border-box;
+  font-size: 62.5%;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+body {
+    font-family: var(--fuentePersonalizada);
+    font-size: 1.6rem;
+    line-height: 2;
+    background: var(--grisOscuro);
+}
+
+/**Globales**/
+h1, h2, h3, h4 {
+    font-family: var(--fuentePersonalizada);
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--blanco);
+}
+h1 {
+    font-size: 4.8rem;
+}
+h2 {
+    font-size: 4rem;
+}
+h3 {
+    font-size: 3.2rem;
+}
+h4 {
+    font-size: 2.8rem;
+}
+.contenedor {
+    width: min(90%, 120rem);
+    margin: 0 auto;
+}
+a {
+    text-decoration: none;
+}
+img {
+    max-width: 100%;
+}
+p{
+    color: var(--blanco);
+}
+.boton:hover{
+    cursor: pointer;
+    background-color: var(--blanco);
+   color: var(--azul);
+}
+/**Utilidades**/
+.noMargin {
+    margin: 0;
+}
+.noPadding {
+    padding: 0;
+}
+.centrarTexto {
+    text-align: center;
+}
+
+/**Header**/
+.header {
+    background-image: url(../img/baner.jpg);
+    height: 60rem;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+    
+}
+.header__texto {
+    text-align: center;
+    color: var(--blanco);
+    margin-top: 5rem;
+}
+@media (min-width: 768px) {
+    .header__texto {
+        margin-top: 15rem;
+    }
+}
+.barra {
+    padding-top: 4rem;
+}
+@media (min-width: 768px) {
+    .barra {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .navegacion {
+        display: flex;
+        gap: 1.5rem;
+    }
+}
+.logo {
+    color: var(--blanco);
+}
+.logo__nombre {
+    font-weight: 300;
+}
+.logo__bold {
+    font-weight: 700;
+}
+.navegacion__enlace{
+    color: var(--blanco);
+    display: block;
+    text-align: center;
+    font-size: 1.8rem;
+}
+.conFondo{
+    background-color: var(--blanco);
+    color: var(--azul);
+    padding: .3rem;
+    border-radius: .5rem;
+}
+.conFondo:hover{
+    background-color: var(--azul);
+    color: var(--blanco);
+}
+/**Footer**/
+.footer {
+    margin-top: 4rem;
+    background-color: var(--azul);
+    padding-bottom: 3rem;
+}
+@media (min-width: 768px) {
+    .parrafo__footer{
+        display: flex;
+        align-items: center;
+    }
+    .parrafo__footer p{
+        margin-right: 1rem;
+    }
+}
+/**Informacion**/
+.informacion {
+    padding: 3rem 0;
+    border-bottom: 1px solid var(--gris);
+}
+@media (min-width: 768px) {
+    .informacion {
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        column-gap: 2rem;
+    }
+    .informacion__segunda{
+        grid-template-columns: 2fr 1fr;
+    }
+    .informacion__texto--segunda{
+        grid-column: 1 / 2;
+        grid-row: 1 / 2;
+    }
+    .informacion__imagen--segunda{
+        grid-column: 2 / 3;
+    }
+}
+.curso:last-of-type {
+    border: none;
+}
+
+/**Login**/
+.sombra{
+    box-shadow: 0px 6px 5px 5px rgba(0,0,0,0.56);
+    background-color: var(--azul);
+    padding: 2rem;
+    border-radius: 1rem;
+}
+@media (min-width: 768px) {
+    .contenedor__formulario{
+        width: min(60%, 120rem);
+    }
+}
+.formulario{
+    background-color: var(--grisClaro);
+    width: min(60rem, 100%);
+    margin: 0 auto;
+    padding: 2rem;
+    border-radius: 1rem;
+}
+
+.formulario fieldset{
+    border: none;
+}
+.formulario legend{
+    text-align: center;
+    font-size: 1.8rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 2rem;
+    color: var(--azul);
+}
+.campo{
+    margin-bottom: 1rem;
+}
+.campo label{
+    color: var(--azul);
+    font-weight: bold;
+    margin-bottom: .5rem;
+    display: block;
+}
+.input-text{
+    padding: 1.5rem;
+    border-radius: .5rem;
+    border: none;
+    width: 100%;
+}
+
+/**Boton**/
+.boton{
+    background-color: var(--azul);
+    color: var(--blanco);
+    padding: 1rem 3rem;
+    margin-top: 1rem;
+    font-size: 2rem;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-weight: bold;
+    border-radius: .5rem;
+    width: 100%;
+    text-align: center;
+    border: none;
+}

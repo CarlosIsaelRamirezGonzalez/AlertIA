@@ -1,0 +1,84 @@
+{% import 'macros.html' as macros%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AlertAI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;700&display=swap" rel="stylesheet">
+
+    <link rel="preload" href="{{ url_for('static', filename='css/normalize.css') }}" as="style">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/normalize.css') }}">
+
+    <link rel="preload" href="{{ url_for('static', filename='css/style.css') }}" as="style">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    
+    {{ macros.show_flashes() }}
+</head>
+<body>
+    <main class="contenedor__formulario contenedor sombra">
+        <h3 class="centrarTexto">Crear cuenta</h3>
+        <form action="{{ url_for('auth.signup') }}" method="POST" class="formulario">
+            {{ signup_form.csrf_token }}
+
+            <fieldset>
+                <div class="contenedor-campos">
+                    <div class="campo">
+                        <label>Nombre de usuario</label>
+                        {{ signup_form.username(class="input-text", placeholder="Ingrese un nombre de usuario") }}
+                        {% for error in signup_form.username.errors %}
+                            <div class="error">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="campo">
+                        <label>Correo</label>
+                        {{ signup_form.email(class="input-text", placeholder="Ingrese su correo") }}
+                        {% for error in signup_form.email.errors %}
+                            <div class="error">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="campo">
+                        <label>Contraseña</label>
+                        {{ signup_form.password(class="input-text", placeholder="Ingrese una contraseña") }}
+                        {% for error in signup_form.password.errors %}
+                            <div class="error">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="campo">
+                        <label>Confirmar contraseña</label>
+                        {{ signup_form.confirmation_password(class="input-text", placeholder="Confirme su contraseña") }}
+                        {% for error in signup_form.confirmation_password.errors %}
+                            <div class="error">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                </div><!--contenedor-campos-->
+
+                <div>
+                    <input class="boton" type="submit" value="Crear">
+                </div>
+            </fieldset>
+        </form>
+    </main>
+
+    <footer class="footer">
+        <div class="contenedor">
+            <div class="barra">
+                <a class="logo" href="index.html">
+                    <h1 class="logo__nombre noMargin centrarTexto">Alert<span class="logo__bold">AI</span></h1>
+                </a>
+                <div class="parrafo__footer">
+                    <p>¿Ya tienes cuenta? Inicia sesión aquí: </p>
+                    <nav class="navegacion">
+                        <a class="navegacion__enlace conFondo" href="{{ url_for('auth.login') }}">Iniciar sesión</a>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

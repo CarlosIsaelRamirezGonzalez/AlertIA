@@ -1,0 +1,65 @@
+{% import 'macros.html' as macros%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AlertAI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;700&display=swap" rel="stylesheet">
+
+    <link rel="preload" href="{{ url_for('static', filename='css/normalize.css') }}" as="style">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/normalize.css') }}">
+
+    <link rel="preload" href="{{ url_for('static', filename='css/style.css') }}" as="style">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    {{ macros.show_flashes() }}
+</head>
+<body>
+    <main class="contenedor__formulario contenedor sombra">
+        <h3 class="centrarTexto">Iniciar sesión</h3>
+        <form action="{{ url_for('auth.login') }}" class="formulario" method="POST">
+            {{ login_form.csrf_token }}
+            <fieldset>
+                <div class="contenedor-campos">
+                    <div class="campo">
+                        <label>Correo</label>
+                        {{ login_form.email(class="input-text", placeholder="Ingrese el correo") }}
+                        {% for error in login_form.email.errors %}
+                            <div class="error">{{ error }}</div>
+                            <!-- Que salga un mensaje de error mas bonito :( -->
+                        {% endfor %}
+                    </div>
+                    <div class="campo">
+                        <label>Contraseña</label>
+                        {{ login_form.password(class="input-text", placeholder="Ingrese la contraseña") }}
+                        {% for error in login_form.password.errors %}
+                            <div class="error">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                </div><!--contenedor-campos-->
+                <div>
+                    <input class="boton" type="submit" value="Ingresar">
+                </div>
+            </fieldset>
+        </form>
+    </main>
+    <footer class="footer">
+        <div class="contenedor">
+            <div class="barra">
+                <a class="logo" href="{{ url_for('index') }}">
+                    <h1 class="logo__nombre noMargin centrarTexto">Alert<span class="logo__bold">AI</span></h1>
+                </a>
+                <div class="parrafo__footer">
+                    <p>¿No tienes cuenta? Crea una aquí: </p>
+                    <nav class="navegacion">
+                        <a class="navegacion__enlace conFondo" href="{{ url_for('auth.signup') }}">Crear cuenta</a>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

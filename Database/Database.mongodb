@@ -1,0 +1,22 @@
+use("AlertIA")
+
+db.createCollection("Users", {
+    validator: {
+        $jsonSchema: {
+            bsonType: 'object',
+            required: ['username', 'password', 'email'],
+            properties: {
+                username: {
+                    bsonType: 'string'
+                },
+                password: {
+                    bsonType: 'string'
+                },
+                email: {
+                    bsonType: 'string'
+                }
+            }
+
+        }
+    }
+})
