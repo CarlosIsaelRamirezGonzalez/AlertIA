@@ -20,7 +20,7 @@
 <body>
     <main class="contenedor__formulario contenedor sombra">
         <h3 class="centrarTexto">Iniciar sesión</h3>
-        <form action="{{ url_for('auth.login') }}" class="formulario" method="POST">
+        <form action="{{ url_for('auth.LoginPage') }}?next={{ request.args.get('next') }}" class="formulario" method="POST">
             {{ login_form.csrf_token }}
             <fieldset>
                 <div class="contenedor-campos">
