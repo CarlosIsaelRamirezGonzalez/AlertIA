@@ -14,13 +14,14 @@
 
     <link rel="preload" href="{{ url_for('static', filename='css/style.css') }}" as="style">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    
+    <script>const generatedToken="{{token}}"</script>
+    <script src="{{ url_for('static', filename='js/custom.js') }}"></script>
     {{ macros.show_flashes() }}
 </head>
 <body>
     <main class="contenedor__formulario contenedor sombra">
         <h3 class="centrarTexto">Crear cuenta</h3>
-        <form action="{{ url_for('auth.signup') }}" method="POST" class="formulario">
+        <form action="{{ url_for('auth.signup') }}?next={{ request.args.get('next') }}" method="POST" class="formulario">
             {{ signup_form.csrf_token }}
 
             <fieldset>
@@ -59,10 +60,19 @@
                 </div><!--contenedor-campos-->
 
                 <div>
-                    <input class="boton" type="submit" value="Crear">
+                    <input class="boton boton-crear" type="submit" value="Crear">
                 </div>
+                <button class="boton" onclick="openTokenModal()">Ingresar Token</button>
             </fieldset>
         </form>
+        <div id="tokenModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeTokenModal()">&times;</span>
+                <h3>Ingresa el token de 9 dígitos</h3>
+                <input id="tokenInput" type="text" maxlength="9">
+                <button class="boton" onclick="verifyToken()">Confirmar</button>
+            </div>
+        </div>
     </main>
 
     <footer class="footer">
@@ -74,11 +84,12 @@
                 <div class="parrafo__footer">
                     <p>¿Ya tienes cuenta? Inicia sesión aquí: </p>
                     <nav class="navegacion">
-                        <a class="navegacion__enlace conFondo" href="{{ url_for('auth.login') }}">Iniciar sesión</a>
+                        <a class="navegacion__enlace conFondo" href="{{ url_for('auth.LoginPage') }}">Iniciar sesión</a>
                     </nav>
                 </div>
             </div>
         </div>
     </footer>
+    
 </body>
 </html>

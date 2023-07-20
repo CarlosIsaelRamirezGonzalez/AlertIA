@@ -232,3 +232,22 @@ p{
     text-align: center;
     border: none;
 }
+
+/* Ocultar el botón "Crear" inicialmente */
+.boton-crear {
+    display: none;
+  }
+  
+  /* Mostrar el botón "Crear" después de ingresar el token */
+  .token-verified .boton-crear {
+    display: inline-block;
+  }
+  
+  /* Estilo para el modal */
+  /* .modal {
+
+  }
+  
+  .modal-content { 
+
+  } */
