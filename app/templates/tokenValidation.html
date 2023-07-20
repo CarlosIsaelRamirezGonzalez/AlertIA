@@ -1,0 +1,38 @@
+{% import 'macros.html' as macros%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AlertAI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;700&display=swap" rel="stylesheet">
+
+    <link rel="preload" href="{{ url_for('static', filename='css/normalize.css') }}" as="style">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/normalize.css') }}">
+
+    <link rel="preload" href="{{ url_for('static', filename='css/style.css') }}" as="style">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    {{ macros.show_flashes() }}
+</head>
+<body>
+    <h2>Se envio un token a su correo {{ email }} por favor revisa e ingresalo</h2>
+    <form action="{{ url_for('auth.token_validation') }}" method="POST" class="formulario">
+        {{ token_form.csrf_token }}
+        <fieldset>
+            <div class="contenedor-campos">
+                <div class="campo">
+                    <label>Token</label>
+                    {{ token_form.token(class="input-text", placeholder="Ingrese el token") }}
+                    {% for error in token_form.token.errors %}
+                        <div class="error">{{error}}</div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div>
+                <input class="boton" type="submit" value="Validar">
+            </div>
+        </fieldset>
+    </form>
+</body>
