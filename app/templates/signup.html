@@ -14,8 +14,7 @@
 
     <link rel="preload" href="{{ url_for('static', filename='css/style.css') }}" as="style">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <script>const generatedToken="{{token}}"</script>
-    <script src="{{ url_for('static', filename='js/custom.js') }}"></script>
+    
     {{ macros.show_flashes() }}
 </head>
 <body>
@@ -60,19 +59,10 @@
                 </div><!--contenedor-campos-->
 
                 <div>
-                    <input class="boton boton-crear" type="submit" value="Crear">
+                    <input class="boton" type="submit" value="Crear">
                 </div>
-                <button class="boton" onclick="openTokenModal()">Ingresar Token</button>
             </fieldset>
         </form>
-        <div id="tokenModal" class="modal">
-            <div class="modal-content">
-                <span class="close" onclick="closeTokenModal()">&times;</span>
-                <h3>Ingresa el token de 9 dígitos</h3>
-                <input id="tokenInput" type="text" maxlength="9">
-                <button class="boton" onclick="verifyToken()">Confirmar</button>
-            </div>
-        </div>
     </main>
 
     <footer class="footer">
@@ -90,6 +80,5 @@
             </div>
         </div>
     </footer>
-    
 </body>
 </html>

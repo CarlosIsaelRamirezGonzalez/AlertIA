@@ -1,5 +1,5 @@
 use("AlertIA")
 
-db.Users.deleteMany({})
+// db.Users.deleteMany({})
 
 db.Users.find()

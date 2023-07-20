@@ -13,3 +13,7 @@ class LoginForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email(message="Ingresa un correo valido")])
     password = PasswordField('Password', validators=[DataRequired()])
     submit = SubmitField('Send')
+
+class TokenForm(FlaskForm):
+    token = StringField('Token', validators=[DataRequired()])
+    submit = SubmitField('Send')
