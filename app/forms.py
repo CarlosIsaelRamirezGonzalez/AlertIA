@@ -9,6 +9,10 @@ class SignupForm(FlaskForm):
     confirmation_password = PasswordField('Confirmation Password', validators=[DataRequired(), EqualTo('password', message='Las contraseñas deben ser iguales')])
     submit = SubmitField('Send')
     
+class EmailForm(FlaskForm):
+    email = StringField('Email', validators=[DataRequired()])
+    submit = SubmitField('Send')
+    
 class LoginForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email(message="Ingresa un correo valido")])
     password = PasswordField('Password', validators=[DataRequired()])
@@ -16,4 +20,9 @@ class LoginForm(FlaskForm):
 
 class TokenForm(FlaskForm):
     token = StringField('Token', validators=[DataRequired()])
+    submit = SubmitField('Send')
+    
+class ResetPasswordForm(FlaskForm):
+    password = PasswordField('Contraseña', validators=[DataRequired()])
+    confirm_password = PasswordField('Confirmar contraseña', validators=[DataRequired(), EqualTo('password', message='Las contraseñas deben ser iguales')])
     submit = SubmitField('Send')

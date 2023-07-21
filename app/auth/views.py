@@ -1,10 +1,9 @@
 from . import auth
 from datetime import datetime, timedelta, timezone
-from app.mongo_service import existing_email, insert_user, get_pasword, get_username
-from app.forms import SignupForm, LoginForm, TokenForm
+from app.mongo_service import existing_email, insert_user, get_pasword, get_username,restore_password_f
+from app.forms import SignupForm, LoginForm, TokenForm, ResetPasswordForm, EmailForm
 from app.helpers import send_message, generate_token
 from app.models import UserData, UserModel
-from dateutil.parser import parse
 from flask import render_template, url_for, redirect, flash, session
 from flask_login import login_user
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -39,9 +38,31 @@ def LoginPage():
     return render_template('login.html', **context)
     
     
+@auth.route('/ForgotPassword', methods=['GET', 'POST'])
+def restore_password():
+    email_form = EmailForm()
+    context = {
+        'email_form': email_form
+    }
+    if email_form.validate_on_submit():
+        email = email_form.email.data 
+        user_doc = existing_email(email)
+        if user_doc:
+            token = generate_token(email) # User_doc['password']?
+            send_message(email, token)
+            session['email'] = email
+            session['token'] = token
+            session['token_timestap'] = datetime.now(timezone.utc).astimezone(timezone.utc)
+            return redirect(url_for('auth.token_validation'))
+        else:
+            flash("Ese email no existe.")
+    return render_template('forgotpassword.html', **context)
+            
+
 @auth.route('/TokenValidation', methods=['GET', 'POST'])
 def token_validation():
     token_form = TokenForm()
+    
 
     username = session.get('username')
     email = session.get('email')
@@ -65,18 +86,38 @@ def token_validation():
         
         user_token = token_form.token.data
         if token == user_token:
-            password_hash = generate_password_hash(password)
-            user_data = UserData(username, password_hash, email)
-            insert_user(user_data)
-            user = UserModel(user_data)
-            login_user(user)
-            return redirect(url_for('WelcomePage'))
+            if session.get('action') == "Register":
+                password_hash = generate_password_hash(password)
+                user_data = UserData(username, password_hash, email)
+                insert_user(user_data)
+                user = UserModel(user_data)
+                login_user(user)
+                return redirect(url_for('WelcomePage'))
+            else:
+                session['token_verified'] = True
+                return redirect(url_for('auth.reset_password'))
         else:
             flash('El token que ingreso no coincide', 'error')
     return render_template('tokenValidation.html', **context)
             
-
-
+@auth.route('/reset_password', methods=['GET', 'POST'])
+def reset_password():
+    reset_form = ResetPasswordForm()
+    context = {
+        'reset_form' : reset_form
+    }
+    if 'email' not in session or 'token_verified' not in session:
+        flash('Primero debes ingresar tu correo electrónico y validar el token.', 'error')
+        return redirect(url_for('auth.restore_password'))
+    email = session['email']
+    if reset_form.validate_on_submit():
+        new_password = reset_form.password.data 
+        password_hash = generate_password_hash(new_password)
+        restore_password_f(email=email, password=password_hash)
+        flash("Tu contraseña ha sido validada exitosamenre")
+        return redirect(url_for('auth.LoginPage'))
+    
+    return render_template('restorepassword.html', **context)
 
 @auth.route('/signup', methods=['GET', 'POST'])
 def signup():
@@ -102,7 +143,7 @@ def signup():
             session['password'] = password 
             session['token'] = token   
             session['token_timestap'] = datetime.now(timezone.utc).astimezone(timezone.utc)
-
+            session['action'] = "Register"
                         
             return redirect(url_for('auth.token_validation'))
         else:
