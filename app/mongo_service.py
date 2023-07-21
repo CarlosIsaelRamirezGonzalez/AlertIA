@@ -12,6 +12,9 @@ def insert_user(user_data):
         'email': user_data.email
     })
 
+def restore_password_f(email, password):
+    user_collection.update_one({'email' : email}, {'$set': {'password': password} })
+
 def get_username(email):
     return user_collection.find_one({'email': email}, {'_id': 0, 'password': 0, 'email': 0})
 

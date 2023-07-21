@@ -10,7 +10,7 @@ def send_message(email, token):
         msg = Message(subject="Token cuenta", recipients=[email], body=f" Tu token es: {token} ")
         mail.send(msg)
         
-def generate_token(email, password, username):
+def generate_token(email, password='123456789', username='qwertyuiop'):
     data = f'{email}{password}{username}'.encode('utf-8')
     hash_result = hashlib.sha256(data).hexdigest()
     token = hash_result[:9]
