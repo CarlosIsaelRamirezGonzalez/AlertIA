@@ -1,5 +1,7 @@
 use("AlertIA")
 
+// Creacion de la base de datos AlertIA
+
 db.createCollection("Users", {
     validator: {
         $jsonSchema: {
@@ -17,6 +19,79 @@ db.createCollection("Users", {
                 }
             }
 
+        }
+    }
+})
+
+db.createCollection("Camaras",{
+    validator: {
+        $jsonSchema: {
+            bsonType: 'object',
+            required: [],
+            properties: {
+                frames: {
+                    bsonType: 'array',
+                    items: {
+                        bsonType: 'binData'
+                    }
+                },
+                IP: {
+                    bsonType: 'string'
+                },
+                direccion: {
+                    bsonType: 'string'
+                },
+                sitio: {
+                    bsonType: 'string',
+                    enum: ["Hogar", "Edificio", "Plaza", "Calle"]
+                },
+                tipo: {
+                    bsonType: 'string',
+                    enum: ["Seguridad", "Web"]
+                },
+                nombre: {
+                    bsonType: 'string'
+                },
+                telefono: {
+                    bsonType: 'string'
+                },
+                configuracion: {
+                    bsonType: 'object',
+                    required: [],
+                    properties: {
+                        incendios: {
+                            bsonType: 'bool'
+                        },
+                        armas_blancas: {
+                            bsonType: 'bool',
+                            properties: {
+                                arma_blanca : {bsonType: "bool"},
+                                apuñalamiento: {bsonType: "bool"}
+                            }
+                        },
+                        armas_de_fuego: {
+                            bsonType: 'bool',
+                            properties: {
+                                arma_de_fuego: {bsonType: "bool"},
+                                encañonamiento: {bsonType: "bool"}
+                            }
+                        },
+                        agresion_canina: {
+                            bsonType: 'bool'
+                        },
+                        choques: {
+                            bsonType: 'bool'
+                        },
+                        peleas: {
+                            bsonType: 'bool'
+                        }, 
+                        personas_heridas: {
+                            bsonType: 'bool'
+                        }
+                    }
+                }
+    
+            }
         }
     }
 })
