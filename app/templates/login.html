@@ -20,12 +20,12 @@
 <body>
     <main class="contenedor__formulario contenedor sombra">
         <h3 class="centrarTexto">Iniciar sesión</h3>
-        <form action="{{ url_for('auth.LoginPage') }}?next={{ request.args.get('next') }}" class="formulario" method="POST">
+        <form action="{{ url_for('auth.login_page') }}?next={{ request.args.get('next') }}" class="formulario" method="POST">
             {{ login_form.csrf_token }}
             <fieldset>
                 <div class="contenedor-campos">
                     <div class="campo">
-                        <label>Correo</label>
+                        <label for="{{ login_form.email.id }}">Correo</label>
                         {{ login_form.email(class="input-text", placeholder="Ingrese el correo") }}
                         {% for error in login_form.email.errors %}
                             <div class="error">{{ error }}</div>
@@ -33,7 +33,7 @@
                         {% endfor %}
                     </div>
                     <div class="campo">
-                        <label>Contraseña</label>
+                        <label for="{{ login_form.password.id }}">Contraseña</label>
                         {{ login_form.password(class="input-text", placeholder="Ingrese la contraseña") }}
                         {% for error in login_form.password.errors %}
                             <div class="error">{{ error }}</div>
