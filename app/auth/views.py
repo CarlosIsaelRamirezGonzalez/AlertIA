@@ -20,20 +20,17 @@ def login_page():
         email = login_form.email.data
         password = login_form.password.data
         user_doc = get_pasword(email)
+        password_hash = user_doc['password']
         
-        if user_doc is not None:
-            password_hash = user_doc['password']
-            if check_password_hash(password_hash, password):
-                username = get_username(email)
-                user_data = UserData(email, password, username)
+        if user_doc is not None or check_password_hash(password_hash, password):
+            username = get_username(email)
+            user_data = UserData(email, password, username)
                 
-                user = UserModel(user_data)
-                login_user(user)
-                return redirect(url_for('WelcomePage'))
-            else:
-                flash('La contraseña es incorrecta.')
+            user = UserModel(user_data)
+            login_user(user)
+            return redirect(url_for('WelcomePage'))
         else: 
-            flash('El usuario no existe')
+            flash('El usuario o la contrase;a son incorrectos')
         
     return render_template('login.html', **context)
     
