@@ -1,6 +1,6 @@
 from . import auth
 from datetime import datetime, timedelta, timezone
-from app.mongo_service import existing_email, insert_user, get_pasword, get_username,update_password
+from app.mongo_service import existing_email, insert_user, get_pasword, get_username,update_password, check_admin
 from app.forms import SignupForm, LoginForm, TokenForm, ResetPasswordForm, EmailForm
 from app.helpers import send_message, generate_token, delete_sessions
 from app.models import UserData, UserModel
@@ -21,8 +21,12 @@ def login_page():
         password = login_form.password.data
         user_doc = get_pasword(email)
         password_hash = user_doc['password']
-        
-        if user_doc is not None or check_password_hash(password_hash, password):
+
+        if user_doc is not None and check_password_hash(password_hash, password):
+
+            if check_admin(email) is True:
+                return redirect(url_for('supervisorCameraPanel'))
+
             username = get_username(email)
             user_data = UserData(email, password, username)
                 

@@ -251,3 +251,18 @@ p{
   .modal-content { 
 
   } */
+
+  /* panel_camaras */
+  .panel_camaras{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    column-gap: 2rem;
+    row-gap: 2rem;
+  }
+  .elemento__panel_camaras{
+    background-color: var(--azul);
+  }
+  .texto__panel_camaras{
+    font-weight: bold;
+    font-size: 2rem;
+  }
