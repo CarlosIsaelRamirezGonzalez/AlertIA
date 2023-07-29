@@ -8,7 +8,7 @@ app = create_app()
 
 @app.route('/')
 def index():
-    flash("The flash works", 'info')
+    flash("Mensaje de exito", "success")
     return render_template('index.html')
 
 @app.route('/WelcomePage', methods=['GET', 'POST'])

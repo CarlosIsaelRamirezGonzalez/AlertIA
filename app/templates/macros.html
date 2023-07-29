@@ -3,7 +3,8 @@
     {% if messages %}
       <div class="container">
         {% for category, message in messages %}
-          <div class="alert alert-{{ category }}">
+          {# <div class="alert alert-{{ category }}"> #}
+          <div>
             {{ message }}
           </div>
         {% endfor %}

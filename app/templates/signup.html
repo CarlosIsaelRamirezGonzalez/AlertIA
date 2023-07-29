@@ -16,7 +16,7 @@
                         <label>Nombre de usuario</label>
                         {{ signup_form.username(class="input-text", placeholder="Ingrese un nombre de usuario") }}
                         {% for error in signup_form.username.errors %}
-                            <div class="error">{{ error }}</div>
+                            <div class="error-message">{{ error }}</div>
                         {% endfor %}
                     </div>
 
@@ -24,7 +24,7 @@
                         <label>Correo</label>
                         {{ signup_form.email(class="input-text", placeholder="Ingrese su correo") }}
                         {% for error in signup_form.email.errors %}
-                            <div class="error">{{ error }}</div>
+                            <div class="error-message">{{ error }}</div>
                         {% endfor %}
                     </div>
 
@@ -32,7 +32,7 @@
                         <label>Contraseña</label>
                         {{ signup_form.password(class="input-text", placeholder="Ingrese una contraseña") }}
                         {% for error in signup_form.password.errors %}
-                            <div class="error">{{ error }}</div>
+                            <div class="error-message">{{ error }}</div>
                         {% endfor %}
                     </div>
 
