@@ -14,7 +14,7 @@
                         <label for="{{ login_form.email.id }}">Correo</label>
                         {{ login_form.email(class="input-text", placeholder="Ingrese el correo") }}
                         {% for error in login_form.email.errors %}
-                            <div class="error">{{ error }}</div>
+                            <div class="error-message">{{ error }}</div>
                             <!-- Que salga un mensaje de error mas bonito :( -->
                         {% endfor %}
                     </div>
@@ -22,7 +22,7 @@
                         <label for="{{ login_form.password.id }}">Contraseña</label>
                         {{ login_form.password(class="input-text", placeholder="Ingrese la contraseña") }}
                         {% for error in login_form.password.errors %}
-                            <div class="error">{{ error }}</div>
+                            <div class="error-message">{{ error }}</div>
                         {% endfor %}
                     </div>
                 </div><!--contenedor-campos-->
@@ -32,8 +32,8 @@
             </fieldset>
         </form>
         <div>
-            <p>¿Olvidaste tu contraseña?</p>
-            <a href="{{ url_for('auth.restore_password') }}">Crea una aqui</a>
+            <p>¿Olvidaste tu contraseña?
+            <a href="{{ url_for('auth.restore_password') }}">Restaurala aqui</a></p>
         </div>
 </main>
     <footer class="footer">

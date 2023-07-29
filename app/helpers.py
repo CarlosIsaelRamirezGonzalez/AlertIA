@@ -10,15 +10,18 @@ def send_message(email, token, username):
     Args:
         email (String): Es el email del usuario que deseamos enviar un correo
         token (string): Es el token que le enviaremos al usuario en el correo
+        username (String): Es el nombre de usuario relacionado con el gmail al cual
+        enviaremos correo
+        
     """
     
     BODY = f"""
-    Hola, {username}: \n 
-    Tu token es: {token}. Úsalo para verificar tu correo. \n 
-    Te recordamos que por tu seguridad este token tiene vigencia solo durante los proximos 3 minutos. \n
-    Si no solicitaste esto, simplemente ignora este mensaje. \n
-    Saludos,
-    Atte: El equipo de AlertIA
+Hola, {username}: \n 
+Tu token es: {token}. Úsalo para verificar tu correo. \n 
+Te recordamos que por tu seguridad este token tiene vigencia solo durante los proximos 3 minutos. \n
+Si no solicitaste esto, simplemente ignora este mensaje. \n
+Saludos,
+Atte: El equipo de AlertIA
     """
     mail = current_app.extensions.get('mail')
     with current_app.app_context():

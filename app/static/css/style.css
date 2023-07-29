@@ -242,12 +242,84 @@ p{
   .token-verified .boton-crear {
     display: inline-block;
   }
-  
-  /* Estilo para el modal */
-  /* .modal {
 
-  }
-  
-  .modal-content { 
+/* Cosas que carlos le movio */
 
-  } */
+/* Cambiar el estilo de los enlaces visitados */
+/* a:visited {
+  color: #37b6d0;
+} */
+
+/* Hace que los errores se vean bonitos */
+.error-message {
+    color: red; 
+    font-size: 14px;
+    margin-top: 5px; 
+}
+
+
+/* Loader */
+.loader::before,
+.loader::after {
+    content: '';
+    position: absolute;
+    border-radius: inherit;
+}
+
+.loader::before {
+    width: 100%;
+    height: 100%;
+    background-image: 
+        linear-gradient(0deg,
+        #f0c 0%,
+        #80f 100%
+    );
+}
+
+.loader::after {
+    width: 85%;
+    height: 85%;
+    background-color: transparent;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.loader {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    animation: spin 1.2s
+        linear infinite;
+}
+
+/* Flashes bonitos
+
+/* Estilos para los flashes */
+.alert {
+    margin-top: 10px;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+  
+.alert.show {
+    opacity: 1;
+}
+
+.alert-error {
+    background-color: #ff4444; /* Color rojo */
+    color: white;
+}
+
+/* Estilos para la categoría "success" */
+.alert-success {
+    background-color: #33cc33; /* Color verde */
+    color: white;
+}
+
+/* Estilos para la categoría "info" */
+.alert-info {
+    background-color: #cce5ff;
+    border-color: #b8daff;
+    color: #004085;
+}

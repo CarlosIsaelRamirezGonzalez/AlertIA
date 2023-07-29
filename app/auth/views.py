@@ -30,10 +30,8 @@ def login_page():
                 user = UserModel(user_data)
                 login_user(user)
                 return redirect(url_for('WelcomePage'))
-            else:
-                flash('La contraseña es incorrecta.')
-        else: 
-            flash('El usuario no existe')
+        
+        flash('Hubo un error con los datos proporcionados')
         
     return render_template('login.html', **context)
     
@@ -73,7 +71,7 @@ def signup():
 def token_validation():
     # Verificamos si el valor 'action' está almacenado en la sesión
     if not session.get('action'):
-        flash('Acceso no autorizado.', 'error')
+        flash('Acceso no autorizado.', 'error-message')
         return(url_for('index'))
     # Obtenemos el form
     token_form = TokenForm()
