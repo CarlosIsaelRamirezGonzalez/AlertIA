@@ -30,7 +30,10 @@
 
                     <div class="campo">
                         <label>Contraseña</label>
-                        {{ signup_form.password(class="input-text", placeholder="Ingrese una contraseña") }}
+                        <div class="password-input">
+                            {{ signup_form.password(class="input-text", placeholder="Ingrese una contraseña", id="password") }}
+                            <i id="password-icon" class="fas fa-eye" onclick="togglePasswordVisibility('password')"></i>
+                        </div>  
                         {% for error in signup_form.password.errors %}
                             <div class="error-message">{{ error }}</div>
                         {% endfor %}
@@ -38,7 +41,10 @@
 
                     <div class="campo">
                         <label>Confirmar contraseña</label>
-                        {{ signup_form.confirmation_password(class="input-text", placeholder="Confirme su contraseña") }}
+                        <div class="password-input">
+                            {{ signup_form.confirmation_password(class="input-text", placeholder="Confirme su contraseña", id="confirmation_password") }}
+                            <i id="confirmation_password-icon" class="fas fa-eye" onclick="togglePasswordVisibility('confirmation_password')"></i>
+                        </div>
                         {% for error in signup_form.confirmation_password.errors %}
                             <div class="error">{{ error }}</div>
                         {% endfor %}
@@ -67,5 +73,10 @@
             </div>
         </div>
     </footer>
+    <div class="lds-grid loader" id="loader">
+        <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+    </div>
+    <script src="{{ url_for('static', filename='js/loader.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/password_toggle.js') }}"></script>
 </body>
 </html>

@@ -1,0 +1,21 @@
+{% import 'macros.html' as macros%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% include 'head.html'%}
+</head>
+
+<body>
+
+    <h3 class="centrarTexto">Lista de camaras de los usuarios</h3>
+
+    <main class="contenedor panel_camaras">
+        {% for camara in cameras_data %}
+            <div class="elemento__panel_camaras sombra">
+                <img loading="lazy" src="{{ url_for('static', filename='img/icono_camara.png') }}" alt="icono de la camara">
+                <p class="texto__panel_camaras centrarTexto noMargin">{{ camara['nombre'] }}</p>
+            </div>
+        {% endfor %}
+
+    </main>
+</body>

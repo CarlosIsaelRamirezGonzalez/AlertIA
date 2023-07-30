@@ -99,3 +99,25 @@ def get_pasword(email):
     db = get_db_connection()
     user_collection = db['Users']
     return user_collection.find_one({'email': email},{'_id': 0, 'email': 0, 'username': 0})
+
+def check_admin(email):
+    db = get_db_connection()
+    user_collection = db['Users']
+    data = user_collection.find_one({'email': email})
+
+    if data is not None and data.get('admin', False):
+        return True
+    else:
+        return False 
+
+def get_cameras():
+    db = get_db_connection()
+    camara_collection = db['Camaras']
+
+    all_camaras = camara_collection.find()
+    cameras_data = []
+
+    for camera in all_camaras:
+        cameras_data.append(camera)
+
+    return cameras_data

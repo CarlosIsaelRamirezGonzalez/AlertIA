@@ -4,7 +4,7 @@ import hashlib
 import sys
 from itsdangerous import URLSafeSerializer
 
-def send_message(email, token, username):
+def send_message(email, token, username, case="Validate email"):
     """Manda un gmail al usuario
 
     Args:
@@ -12,17 +12,28 @@ def send_message(email, token, username):
         token (string): Es el token que le enviaremos al usuario en el correo
         username (String): Es el nombre de usuario relacionado con el gmail al cual
         enviaremos correo
+        case (String): Es el asunto del gmail, si es para recuperar contraseña, validar correo,
         
     """
-    
-    BODY = f"""
+    bodies = {
+        "Validate email": f"""
 Hola, {username}: \n 
 Tu token es: {token}. Úsalo para verificar tu correo. \n 
 Te recordamos que por tu seguridad este token tiene vigencia solo durante los proximos 3 minutos. \n
 Si no solicitaste esto, simplemente ignora este mensaje. \n
 Saludos,
 Atte: El equipo de AlertIA
-    """
+        """,
+        "Forgot password": f"""  
+Hola, {username}: \n 
+Tu token es: {token}. Úsalo para restablecer tu contraseña. \n 
+Te recordamos que por tu seguridad este token tiene vigencia solo durante los proximos 3 minutos. \n
+Si no solicitaste esto, simplemente ignora este mensaje. \n
+Saludos,
+Atte: El equipo de AlertIA
+        """
+    }
+    BODY = bodies.get(case)
     mail = current_app.extensions.get('mail')
     with current_app.app_context():
         msg = Message(subject=f"Tu token es {token}", recipients=[email], body=BODY)
