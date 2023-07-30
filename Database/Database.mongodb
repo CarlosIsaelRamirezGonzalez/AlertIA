@@ -16,6 +16,9 @@ db.createCollection("Users", {
                 },
                 email: {
                     bsonType: 'string'
+                },
+                admin: {
+                    bsonType: 'bool'
                 }
             }
 

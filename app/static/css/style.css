@@ -203,6 +203,7 @@ p{
 }
 .campo{
     margin-bottom: 1rem;
+    align-items: center;
 }
 .campo label{
     color: var(--azul);
@@ -233,15 +234,21 @@ p{
     border: none;
 }
 
-/* Ocultar el botón "Crear" inicialmente */
-.boton-crear {
-    display: none;
-  }
-  
-  /* Mostrar el botón "Crear" después de ingresar el token */
-  .token-verified .boton-crear {
-    display: inline-block;
-  }
+
+  /* panel_camaras */
+.panel_camaras{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    column-gap: 2rem;
+    row-gap: 2rem;
+}
+.elemento__panel_camaras{
+background-color: var(--azul);
+}
+.texto__panel_camaras{
+font-weight: bold;
+font-size: 2rem;
+}
 
 /* Cosas que carlos le movio */
 
@@ -257,42 +264,121 @@ p{
     margin-top: 5px; 
 }
 
+/* Password */
+.password-input {
+    position: relative; /* Para que el icono se pueda posicionar sobre el campo de contraseña */
+    display: flex;
+    align-items: center;
+    flex: 1; /* Hace que el campo de contraseña ocupe todo el espacio restante */
+}
+
+.password-input input {
+    margin-right: 10px; /* Espacio entre el campo de contraseña y el icono */
+}
 
 /* Loader */
-.loader::before,
-.loader::after {
-    content: '';
+
+
+
+.lds-grid {
+    display: inline-block;
+    position: relative;
+    width: 80px;
+    height: 80px;
+}
+.lds-grid div {
     position: absolute;
-    border-radius: inherit;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    animation: lds-grid 1.2s linear infinite;
 }
-
-.loader::before {
-    width: 100%;
-    height: 100%;
-    background-image: 
-        linear-gradient(0deg,
-        #f0c 0%,
-        #80f 100%
-    );
+.lds-grid div:nth-child(1) {
+    background: rgb(117, 73, 117);
+    top: 8px;
+    left: 8px;
+    animation-delay: 0s;
 }
-
-.loader::after {
-    width: 85%;
-    height: 85%;
-    background-color: transparent;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+.lds-grid div:nth-child(2) {
+    background: rgb(188, 13, 188);
+    top: 8px;
+    left: 32px;
+    animation-delay: -0.4s;
 }
+.lds-grid div:nth-child(3) {
+    background: rgb(85, 222, 54);
+    top: 8px;
+    left: 56px;
+    animation-delay: -0.8s;
+}
+.lds-grid div:nth-child(4) {
+    background: rgb(222, 116, 54);
+    top: 32px;
+    left: 8px;
+    animation-delay: -0.4s;
+}
+.lds-grid div:nth-child(5) {
+    background: rgb(135, 54, 222);
+    top: 32px;
+    left: 32px;
+    animation-delay: -0.8s;
+}
+.lds-grid div:nth-child(6) {
+    background: rgb(115, 47, 142);
+    top: 32px;
+    left: 56px;
+    animation-delay: -1.2s;
+}
+.lds-grid div:nth-child(7) {
+    background: rgb(167, 91, 91);
+    top: 56px;
+    left: 8px;
+    animation-delay: -0.8s;
+}
+.lds-grid div:nth-child(8) {
+    background: rgb(25, 22, 71);
+    top: 56px;
+    left: 32px;
+    animation-delay: -1.2s;
+}
+.lds-grid div:nth-child(9) {
+    background: rgb(158, 198, 149);
+    top: 56px;
+    left: 56px;
+    animation-delay: -1.6s;
+}
+@keyframes lds-grid {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.5;
+    }
+} 
 
 .loader {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    animation: spin 1.2s
-        linear infinite;
+    background: black;
+    width: 100%;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000000;
+    clip-path: circle(150% at 100% 0);
+    transition: clip-path 0.8s ease-in-out;
+}
+.loader2 {
+    clip-path: circle(0% at 100% 100%);
 }
 
+.loader-container {
+    display: grid;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+  
 /* Flashes bonitos
 
 /* Estilos para los flashes */
@@ -323,3 +409,6 @@ p{
     border-color: #b8daff;
     color: #004085;
 }
+
+
+

@@ -3,6 +3,7 @@
 <html lang="en">
 <head>
     {% include 'head.html'%}
+    
 <body>
     <main class="contenedor__formulario contenedor sombra">
         <h3 class="centrarTexto">Iniciar sesión</h3>
@@ -20,7 +21,10 @@
                     </div>
                     <div class="campo">
                         <label for="{{ login_form.password.id }}">Contraseña</label>
-                        {{ login_form.password(class="input-text", placeholder="Ingrese la contraseña") }}
+                        <div class="password-input">
+                            {{ login_form.password(class="input-text", placeholder="Ingrese la contraseña", id="password")}}
+                            <i id="password-icon" class="fas fa-eye" onclick="togglePasswordVisibility('password')"></i>
+                        </div>
                         {% for error in login_form.password.errors %}
                             <div class="error-message">{{ error }}</div>
                         {% endfor %}
@@ -51,5 +55,10 @@
             </div>
         </div>
     </footer>
+    <div class="lds-grid loader" id="loader">
+        <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+    </div>
+    <script src="{{ url_for('static', filename='js/password_toggle.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/loader.js') }}"></script>
 </body>
 </html>

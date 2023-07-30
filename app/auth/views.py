@@ -1,6 +1,6 @@
 from . import auth
 from datetime import datetime, timedelta, timezone
-from app.mongo_service import existing_email, insert_user, get_pasword, get_username,update_password
+from app.mongo_service import existing_email, insert_user, get_pasword, get_username,update_password, check_admin
 from app.forms import SignupForm, LoginForm, TokenForm, ResetPasswordForm, EmailForm
 from app.helpers import send_message, generate_token, delete_sessions
 from app.models import UserData, UserModel
@@ -20,16 +20,19 @@ def login_page():
         email = login_form.email.data
         password = login_form.password.data
         user_doc = get_pasword(email)
-        
-        if user_doc is not None:
-            password_hash = user_doc['password']
-            if check_password_hash(password_hash, password):
-                username = get_username(email)
-                user_data = UserData(email, password, username)
+        password_hash = user_doc['password']
+
+        if user_doc is not None and check_password_hash(password_hash, password):
+
+            if check_admin(email) is True:
+                return redirect(url_for('supervisorCameraPanel'))
+
+            username = get_username(email)
+            user_data = UserData(email, password, username)
                 
-                user = UserModel(user_data)
-                login_user(user)
-                return redirect(url_for('WelcomePage'))
+            user = UserModel(user_data)
+            login_user(user)
+            return redirect(url_for('WelcomePage'))
         
         flash('Hubo un error con los datos proporcionados')
         
@@ -138,7 +141,7 @@ def restore_password():
         user_doc = existing_email(email)
         if user_doc:
             token = generate_token(email, user_doc['password'], user_doc['username']) # User_doc['password']?
-            send_message(email, token, user_doc['username'])
+            send_message(email, token, user_doc['username'], "Forgot password")
             session['email'] = email
             session['token'] = token
             session['action'] = "Restore"
@@ -170,7 +173,7 @@ def reset_password():
         password_hash = generate_password_hash(new_password)
         update_password(email=email, password=password_hash)
         
-        flash("Tu contraseña ha sido validada exitosamenre")
+        flash("Tu contraseña ha sido restaurada exitosamenre")
         delete_sessions(['email', 'token_verified'])
         
         return redirect(url_for('auth.login_page'))
