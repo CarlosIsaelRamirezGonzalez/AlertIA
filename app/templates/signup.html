@@ -5,6 +5,8 @@
     {% include 'head.html'%}
 </head>
 <body>
+    {% include 'loader.html' %}
+
     <main class="contenedor__formulario contenedor sombra">
         <h3 class="centrarTexto">Crear cuenta</h3>
         <form action="{{ url_for('auth.signup') }}?next={{ request.args.get('next') }}" method="POST" class="formulario">
@@ -73,10 +75,7 @@
             </div>
         </div>
     </footer>
-    <div class="lds-grid loader" id="loader">
-        <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
-    </div>
-    <script src="{{ url_for('static', filename='js/loader.js') }}"></script>
+
     <script src="{{ url_for('static', filename='js/password_toggle.js') }}"></script>
 </body>
 </html>

@@ -12,6 +12,8 @@
 html {
   box-sizing: border-box;
   font-size: 62.5%;
+  margin: 0;
+  padding: 0;
 }
 *, *:before, *:after {
   box-sizing: inherit;
@@ -21,6 +23,8 @@ body {
     font-size: 1.6rem;
     line-height: 2;
     background: var(--grisOscuro);
+    margin: 0;
+    padding: 0;
 }
 
 /**Globales**/
@@ -249,13 +253,149 @@ background-color: var(--azul);
 font-weight: bold;
 font-size: 2rem;
 }
-
 /* Cosas que carlos le movio */
 
-/* Cambiar el estilo de los enlaces visitados */
-/* a:visited {
-  color: #37b6d0;
-} */
+/* API google maps */
+
+.close {
+    border-radius: 10px;
+    background-color: rgb(60, 58, 111);
+    cursor: pointer;
+}
+
+.close p {
+    color: white;
+    font-weight: 400;
+}
+
+.close:hover {
+    background-color: rgb(45, 67, 145);
+}
+
+#map {
+    height: 550px;
+    width: 845px;
+    border-radius: 10px;
+    margin: 10px;
+}
+#address_input {
+    width: 100%;
+    height: 40px;
+    border-radius: 0;
+    border: none;
+    font-size: 22px;
+}
+
+.cameras-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 20px; /* Agrega un espacio de 20px entre las cámaras */
+    margin: 0 60px; /* Margen izquierdo y derecho de 20px */
+}
+
+
+.modal-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(79, 79, 79, 0.70);
+    z-index: 1;
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0.5s, opacity 0.5s;
+}
+
+.modal-container.visible {
+    visibility: visible;
+    opacity: 1;
+}
+
+.modal-content {
+    font-family: Verdana;
+    justify-content: space-around;
+    width: 60vw;
+    height: auto;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: rgb(255, 255, 255);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 50px;
+}
+
+.modal-tittle {
+    color: black;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.camera-types {
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+}
+
+.camera-type {
+    position: relative;
+    margin: 50px;
+    display: inline-block; 
+    text-align: center;
+    height: 250px; 
+}
+
+.camera-type img {
+    height: 200px;
+    width: 300px;
+    border-radius: 10px;
+}
+
+.camera-type h5 {
+    font-size: 18px;
+}
+
+.slide-title {
+    position: absolute;
+    bottom: -50px;
+    text-align: center;
+    width: 100%;
+    width: auto;
+    opacity: 0;
+    transform: translateY(-70%);
+    transition: opacity 0.2s, transform 0.3s;
+}
+
+.camera-type:hover .slide-title { 
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.poster {
+    height: 200px;
+    width: 300px;
+    border-radius: 10px;
+    transition: box-shadow .4s, transform;
+    background: center no-repeat;
+    background-size: cover;
+    position: relative; /* Agregamos posición relativa para que el enlace funcione correctamente */
+
+}
+.poster:hover {
+    box-shadow: 0px 0px 50px rgba(0,0,0,1);
+    cursor: pointer;    
+}
+.box {
+    height: 200px;
+    width: 300px;
+}
+
+
 
 /* Hace que los errores se vean bonitos */
 .error-message {
@@ -277,8 +417,6 @@ font-size: 2rem;
 }
 
 /* Loader */
-
-
 
 .lds-grid {
     display: inline-block;

@@ -1,100 +1,72 @@
 use("AlertIA")
 
-// Creacion de la base de datos AlertIA
-
-db.createCollection("Users", {
-    validator: {
-        $jsonSchema: {
-            bsonType: 'object',
-            required: ['username', 'password', 'email'],
-            properties: {
-                username: {
-                    bsonType: 'string'
-                },
-                password: {
-                    bsonType: 'string'
-                },
-                email: {
-                    bsonType: 'string'
-                },
-                admin: {
-                    bsonType: 'bool'
-                }
-            }
-
-        }
-    }
+db.createCollection("users", {
+  validator: {
+      $jsonSchema: {
+          bsonType: 'object',
+          required: ['username', 'password', 'email'],
+          properties: {
+              username: {
+                  bsonType: 'string'
+              },
+              password: {
+                  bsonType: 'string'
+              },
+              email: {
+                  bsonType: 'string'
+              }
+          }
+      }
+  }
 })
 
-db.createCollection("Camaras",{
+
+db.createCollection("cameras", {
     validator: {
-        $jsonSchema: {
-            bsonType: 'object',
-            required: [],
-            properties: {
-                frames: {
-                    bsonType: 'array',
-                    items: {
-                        bsonType: 'binData'
-                    }
-                },
-                IP: {
-                    bsonType: 'string'
-                },
-                direccion: {
-                    bsonType: 'string'
-                },
-                sitio: {
-                    bsonType: 'string',
-                    enum: ["Hogar", "Edificio", "Plaza", "Calle"]
-                },
-                tipo: {
-                    bsonType: 'string',
-                    enum: ["Seguridad", "Web"]
-                },
-                nombre: {
-                    bsonType: 'string'
-                },
-                telefono: {
-                    bsonType: 'string'
-                },
-                configuracion: {
-                    bsonType: 'object',
-                    required: [],
-                    properties: {
-                        incendios: {
-                            bsonType: 'bool'
-                        },
-                        armas_blancas: {
-                            bsonType: 'bool',
-                            properties: {
-                                arma_blanca : {bsonType: "bool"},
-                                apuñalamiento: {bsonType: "bool"}
-                            }
-                        },
-                        armas_de_fuego: {
-                            bsonType: 'bool',
-                            properties: {
-                                arma_de_fuego: {bsonType: "bool"},
-                                encañonamiento: {bsonType: "bool"}
-                            }
-                        },
-                        agresion_canina: {
-                            bsonType: 'bool'
-                        },
-                        choques: {
-                            bsonType: 'bool'
-                        },
-                        peleas: {
-                            bsonType: 'bool'
-                        }, 
-                        personas_heridas: {
-                            bsonType: 'bool'
-                        }
-                    }
-                }
-    
+      $jsonSchema: {
+        bsonType: 'object',
+        required: ['address', 'place', 'cameraType', 'cameraName', 'settings', 'user_id'],
+        properties: {
+          user_id: { bsonType: 'objectId' },
+          frames: {
+            bsonType: 'array',
+            items: {
+              bsonType: 'object',
+              properties: {
+                date:   {  bsonType: 'string'  },
+                images: {  bsonType: 'binData' }
+              }
             }
+          },
+          address:  { bsonType: 'string' },
+          place: {
+            bsonType: 'string',
+            enum: ["home", "building", "square", "street", "personalized"]
+          },
+          cameraType: {
+            bsonType: 'string',
+            enum: ["security", "web"]
+          },
+          cameraName:   { bsonType: 'string' },
+          phoneNumber:  { bsonType: 'string' },
+          settings: {
+            bsonType: 'object',
+            required: ['fires', 'brawls', 'injuredPeople', 'bladedWeapons', 'firearms', 
+              'dogAggression', 'carAccident'],
+            properties: {
+              fires:          { bsonType: 'bool' },
+              bladedWeapon:   { bsonType: "bool" },
+              stabbing:       { bsonType: "bool" },
+              handgun:        { bsonType: "bool" },
+              longGun:        { bsonType: "bool" },
+              brandishing:    { bsonType: "bool" },
+              dogAggression:  { bsonType: 'bool' },
+              carAccident:    { bsonType: 'bool' },
+              brawls:         { bsonType: 'bool' },
+              injuredPeople:  { bsonType: 'bool' }
+            }
+          }
         }
+      }
     }
-})
+  })

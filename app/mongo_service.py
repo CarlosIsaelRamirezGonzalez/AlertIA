@@ -31,7 +31,7 @@ def insert_user(user_data):
     """
     
     db = get_db_connection()
-    user_collection = db['Users']
+    user_collection = db['users']
     user_collection.insert_one({
         'username': user_data.username,
         'password': user_data.password,
@@ -51,7 +51,7 @@ def update_password(email, password):
     """
     
     db = get_db_connection()
-    user_collection = db['Users']
+    user_collection = db['users']
     user_collection.update_one({'email' : email}, {'$set': {'password': password} })
 
 def get_username(email):
@@ -83,7 +83,7 @@ def existing_email(email):
     """
     
     db = get_db_connection()
-    user_collection = db['Users']
+    user_collection = db['users']
     return user_collection.find_one({'email': email})
 
 def get_pasword(email):
@@ -97,12 +97,12 @@ def get_pasword(email):
     """
     
     db = get_db_connection()
-    user_collection = db['Users']
+    user_collection = db['users']
     return user_collection.find_one({'email': email},{'_id': 0, 'email': 0, 'username': 0})
 
 def check_admin(email):
     db = get_db_connection()
-    user_collection = db['Users']
+    user_collection = db['users']
     data = user_collection.find_one({'email': email})
 
     if data is not None and data.get('admin', False):
@@ -112,7 +112,7 @@ def check_admin(email):
 
 def get_cameras():
     db = get_db_connection()
-    camara_collection = db['Camaras']
+    camara_collection = db['cameras']
 
     all_camaras = camara_collection.find()
     cameras_data = []

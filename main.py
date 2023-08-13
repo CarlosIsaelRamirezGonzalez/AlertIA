@@ -1,12 +1,12 @@
 from app import create_app
-from flask import render_template, flash
+from flask import render_template, flash, session, request, redirect, url_for
 from flask_login import login_required, current_user
 from flask_mail import Mail
+
 #La siguiente linea debe cambiar tambien de lugar
 from app.mongo_service import get_cameras
 
 app = create_app()
-
 
 @app.route('/')
 def index():
@@ -16,7 +16,14 @@ def index():
 @app.route('/WelcomePage', methods=['GET', 'POST'])
 @login_required
 def WelcomePage():
-    return f'Bienvenido {current_user.id}'
+    value = request.form.get('value')
+    session['camera_type'] = value
+
+    context = {
+        'username': current_user.username,
+        'value': value
+    }
+    return render_template('welcomepage.html', **context)
 
 
 @app.route('/supervisorCameraPanel', methods=['GET', 'POST'])

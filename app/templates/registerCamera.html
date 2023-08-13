@@ -1,0 +1,147 @@
+{% import 'macros.html' as macros%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% include 'head.html'%}
+</head>
+<body>
+    {% include 'loader.html' %}
+
+    <!-- <div id="modal" class="modal-container">
+        <div id="modal-content" class="modal-content">
+                <input type="text" id="address_input" placeholder="Ingresa la ubicación de la camara.">
+                <div id="map"></div>
+                <div id="close" class="close">
+                    <p>Confirmar</p>
+                </div>
+        </div>  
+    </div> -->
+
+    
+    <form class="formulario" method="POST">
+        {{ register_camera_form.csrf_token }}
+        <fieldset>
+
+            <div class="contenedor-campos">
+                <div class="campo">
+                    <label for="{{ register_camera_form.camera_name.id }}">Nombre de la camara.</label>
+                    {{ register_camera_form.camera_name(class="input-text", placeholder="Por favor ingresa el nombre de la camara.") }}
+                    {% for error in register_camera_form.camera_name.errors %}
+                        <div class="error-message">{{ error }}</div>
+                    {% endfor %}
+                </div>
+
+                <!-- <div class="campo">
+                    <label for="{{ register_camera_form.address.id }}">Dirección.</label>
+                    <div id="openModal">
+                        {{ register_camera_form.address(id="form_input_address",class="input-text", placeholder="Ingrese la dirección de la camara.") }}
+                    </div>
+                    {% for error in register_camera_form.address.errors %}
+                        <div class="error-message">{{ error }}</div>
+                    {% endfor %}
+                </div> -->
+
+                <div class="campo">
+                    <label for="{{ register_camera_form.phone_number.id }}">Telefono.</label>
+                    {{ register_camera_form.phone_number(class="input-text", placeholder="Ingrese el numero de telefono.") }}
+                    {% for error in register_camera_form.phone_number.errors %}
+                        <div class="error-message">{{ error }}</div>
+                    {% endfor %}
+                </div>
+
+                <div class="campo">
+                    <label for="{{ register_camera_form.place.id }}">
+                        Sitio donde se encuentra la camara:
+                    </label>
+                    {{ register_camera_form.place(id="place-select") }}
+                    {% for error in register_camera_form.place.errors %}
+                        <div class="error-message">{{ error }}</div>
+                    {% endfor %}
+                </div>
+
+
+                <div class="campo">
+                    <label for="{{ register_camera_form.fires.id }}">
+                        Incendios.
+                        {{ register_camera_form.fires(id="fires-checkbox") }}
+                    </label>
+                </div>
+
+                <div class="campo">
+                    <label for="{{ register_camera_form.bladed_weapons.id }}">
+                        Armas blancas.
+                        {{  register_camera_form.bladed_weapons(id="bladed_weapons-checkbox") }}
+                    </label>
+
+                    <label for="{{ register_camera_form.stabbing.id }}">
+                        Apuñalamientos.
+                        {{ register_camera_form.stabbing(id="stabbing-checkbox") }}
+                    </label>
+
+                </div>
+
+                <div class="campo">
+
+                    <label for="{{ register_camera_form.handgun.id }}">
+                        Armas cortas.
+                        {{ register_camera_form.handgun(id="handgun-checkbox") }}
+                    </label>    
+
+                    <label for="{{ register_camera_form.long_gun.id }}">
+                        Armas largas.
+                        {{ register_camera_form.long_gun(id="long_gun-checkbox") }}
+                    </label for="{{ register_camera_form.handgun.id }}">
+
+
+                    <label for="{{ register_camera_form.brandishing.id }}">
+                        Encañonamiento.
+                        {{ register_camera_form.brandishing(id="brandishing-checkbox") }}
+                    </label>
+
+                </div>
+                
+                <div class="campo">
+                    <label for="{{ register_camera_form.dog_aggresion.id }}">
+                        Ataques de perro.
+                        {{ register_camera_form.dog_aggresion(id="dog_aggression-checkbox") }}
+                    </label>
+                </div>
+                
+                <div class="campo">
+                    <label for="{{ register_camera_form.car_accident.id }}">
+                        Choques.
+                        {{ register_camera_form.car_accident(id="car_accident-checkbox") }} 
+                    </label>
+                </div>
+
+                <div class="campo">
+                    <label for="{{ register_camera_form.brawls.id }}">
+                        Peleas.
+                        {{ register_camera_form.brawls(id="brawls-checkbox") }}
+                    </label>
+                </div>
+
+                <div class="campo">
+                    <label for="{{ register_camera_form.injured_people.id }}">
+                        Personas heridas
+                        {{ register_camera_form.injured_people(id="injured_people-checkbox") }}
+                    </label>
+                </div>
+
+
+
+            </div>
+
+        </fieldset>
+    </form>
+
+
+
+    <script async
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCHOslXEWFjWLvxr2EPcxER3QC44_T1sgY&libraries=places&callback=initMap"></script>
+    <!-- <script src="{{ url_for('static', filename='js/googleMap.js') }}"></script> -->
+    <script src="{{ url_for('static', filename='js/modal.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/placeSelect.js') }}"></script>
+    <!-- <script src="{{ url_for('static', filename='js/googleMapInput.js') }}"></script> -->
+
+</body>

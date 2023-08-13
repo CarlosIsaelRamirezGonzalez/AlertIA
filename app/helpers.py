@@ -66,7 +66,7 @@ def generate_token(email, password, username):
     Returns:
         str: Un token de 5 caracteres de seguridad unico generado para el usuario
     """
-    
+        
     data = f'{email}{password}{username}'.encode('utf-8')
     hash_result = hashlib.sha256(data).hexdigest()
     token = hash_result[:5]

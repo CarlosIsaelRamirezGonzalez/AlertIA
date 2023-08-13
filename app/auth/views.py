@@ -17,22 +17,26 @@ def login_page():
     }
     
     if login_form.validate_on_submit():
+        
         email = login_form.email.data
         password = login_form.password.data
         user_doc = get_pasword(email)
-        password_hash = user_doc['password']
-
-        if user_doc is not None and check_password_hash(password_hash, password):
-
-            if check_admin(email) is True:
-                return redirect(url_for('supervisorCameraPanel'))
-
-            username = get_username(email)
-            user_data = UserData(email, password, username)
+        
+        if user_doc is not None:
+            
+            password_hash = user_doc['password']
+            
+            if check_password_hash(password_hash, password):
                 
-            user = UserModel(user_data)
-            login_user(user)
-            return redirect(url_for('WelcomePage'))
+                if check_admin(email) is True:
+                    return redirect(url_for('supervisorCameraPanel'))
+
+                username = get_username(email)
+                user_data = UserData(username, password_hash, email)
+                    
+                user = UserModel(user_data)
+                login_user(user)
+                return redirect(url_for('WelcomePage'))
         
         flash('Hubo un error con los datos proporcionados')
         
