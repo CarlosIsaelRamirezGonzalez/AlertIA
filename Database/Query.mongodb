@@ -2,4 +2,4 @@ use("AlertIA")
 
 // db.Users.deleteMany({})
 
-db.Users.find()
+db.users.findOneAndDelete({email: "a20100322@ceti.mx"})

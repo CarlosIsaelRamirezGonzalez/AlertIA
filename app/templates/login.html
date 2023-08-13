@@ -5,6 +5,8 @@
     {% include 'head.html'%}
     
 <body>
+    {% include 'loader.html' %}
+
     <main class="contenedor__formulario contenedor sombra">
         <h3 class="centrarTexto">Iniciar sesión</h3>
         <form action="{{ url_for('auth.login_page') }}?next={{ request.args.get('next') }}" class="formulario" method="POST">
@@ -55,10 +57,7 @@
             </div>
         </div>
     </footer>
-    <div class="lds-grid loader" id="loader">
-        <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
-    </div>
+
     <script src="{{ url_for('static', filename='js/password_toggle.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/loader.js') }}"></script>
 </body>
 </html>

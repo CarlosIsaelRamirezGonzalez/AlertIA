@@ -5,6 +5,8 @@
     {% include 'head.html'%}
 </head>
 <body>
+    {% include 'loader.html' %}
+
     <h2>Se envio un token a su correo {{ email }} por favor revisa e ingresalo</h2>
     <form action="{{ url_for('auth.token_validation') }}" method="POST" class="formulario">
         {{ token_form.csrf_token }}
@@ -23,8 +25,5 @@
             </div>
         </fieldset>
     </form>
-    <div class="lds-grid loader" id="loader">
-        <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
-    </div>
-    <script src="{{ url_for('static', filename='js/loader.js') }}"></script>
+   
 </body>
