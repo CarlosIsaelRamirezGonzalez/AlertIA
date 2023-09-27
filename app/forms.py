@@ -52,7 +52,6 @@ class RegisterCamera(FlaskForm):
     ])
     
     fires = BooleanField('Incendios', validators=[
-        # DataRequired(message="Por favor ingresa si deseas recibir alertas de incendios.")
     ])
     
     # bladed_weapons = BooleanField('Armas blancas', validators=[
@@ -99,9 +98,7 @@ class RegisterCamera(FlaskForm):
         # DataRequired(message="Por favor ingrese si desea recibir alertas de personas heridas.")
     ])
     
-    submit = SubmitField('Confirmar')
-    
-
+    submit = SubmitField('Confirmar') 
     
 class ResetPasswordForm(FlaskForm):
     """ 
