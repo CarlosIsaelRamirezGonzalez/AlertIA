@@ -7,17 +7,8 @@
 <body>
     {% include 'loader.html' %}
 
-    <!-- <div id="modal" class="modal-container">
-        <div id="modal-content" class="modal-content">
-                <input type="text" id="address_input" placeholder="Ingresa la ubicación de la camara.">
-                <div id="map"></div>
-                <div id="close" class="close">
-                    <p>Confirmar</p>
-                </div>
-        </div>  
-    </div> -->
 
-    
+
     <form class="formulario" method="POST">
         {{ register_camera_form.csrf_token }}
         <fieldset>
@@ -29,17 +20,8 @@
                     {% for error in register_camera_form.camera_name.errors %}
                         <div class="error-message">{{ error }}</div>
                     {% endfor %}
-                </div>
 
-                <!-- <div class="campo">
-                    <label for="{{ register_camera_form.address.id }}">Dirección.</label>
-                    <div id="openModal">
-                        {{ register_camera_form.address(id="form_input_address",class="input-text", placeholder="Ingrese la dirección de la camara.") }}
-                    </div>
-                    {% for error in register_camera_form.address.errors %}
-                        <div class="error-message">{{ error }}</div>
-                    {% endfor %}
-                </div> -->
+                </div>
 
                 <div class="campo">
                     <label for="{{ register_camera_form.phone_number.id }}">Telefono.</label>
@@ -72,12 +54,6 @@
                         Armas blancas.
                         {{  register_camera_form.bladed_weapons(id="bladed_weapons-checkbox") }}
                     </label>
-
-                    <label for="{{ register_camera_form.stabbing.id }}">
-                        Apuñalamientos.
-                        {{ register_camera_form.stabbing(id="stabbing-checkbox") }}
-                    </label>
-
                 </div>
 
                 <div class="campo">
@@ -128,8 +104,24 @@
                     </label>
                 </div>
 
-
-
+                <div id="modal" class="modal-container">
+                    <div id="modal-content" class="modal-content">
+                            <input type="text" id="address_input" placeholder="Ingresa la ubicación de la camara.">
+                            <div id="map"></div>
+                            <div id="close" class="close">
+                                <p>Confirmar</p>
+                            </div>
+                    </div>  
+                </div>
+                <div class="campo">
+                    <label for="{{ register_camera_form.address.id }}">Dirección.</label>
+                    <div id="openModal">
+                        {{ register_camera_form.address(id="form_input_address",class="input-text", placeholder="Ingrese la dirección de la camara.") }}
+                    </div>
+                    {% for error in register_camera_form.address.errors %}
+                        <div class="error-message">{{ error }}</div>
+                    {% endfor %}
+                </div>
             </div>
 
         </fieldset>
@@ -139,9 +131,8 @@
 
     <script async
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCHOslXEWFjWLvxr2EPcxER3QC44_T1sgY&libraries=places&callback=initMap"></script>
-    <!-- <script src="{{ url_for('static', filename='js/googleMap.js') }}"></script> -->
+    <script src="{{ url_for('static', filename='js/googleMap.js') }}"></script> 
     <script src="{{ url_for('static', filename='js/modal.js') }}"></script>
     <script src="{{ url_for('static', filename='js/placeSelect.js') }}"></script>
-    <!-- <script src="{{ url_for('static', filename='js/googleMapInput.js') }}"></script> -->
-
+    <script src="{{ url_for('static', filename='js/googleMapInput.js') }}"></script>
 </body>
