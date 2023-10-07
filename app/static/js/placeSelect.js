@@ -17,8 +17,20 @@ function setTruePlaces(idValues, setToTrueValues) {
         }
     }
 }
+function setPersonalized(idValues, isPersonalized = false, placeSelect) {
+    let checkbox;
+    for (let i = 0; i < idValues.length; i++) {
+        checkbox = document.getElementById(idValues[i]);
+        checkbox.addEventListener('change', () => {
+            if (!isPersonalized) {
+                placeSelect.value = "personalized";
+            }
+        });
+    }
+}
 document.addEventListener('DOMContentLoaded', function() {
-    const placeSelect = document.getElementById('place-select')
+    const placeSelect = document.getElementById('place-select');
+    let isPersonalized = false;
     let allIdCheckBox = ['fires-checkbox', 'bladed_weapons-checkbox', 'handgun-checkbox',
     'long_gun-checkbox', 'brandishing-checkbox', 'dog_aggression-checkbox', 
     'car_accident-checkbox', 'brawls-checkbox', 'injured_people-checkbox'];
@@ -33,25 +45,33 @@ document.addEventListener('DOMContentLoaded', function() {
     let streetValues = ['injured_people-checkbox', 'brawls-checkbox', 'brandishing-checkbox', 
                         'fires-checkbox', 'dog_aggression-checkbox', 'handgun-checkbox',
                         'long_gun-checkbox', 'car_accident-checkbox']
+        
+            
     placeSelect.addEventListener('change', function() {
        let placeSelectValue = placeSelect.value;
         switch (placeSelectValue) {
             case 'personalized':
                 emptyCheckBox(allIdCheckBox);
+                isPersonalized = true;
                 break
             case 'home':
                 setTruePlaces(allIdCheckBox, homeValues);
+                isPersonalized = false;
                 break;
             case 'building':
                 setTruePlaces(allIdCheckBox, buildingValues);
+                isPersonalized = false;
                 break;
             case 'square':
                 setTruePlaces(allIdCheckBox, squareValues);
+                isPersonalized = false;
                 break;
             case 'street':
                 setTruePlaces(allIdCheckBox, streetValues);
+                isPersonalized = false;
                 break;
         }
     });
+    setPersonalized(idValues, isPersonalized, placeSelect);
     
 });

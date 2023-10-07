@@ -2,4 +2,10 @@ use("AlertIA")
 
 // db.Users.deleteMany({})
 
-db.users.findOneAndDelete({email: "a20100322@ceti.mx"})
+// db.users.findOneAndDelete({email: "a20100322@ceti.mx"})
+
+// db.cameras.drop()
+db.cameras.find()   
+// db.cameras.deleteMany({})   
+
+// db.cameras.find({'user_id' : 'carlosramirez3982@gmail.com'}) 

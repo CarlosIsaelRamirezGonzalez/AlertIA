@@ -14,7 +14,7 @@ db.createCollection("users", {
               },
               email: {
                   bsonType: 'string'
-              }
+              } 
           }
       }
   }
@@ -25,9 +25,10 @@ db.createCollection("cameras", {
     validator: {
       $jsonSchema: {
         bsonType: 'object',
-        required: ['address', 'place', 'cameraType', 'cameraName', 'settings', 'user_id'],
-        properties: {
-          user_id: { bsonType: 'objectId' },
+        required: ['address', 'place', 'cameraType', 'cameraName', 'settings', 'user_id', "phoneNumber"],
+        properties: { 
+          user_id: { bsonType: 'string' },
+          ip : { bsonType : 'string' },
           frames: {
             bsonType: 'array',
             items: {
@@ -51,8 +52,6 @@ db.createCollection("cameras", {
           phoneNumber:  { bsonType: 'string' },
           settings: {
             bsonType: 'object',
-            required: ['fires', 'brawls', 'injuredPeople', 'bladedWeapons', 'firearms', 
-              'dogAggression', 'carAccident'],
             properties: {
               fires:          { bsonType: 'bool' },
               bladedWeapon:   { bsonType: "bool" },

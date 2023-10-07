@@ -5,15 +5,23 @@
     {% include 'head.html'%}
 </head>
 <body>
-    {% include 'loader.html' %}
-
-
-
+    {% include 'loader.html' %} 
     <form class="formulario" method="POST">
         {{ register_camera_form.csrf_token }}
-        <fieldset>
+        <fieldset>  
 
             <div class="contenedor-campos">
+            
+                {% if camera_type == "security" %}
+                    <div class="campo">
+                        <label for="{{ register_camera_form.ip_address.id }}">Direccion IP.</label>
+                        {{ register_camera_form.ip_address(class="input-text", placeholder="Por favor ingrese la direccion IP.") }}
+                        {% for error in register_camera_form.ip_address.errors %}
+                            <div class="error-message">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
                 <div class="campo">
                     <label for="{{ register_camera_form.camera_name.id }}">Nombre de la camara.</label>
                     {{ register_camera_form.camera_name(class="input-text", placeholder="Por favor ingresa el nombre de la camara.") }}
@@ -25,7 +33,7 @@
 
                 <div class="campo">
                     <label for="{{ register_camera_form.phone_number.id }}">Telefono.</label>
-                    {{ register_camera_form.phone_number(class="input-text", placeholder="Ingrese el numero de telefono.") }}
+                    {{ register_camera_form.phone_number(class="input-text", placeholder="Ingrese el numero de telefono al que desea recibir la alarma.") }}
                     {% for error in register_camera_form.phone_number.errors %}
                         <div class="error-message">{{ error }}</div>
                     {% endfor %}
@@ -48,7 +56,7 @@
                         {{ register_camera_form.fires(id="fires-checkbox") }}
                     </label>
                 </div>
-
+                
                 <div class="campo">
                     <label for="{{ register_camera_form.bladed_weapons.id }}">
                         Armas blancas.
@@ -122,6 +130,9 @@
                         <div class="error-message">{{ error }}</div>
                     {% endfor %}
                 </div>
+            </div>
+            <div>
+                <input class="boton" type="submit" value="Registrar">
             </div>
 
         </fieldset>

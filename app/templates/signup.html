@@ -11,12 +11,15 @@
         <h3 class="centrarTexto">Crear cuenta</h3>
         <form action="{{ url_for('auth.signup') }}?next={{ request.args.get('next') }}" method="POST" class="formulario">
             {{ signup_form.csrf_token }}
-
+{# Poner a todos el URLFOR #}
             <fieldset>
                 <div class="contenedor-campos">
                     <div class="campo">
-                        <label>Nombre de usuario</label>
-                        {{ signup_form.username(class="input-text", placeholder="Ingrese un nombre de usuario") }}
+                        <label for="{{signup_form.username.id}}">
+                            Nombre de usuario
+                            {{ signup_form.username(class="input-text", placeholder="Ingrese un nombre de usuario") }}
+
+                        </label>
                         {% for error in signup_form.username.errors %}
                             <div class="error-message">{{ error }}</div>
                         {% endfor %}

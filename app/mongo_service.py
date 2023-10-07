@@ -19,6 +19,11 @@ def get_db_connection():
     client = MongoClient(MONGO_URI)
     return client['AlertIA']
 
+def get_cameras_by_user(email):
+    db = get_db_connection()
+    cameras_collection = db['cameras']
+    return list(cameras_collection.find({'user_id' : email}, {'_id' : 1, 'place' : 1}))
+
 def insert_user(user_data):
     """ Inserta un usuario en la base de datos AlertIA
 
@@ -53,6 +58,32 @@ def update_password(email, password):
     db = get_db_connection()
     user_collection = db['users']
     user_collection.update_one({'email' : email}, {'$set': {'password': password} })
+    
+def insert_camera(camera_data):
+    db = get_db_connection()
+    cameras_collection = db['cameras']
+    cameras_collection.insert_one({
+        "user_id" : camera_data.user_id,
+        "ip" : camera_data.ip,
+        "address": camera_data.address,
+        "place" : camera_data.place,
+        "cameraType" : camera_data.camera_type,
+        "cameraName" : camera_data.camera_name,
+        "phoneNumber" : camera_data.phone_number,
+        "settings" :  {
+            "fires" : camera_data.settings["fires"], 
+            "bladedWeapon": camera_data.settings["bladed_weapons"],
+            "stabbing" : camera_data.settings["stabbing"],
+            "handgun" : camera_data.settings["handgun"],
+            "longGun" : camera_data.settings["long_gun"],
+            "brandishing" : camera_data.settings["brandishing"],
+            "dogAggresion" : camera_data.settings["dog_aggression"],
+            "carAccident" : camera_data.settings["car_accident"],
+            "brawls" : camera_data.settings["brawls"],
+            "injuredPeople" : camera_data.settings["injured_people"]
+        }
+         
+    })
 
 def get_username(email):
     """Obtiene el nombre de usuario

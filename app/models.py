@@ -1,5 +1,5 @@
 from flask_login import UserMixin
-from .mongo_service import existing_email
+from .mongo_service import existing_email, insert_camera
 
 
 class UserData():
@@ -23,12 +23,33 @@ class UserModel(UserMixin):
 
 
 class CameraData():
-    def __init__(self, user_id, frames, ip, address, place, camera_type, camera_name, settings):
+    def __init__(self, user_id, ip, address, place, camera_type, camera_name, settings, phone_number):
         self.user_id = user_id
-        self.frames = frames
         self.ip = ip
         self.address = address
         self.place = place
         self.camera_type = camera_type
         self.camera_name = camera_name
         self.settings = settings
+        self.phone_number = phone_number
+
+class CameraModel():
+    def __init__(self):
+        pass 
+    
+    def __init__(self, camera_data):
+        self.id = camera_data.user_id
+        self.ip = camera_data.ip
+        self.address = camera_data.address 
+        self.place = camera_data.place 
+        self.camera_type = camera_data.camera_type
+        self.camera_name = camera_data.camera_name 
+        self.settings = camera_data.settings 
+        self.phone_number = camera_data.phone_number
+        
+    def insert(self, camera_model):
+        insert_camera(camera_model)
+    
+
+
+        

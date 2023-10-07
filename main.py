@@ -1,7 +1,7 @@
 from app import create_app
 from flask import render_template, flash, session, request, redirect, url_for
 from flask_login import login_required, current_user
-from flask_mail import Mail
+from app.mongo_service import get_cameras_by_user
 
 #La siguiente linea debe cambiar tambien de lugar
 from app.mongo_service import get_cameras
@@ -18,10 +18,13 @@ def index():
 def WelcomePage():
     value = request.form.get('value')
     session['camera_type'] = value
+    cameras = get_cameras_by_user(current_user.id)
 
+    
     context = {
         'username': current_user.username,
-        'value': value
+        'value': value,
+        'cameras': cameras
     }
     return render_template('welcomepage.html', **context)
 
