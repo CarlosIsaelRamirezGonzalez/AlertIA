@@ -35,9 +35,9 @@ class RegisterCamera(FlaskForm):
     address = StringField('Direccion', validators=[
         DataRequired(message="Por favor, ingresa la direccion.")
     ])
-    
+
     ip_address = StringField("IP")
-    
+   
     place = SelectField('Sitio', choices=[('personalized', 'Personalizado'),
                                           ('home', 'Casa'), ('building', 'Edificio'),
                                           ('square', 'Plaza'),('street', 'Calle')])
@@ -51,52 +51,25 @@ class RegisterCamera(FlaskForm):
         Length(min=10, message="Ingrese un numero de telefono valido.")
     ])
     
-    fires = BooleanField('Incendios', validators=[
-    ])
-    
-    # bladed_weapons = BooleanField('Armas blancas', validators=[
-    #     DataRequired(message="Por favor ingresa si deseas recibir alertas de armas blancas.")
-    # ])
-    
-    bladed_weapons = BooleanField('Arma blanca', validators=[
-        # DataRequired(message="Por favor ingresa si deseas recibir alertas de armas blancas.")
-    ])
-    
-    stabbing = BooleanField('Apuñalamiento', validators=[
-        # DataRequired(message="Por favor ingresa si deseas recibir alertas por apuñalamientos.")
-    ])
+    fires = BooleanField('Incendios')
 
-    # firearms = BooleanField('Armas de fuego', validators=[
-    #     DataRequired(message="Por favor ingresa si deseas recibir notifiaciones sobre armas de fuego.")
-    # ])
+    bladed_weapons = BooleanField('Arma blanca')
     
-    handgun = BooleanField('Armas cortas', validators=[
-        # DataRequired(message="POr favor ingresa si deseas recibir alertas por armas cortas.")
-    ])
+    stabbing = BooleanField('Apuñalamiento')
+
+    handgun = BooleanField('Armas cortas')
     
-    long_gun = BooleanField('Armas largas', validators=[
-        # DataRequired(message="Por favor ingresa si deseas recibir alertas por armas largas.")
-    ])
+    long_gun = BooleanField('Armas largas')
     
-    brandishing = BooleanField('Encañonamiento',  validators=[
-        # DataRequired(message="Por favor ingresa si deseas recibir alertas por encañonamientos")
-    ])
+    brandishing = BooleanField('Encañonamiento')
     
-    dog_aggresion = BooleanField('Ataque de perro', validators=[
-        # DataRequired(message="Por favor ingresa si deseas recibir notificaciones por ataque de perros.")
-    ])
+    dog_aggresion = BooleanField('Ataque de perro')
     
-    car_accident = BooleanField('Accidente de coche', validators=[
-        # DataRequired(message="Por favor ingresa si deseas recibir alertas por accidentes de coche.")
-    ])
+    car_accident = BooleanField('Accidente de coche')
     
-    brawls = BooleanField('Peleas', validators=[
-        # DataRequired(message="Por favor ingresa si deseas recibir notificaciones de peleas")
-    ])
+    brawls = BooleanField('Peleas')
     
-    injured_people = BooleanField('Personas heridas', validators=[
-        # DataRequired(message="Por favor ingrese si desea recibir alertas de personas heridas.")
-    ])
+    injured_people = BooleanField('Personas heridas')
     
     submit = SubmitField('Confirmar') 
     

@@ -8,13 +8,34 @@
     {% include 'loader.html' %}
     
     <h3 class="centrarTexto">Bienvenido {{ username }}</h3>
-
     <div class="cameras-container">
+            
+    <div class="cameras-container">
+        {% set image_map = {
+            'home': 'casa.jpg',
+            'building': 'edificio.png',
+            'square': 'plaza.jpg',
+            'street': 'calle.jpg',
+            'personalized': 'personalizado.jpg'
+        } %}
+        
+        {% for camera in cameras %}
+            {% set place = camera['place'] %}
+            {% set image_src = '../static/img/' + (image_map[place] if image_map.get(place)) %}
+            <div class="camera-folder">
+                <img src="{{ image_src }}">
+                <div class="camera-options">
+                </div>
+            </div>
+            
+        {% endfor %}
 
         <div id="openModal">
-            <div class="poster"><img src="https://i.pinimg.com/564x/4a/fd/df/4afddf607da2ff17bf6b08ece0265a21.jpg"></div>
+            <img class="poster" src="../static/img/ideogram.jpeg">
         </div>
-    
+
+    </div>
+
         <div id="modal" class="modal-container">
             <div id="modal-content" class="modal-content">
                 <h4 class="modal-tittle">¿Qué tipo de cámara desea ingresar?</h4>
@@ -26,7 +47,7 @@
                             <div class="poster">
                                 <img src="https://i.pinimg.com/564x/8a/e5/ee/8ae5ee6e181a1e2e0c77d7fe9ea1bc34.jpg"
                                     class="camera-image"
-                                    data-camera-type="Camara Web"
+                                    data-camera-type="web"
                                 >
                             </div>
                         </a> 
@@ -39,7 +60,7 @@
                             <div class="poster">
                                 <img src="https://i.pinimg.com/236x/ae/3f/9b/ae3f9bbdce2ba7abb70ee7f625c09b9d.jpg"
                                     class="camera-image"
-                                    data-camera-type="Camara de seguridad"
+                                    data-camera-type="security"
                                 >
                             </div>  
                         </a>
