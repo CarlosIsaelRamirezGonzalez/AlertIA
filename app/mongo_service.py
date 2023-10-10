@@ -1,8 +1,7 @@
 from pymongo import MongoClient
 
 
-MONGO_URI = "mongodb+srv://REDACTED@alertai.2fssau2.mongodb.net/" 
-
+MONGO_URI = "mongodb://REDACTED@localhost:27017/?authMechanism=DEFAULT&tls=false"
 # mongodb://REDACTED@localhost:27017/?authMechanism=DEFAULT&tls=false
 
 def get_db_connection():

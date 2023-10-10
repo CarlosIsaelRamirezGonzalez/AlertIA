@@ -1,10 +1,7 @@
 from app import create_app
 from flask import render_template, flash, session, request, redirect, url_for
 from flask_login import login_required, current_user
-from app.mongo_service import get_cameras_by_user
-
-#La siguiente linea debe cambiar tambien de lugar
-from app.mongo_service import get_cameras
+from app.mongo_service import get_cameras_by_user, get_cameras
 
 app = create_app()
 
