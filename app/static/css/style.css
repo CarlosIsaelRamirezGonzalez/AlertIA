@@ -259,9 +259,9 @@ font-size: 2rem;
 .camera-folder {
     height: 200px;
     width: 300px;
-    cursor: pointer; 
     transition: 1.5s;
     overflow: hidden;
+    position: relative;
 }
 .camera-folder img {
     border-radius : 20px;
@@ -269,15 +269,43 @@ font-size: 2rem;
     width: 300px;
 }
 
+.camera-options {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    transition: opacity 0.3s;
+    border-radius : 20px;
+}
+
+.camera-options i {
+    margin-right: 10px; /* Agrega espacio a la derecha del primer ícono */
+    cursor: pointer;
+}
+
+.camera-options i:last-child {
+    margin-right: 0; /* Elimina el margen derecho del último ícono */
+    margin-left: 10px; /* Agrega espacio a la izquierda del último ícono */
+}
+
+.camera-folder:hover img {
+    filter: brightness(0.7);
+}
+
+.camera-folder:hover .camera-options {
+    opacity: 1;
+}
+
 .camera-folder:hover {
     transform: scale(1.1);
     transition: 1.5s;
 }
-
-.camera-folder .camera-options {
-    background: rgba(0, 0, 0, .7);
-}
-
 
 
 /* API google maps */
