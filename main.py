@@ -15,9 +15,10 @@ def index():
 def WelcomePage():
     value = request.form.get('value')
     session['camera_type'] = value
+    
     cameras = get_cameras_by_user(current_user.id)
 
-    
+    print(cameras)
     context = {
         'username': current_user.username,
         'value': value,
