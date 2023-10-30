@@ -1,9 +1,23 @@
 from . import cameras
 from flask_login import login_required, current_user
-from flask import render_template, session, request, redirect, url_for, flash
+from flask import render_template, session, request, redirect, url_for, flash, jsonify
+from app.mongo_service import delete_camera_by_id
 from app.models import CameraData, CameraModel
 from app.forms import RegisterCamera
 from app.helpers import delete_sessions
+
+
+
+@cameras.route('/deleteCamera', methods = [ 'GET', 'POST'])
+@login_required
+def delete_camera():
+    try:
+        camera_id = request.form.get('camera_id')
+        delete_camera_by_id(camera_id)
+        return jsonify({'message': 'Camara eliminada con exito'})
+    except Exception as e:
+        return jsonify({'error': str(e)})
+    
 
 
 @cameras.route('/registerCamera', methods = ['GET', 'POST'])

@@ -1,8 +1,9 @@
 from pymongo import MongoClient
+from bson import ObjectId
 
-
-MONGO_URI = "mongodb://root:root123@localhost:27017/?authMechanism=DEFAULT&tls=false"
+MONGO_URI = "mongodb+srv://enriquerc260:erJvAyN1zF9guAkV@alertai.2fssau2.mongodb.net/"
 # mongodb://root:root123@localhost:27017/?authMechanism=DEFAULT&tls=false
+# mongodb+srv://enriquerc260:erJvAyN1zF9guAkV@alertai.2fssau2.mongodb.net/
 
 def get_db_connection():
     """ Obtiene una conexion a la base de datos de MongoDB
@@ -17,6 +18,12 @@ def get_db_connection():
     
     client = MongoClient(MONGO_URI)
     return client['AlertIA']
+
+def delete_camera_by_id(camera_id):
+    db = get_db_connection()
+    cameras_collection = db['cameras']
+    cameras_collection.delete_one({'_id' : ObjectId(camera_id)})
+    
 
 def get_cameras_by_user(email):
     db = get_db_connection()

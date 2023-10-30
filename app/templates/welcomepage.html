@@ -22,7 +22,7 @@
         {% for camera in cameras %}
             {% set place = camera['place'] %}
             {% set image_src = '../static/img/' + (image_map[place] if image_map.get(place)) %}
-            <div class="camera-folder">
+            <div class="camera-folder" data-camera-id="{{ camera['_id'] }}">
                 <img src="{{ image_src }}">
                 <div class="camera-options">
                     <i class="fa-solid fa-pen-to-square"></i>
@@ -74,4 +74,6 @@
     <script src="{{ url_for('static', filename='js/modal.js') }}"></script>
     <script src="{{ url_for('static', filename='js/image_style.js') }}"></script>
     <script src="{{ url_for('static', filename='js/cameraType.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/deleteAndEditCameras.js') }}"></script>
+
 </body>
