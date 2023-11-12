@@ -19,6 +19,8 @@ def get_db_connection():
     client = MongoClient(MONGO_URI)
     return client['AlertIA']
 
+
+
 def delete_camera_by_id(camera_id):
     db = get_db_connection()
     cameras_collection = db['cameras']

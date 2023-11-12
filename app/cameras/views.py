@@ -8,6 +8,16 @@ from app.helpers import delete_sessions
 
 
 
+@cameras.route('/editCamera', methods = ['GET', 'POST'])
+@login_required
+def add_camera():
+    # No se manda ¿?
+    camera_id = request.form.get('camera_id')
+    context = {
+        'camera_id' : camera_id
+    }
+    return render_template('editCamera.html', **context)
+
 @cameras.route('/deleteCamera', methods = [ 'GET', 'POST'])
 @login_required
 def delete_camera():
