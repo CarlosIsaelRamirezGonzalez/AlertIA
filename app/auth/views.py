@@ -1,6 +1,5 @@
 from . import auth
 from datetime import datetime, timedelta, timezone
-from app.mongo_service import existing_email, insert_user, get_pasword, get_username,update_password, check_admin
 from app.forms import SignupForm, LoginForm, TokenForm, ResetPasswordForm, EmailForm
 from app.helpers import send_message, generate_token, delete_sessions
 from app.models import UserData, UserModel
@@ -11,7 +10,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 @auth.route('/login', methods=['GET','POST'])
 def login_page():
     login_form = LoginForm()
-    
+    user_model = UserModel()
     context = {
         'login_form': login_form
     }
@@ -20,7 +19,7 @@ def login_page():
         
         email = login_form.email.data
         password = login_form.password.data
-        user_doc = get_pasword(email)
+        user_doc = user_model.get_password(email)
         
         if user_doc is not None:
             
@@ -28,10 +27,10 @@ def login_page():
             
             if check_password_hash(password_hash, password):
                 
-                if check_admin(email) is True:
+                if user_model.check_admin(email) is True:
                     return redirect(url_for('supervisorCameraPanel'))
 
-                username = get_username(email)
+                username = user_model.get_username(email)
                 user_data = UserData(username, password_hash, email)
                     
                 user = UserModel(user_data)
@@ -45,6 +44,8 @@ def login_page():
 @auth.route('/signup', methods=['GET', 'POST'])
 def signup():
     signup_form = SignupForm()
+    user_model = UserModel()
+
     context = {
         'signup_form' : signup_form,
     }
@@ -54,7 +55,7 @@ def signup():
         email = signup_form.email.data
         password = signup_form.password.data
         
-        user_doc = existing_email(email)
+        user_doc = user_model.existing_email(email)
         
         if user_doc is None:
             token = generate_token(email, password, username)
@@ -114,8 +115,8 @@ def token_validation():
                 # Encriptamos el password
                 password_hash = generate_password_hash(password)
                 user_data = UserData(username, password_hash, email)
-                insert_user(user_data)
                 user = UserModel(user_data)
+                user.insert_user(user_data)
                 login_user(user)
                 # Liberamos las cookies del usuario
                 delete_sessions(['email', 'password', 'username', 'token_timestap', 'token', 'action'])
@@ -137,12 +138,13 @@ def token_validation():
 @auth.route('/ForgotPassword', methods=['GET', 'POST'])
 def restore_password():
     email_form = EmailForm()
+    user_model = UserModel()
     context = {
         'email_form': email_form
     }
     if email_form.validate_on_submit():
         email = email_form.email.data 
-        user_doc = existing_email(email)
+        user_doc = user_model.existing_email(email)
         if user_doc:
             token = generate_token(email, user_doc['password'], user_doc['username']) # User_doc['password']?
             send_message(email, token, user_doc['username'], "Forgot password")
@@ -164,6 +166,7 @@ def reset_password():
         flash('Primero debes ingresar tu correo electrónico y validar el token.', 'error')
         return redirect(url_for('auth.restore_password'))
     reset_form = ResetPasswordForm()
+    user_model = UserModel()
     
     context = {
         'reset_form' : reset_form
@@ -175,7 +178,7 @@ def reset_password():
         new_password = reset_form.password.data 
         
         password_hash = generate_password_hash(new_password)
-        update_password(email=email, password=password_hash)
+        user_model.update_password(email=email, password=password_hash)
         
         flash("Tu contraseña ha sido restaurada exitosamenre")
         delete_sessions(['email', 'token_verified'])

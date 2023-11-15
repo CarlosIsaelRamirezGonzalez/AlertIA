@@ -7,5 +7,134 @@
 </head>
 <body>
     {% include 'loader.html' %}
-    <h3 class="centrarTexto">ID: {{ camera_id }}</h3>
+    <form class="formulario" method="post">
+        {{ camera_form.csrf_token }}
+        <fieldset>
+            <div class="contenedor-campos">
+            {% if camera_data['ip'] != 'None' %}
+                <div class="campo">
+                    <label for="{{ camera_form.ip_address.id }}">Direccion IP.</label>
+                    {{ camera_form.ip_address(class="input-text", value=camera_data['ip'], placeholder="Ingrese la direccion IP.") }}
+                    {% for error in camera_form.ip_address.errors %}
+                        <div class="error-message">{{ error }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            </div>
+            
+                <div class="campo">
+                    <label for="{{ camera_form.camera_name.id }}">Nombre de la camara.</label>
+                    {{ camera_form.camera_name(class="input-text", value=camera_data['cameraName'], placeholder="Ingrese el nombre de la camara.") }}
+                    {% for error in camera_form.camera_name.errors %}
+                        <div class="error-message">{{ error }}</div>
+                    {% endfor %}
+
+                </div>
+
+                <div class="campo">
+                    <label for="{{ camera_form.phone_number.id }}">Telefono.</label>
+                    {{ camera_form.phone_number(class="input-text", value=camera_data['phoneNumber'], placeholder="Ingrese el numero de telefono.") }}
+                    {% for error in camera_form.phone_number.errors %}
+                        <div class="error-message">{{ error }}</div>
+                    {% endfor %}
+                </div>
+
+                <div class="campo">
+                    <label for="{{ camera_form.place.id }}">
+                        Sitio donde se encuentra la camara:
+                    </label>
+                    {{ camera_form.place(id="place-select", select="Casa", value="Casa") }}
+                    {% for error in camera_form.place.errors %}
+                        <div class="error-message">{{ error }}</div>
+                    {% endfor %}
+                </div>
+
+
+                <div class="campo">
+                    <label for="{{ camera_form.fires.id }}">
+                        Incendios.
+                        {{ camera_form.fires(id="fires-checkbox") }}
+                    </label>
+                </div>
+                
+                <div class="campo">
+                    <label for="{{ camera_form.bladed_weapons.id }}">
+                        Armas blancas.
+                        {{  camera_form.bladed_weapons(id="bladed_weapons-checkbox") }}
+                    </label>
+                </div>
+
+                <div class="campo">
+
+                    <label for="{{ camera_form.handgun.id }}">
+                        Armas cortas.
+                        {{ camera_form.handgun(id="handgun-checkbox") }}
+                    </label>    
+
+                    <label for="{{ camera_form.long_gun.id }}">
+                        Armas largas.
+                        {{ camera_form.long_gun(id="long_gun-checkbox") }}
+                    </label for="{{ camera_form.handgun.id }}">
+
+
+                    <label for="{{ camera_form.brandishing.id }}">
+                        Encañonamiento.
+                        {{ camera_form.brandishing(id="brandishing-checkbox") }}
+                    </label>
+
+                </div>
+                
+                <div class="campo">
+                    <label for="{{ camera_form.dog_aggresion.id }}">
+                        Ataques de perro.
+                        {{ camera_form.dog_aggresion(id="dog_aggression-checkbox") }}
+                    </label>
+                </div>
+                
+                <div class="campo">
+                    <label for="{{ camera_form.car_accident.id }}">
+                        Choques.
+                        {{ camera_form.car_accident(id="car_accident-checkbox") }} 
+                    </label>
+                </div>
+
+                <div class="campo">
+                    <label for="{{ camera_form.brawls.id }}">
+                        Peleas.
+                        {{ camera_form.brawls(id="brawls-checkbox") }}
+                    </label>
+                </div>
+
+                <div class="campo">
+                    <label for="{{ camera_form.injured_people.id }}">
+                        Personas heridas
+                        {{ camera_form.injured_people(id="injured_people-checkbox") }}
+                    </label>
+                </div>
+
+                <div id="modal" class="modal-container">
+                    <div id="modal-content" class="modal-content">
+                            <input type="text" id="address_input" placeholder="Ingresa la ubicación de la camara.">
+                            <div id="map"></div>
+                            <div id="close" class="close">
+                                <p>Confirmar</p>
+                            </div>
+                    </div>  
+                </div>
+
+                <div class="campo">
+                    <label for="{{ camera_form.address.id }}">Dirección.</label>
+                    <div id="openModal">
+                        {{ camera_form.address(id="form_input_address",class="input-text", value=camera_data['address'],placeholder="Ingrese la dirección de la camara.") }}
+                    </div>
+                    {% for error in camera_form.address.errors %}
+                        <div class="error-message">{{ error }}</div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div>
+                <input class="boton" type="submit" value="Registrar">
+            </div>
+        </fieldset>
+    </form>
 </body>

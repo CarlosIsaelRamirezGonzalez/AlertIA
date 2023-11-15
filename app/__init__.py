@@ -11,7 +11,8 @@ login_manager.login_view = 'auth.login_page'
 
 @login_manager.user_loader
 def load_user(email):
-    return UserModel.query(email)
+    user_model = UserModel()
+    return user_model.query(email)
 
 def create_app():
     app = Flask(__name__)
