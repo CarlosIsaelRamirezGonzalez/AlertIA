@@ -5,7 +5,12 @@ document.addEventListener('DOMContentLoaded', function() {
     deleteButtons.forEach(button => {
         button.addEventListener('click', function() {
             const cameraId = getCameraId(this);
-            deleteCamera(cameraId);
+            var reply = confirm("¿Seguro que desea eliminar la camara?");
+            if (reply == true) {
+                deleteCamera(cameraId);
+            } else {
+
+            }
         }); 
     });
 
@@ -25,25 +30,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
     function editCamera(cameraId) {
-        fetch('/editCamera', {
-            method: 'POST',
-            body: new URLSearchParams({ camera_id : cameraId}),
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            }
-        })
-        .then(response => {
-            response.text()
-        })
-        .then(data => {
-            console.log(data);
-            window.location.replace('/editCamera');
-        })
-        .catch(error => console.error(error));
+        const encodedCameraId = encodeURIComponent(cameraId);
+        window.location.href = `/editCamera?cameraId=${encodedCameraId}`;
     }
 
     function deleteCamera(cameraId) {
-        // Ajax request
         fetch('/deleteCamera' , {
             method: 'POST',
             body: new URLSearchParams({ camera_id : cameraId}),
@@ -51,7 +42,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 'Content-Type': 'application/x-www-form-urlencoded'
             }
         })
-        .then(response => response.text())
+        .then(response => response.json())
         .then(data => {
             setTimeout(() => {
                 location.reload();

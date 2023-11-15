@@ -1,7 +1,7 @@
 from app import create_app
 from flask import render_template, flash, session, request, redirect, url_for
 from flask_login import login_required, current_user
-from app.mongo_service import get_cameras_by_user, get_cameras
+from app.models import CameraModel
 
 app = create_app()
 
@@ -13,15 +13,10 @@ def index():
 @app.route('/WelcomePage', methods=['GET', 'POST'])
 @login_required
 def WelcomePage():
-    value = request.form.get('value')
-    session['camera_type'] = value
-    
-    cameras = get_cameras_by_user(current_user.id)
-
-    print(cameras)
+    camera_model = CameraModel()
+    cameras = camera_model.get_cameras_by_user(current_user.id)
     context = {
         'username': current_user.username,
-        'value': value,
         'cameras': cameras
     }
     return render_template('welcomepage.html', **context)
@@ -29,7 +24,8 @@ def WelcomePage():
 
 @app.route('/supervisorCameraPanel', methods=['GET', 'POST'])
 def supervisorCameraPanel():
-    cameras_data = get_cameras()
+    camera_model = CameraModel()
+    cameras_data = camera_model.get_cameras()
     return render_template('supervisorCameraPanel.html', cameras_data = cameras_data)
 
 

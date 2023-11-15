@@ -257,12 +257,20 @@ font-size: 2rem;
 /* Para que las camaras se vean  */
 
 .camera-folder {
-    height: 200px;
+    height: 240px;
     width: 300px;
     transition: 1.5s;
     overflow: hidden;
     position: relative;
 }
+
+.camera-name {
+    margin-top: 10px;
+    text-align: center;
+    color: rgb(0, 0, 0);
+    font-family: Arial;
+}
+
 .camera-folder img {
     border-radius : 20px;
     height: 200px;

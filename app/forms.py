@@ -28,50 +28,40 @@ class LoginForm(FlaskForm):
     
     submit = SubmitField('Send')
     
-class RegisterCamera(FlaskForm):
-    """ 
-    Formulario para registrar camara
-    """
+class WebCameraForm(FlaskForm):
     address = StringField('Direccion', validators=[
         DataRequired(message="Por favor, ingresa la direccion.")
     ])
-
-    ip_address = StringField("IP")
-   
     place = SelectField('Sitio', choices=[('personalized', 'Personalizado'),
                                           ('home', 'Casa'), ('building', 'Edificio'),
                                           ('square', 'Plaza'),('street', 'Calle')])
-    
     camera_name = StringField('Nombre de la camara', validators=[
         DataRequired(message="Por favor ingresa un nombre para la camara."),
+        Length(min=5, max=20, message="El nombre es demasiado largo")
     ])
-    
     phone_number = StringField('Numero de telefono', validators=[
         DataRequired(message="Por favor ingrese un numero de telefono."),
         Length(min=10, message="Ingrese un numero de telefono valido.")
     ])
-    
     fires = BooleanField('Incendios')
-
     bladed_weapons = BooleanField('Arma blanca')
-    
     stabbing = BooleanField('Apuñalamiento')
-
     handgun = BooleanField('Armas cortas')
-    
     long_gun = BooleanField('Armas largas')
-    
     brandishing = BooleanField('Encañonamiento')
-    
     dog_aggresion = BooleanField('Ataque de perro')
-    
     car_accident = BooleanField('Accidente de coche')
-    
     brawls = BooleanField('Peleas')
-    
     injured_people = BooleanField('Personas heridas')
-    
     submit = SubmitField('Confirmar') 
+
+
+class SecurityCameraForm(WebCameraForm):
+    ip_address = StringField("IP", validators=[
+        DataRequired(message="Ingrese la direccion IP."),
+        Regexp(r'^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$',
+               message="Ingrese una direccion IP valida.")
+    ])
     
 class ResetPasswordForm(FlaskForm):
     """ 

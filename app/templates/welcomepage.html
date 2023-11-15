@@ -28,6 +28,7 @@
                     <i class="fa-solid fa-pen-to-square"></i>
                     <i class="fa-solid fa-trash"></i>
                 </div>
+                <h5 class="camera-name">{{camera['cameraName']}}</h5>
             </div>
         {% endfor %} 
 
@@ -42,27 +43,23 @@
             <h4 class="modal-tittle">¿Qué tipo de cámara desea ingresar?</h4>
             <div class="camera-types">
                 <div class="camera-type">
-                    <a href="{{ url_for('cameras.register_camera') }}" onclick="handleImageClick(event);">  
-                        <div class="poster">
-                            <img src="https://i.pinimg.com/564x/8a/e5/ee/8ae5ee6e181a1e2e0c77d7fe9ea1bc34.jpg"
-                                class="camera-image"
-                                data-camera-type="web"
-                            >
-                        </div>
-                    </a> 
+                    <div class="poster">
+                        <img src="https://i.pinimg.com/564x/8a/e5/ee/8ae5ee6e181a1e2e0c77d7fe9ea1bc34.jpg"
+                            class="camera-image"
+                            data-camera-type="web"
+                        >
+                    </div>
                     <div class="slide-title">
                         <h5>Camara web</h5>
                     </div>
                 </div>
                 <div class="camera-type">
-                    <a href="{{ url_for('cameras.register_camera') }}">
-                        <div class="poster">
-                            <img src="https://i.pinimg.com/236x/ae/3f/9b/ae3f9bbdce2ba7abb70ee7f625c09b9d.jpg"
-                                class="camera-image"
-                                data-camera-type="security"
-                            >
-                        </div>  
-                    </a>
+                    <div class="poster">
+                        <img src="https://i.pinimg.com/236x/ae/3f/9b/ae3f9bbdce2ba7abb70ee7f625c09b9d.jpg"
+                            class="camera-image"
+                            data-camera-type="security"
+                        >
+                    </div>  
                     <div class="slide-title">
                         <h5>Camara de seguridad</h5>
                     </div>
