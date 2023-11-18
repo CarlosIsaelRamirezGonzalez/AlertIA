@@ -2,8 +2,7 @@ from pymongo import MongoClient
 
 class Database: 
     def __init__(self):
-        self.MONGO_URI = "mongodb://REDACTED@localhost:27017/?authMechanism=DEFAULT&tls=false"
-        # mongodb+srv://REDACTED@alertai.2fssau2.mongodb.net/
+        self.MONGO_URI = "mongodb+srv://REDACTED@alertai.2fssau2.mongodb.net/"
         self.client = MongoClient(self.MONGO_URI)
         self.db = self.client['AlertIA']    
     

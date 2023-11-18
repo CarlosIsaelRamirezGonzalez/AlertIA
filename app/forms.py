@@ -37,7 +37,7 @@ class WebCameraForm(FlaskForm):
                                           ('square', 'Plaza'),('street', 'Calle')])
     camera_name = StringField('Nombre de la camara', validators=[
         DataRequired(message="Por favor ingresa un nombre para la camara."),
-        Length(min=5, max=20, message="El nombre es demasiado largo")
+        Length(max=20, message="El nombre es demasiado largo")
     ])
     phone_number = StringField('Numero de telefono', validators=[
         DataRequired(message="Por favor ingrese un numero de telefono."),
