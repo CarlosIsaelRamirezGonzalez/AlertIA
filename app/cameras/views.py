@@ -69,7 +69,7 @@ def register_camera():
                                  camera_name=camera_name, settings=alerts, address=address, phone_number=phone_number)
         camera = CameraModel(camera_data=camera_data)
         camera.insert_camera()
-        flash("Camara creada con exito")
+        flash("Camara creada con exito", 'success')
         return redirect(url_for('WelcomePage'))
         
     return render_template('registerCamera.html', **context)

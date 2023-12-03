@@ -24,7 +24,7 @@
 
                 <div class="campo">
                     <label for="{{ camera_form.camera_name.id }}">Nombre de la camara.</label>
-                    {{ camera_form.camera_name(class="input-text", placeholder="Por favor ingresa el nombre de la camara.", autocomplete="off   ") }}
+                    {{ camera_form.camera_name(class="input-text", placeholder="Por favor ingresa el nombre de la camara.", autocomplete="off") }}
                     {% for error in camera_form.camera_name.errors %}
                         <div class="error-message">{{ error }}</div>
                     {% endfor %}
@@ -124,7 +124,7 @@
                 <div class="campo">
                     <label for="{{ camera_form.address.id }}">Dirección.</label>
                     <div id="openModal">
-                        {{ camera_form.address(id="form_input_address",class="input-text", placeholder="Ingrese la dirección de la camara.", autocomplete="off  ") }}
+                        {{ camera_form.address(id="form_input_address",class="input-text", placeholder="Ingrese la dirección de la camara.", autocomplete="off") }}
                     </div>
                     {% for error in camera_form.address.errors %}
                         <div class="error-message">{{ error }}</div>

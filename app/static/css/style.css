@@ -351,7 +351,7 @@ font-size: 2rem;
     flex-wrap: wrap;
     justify-content: flex-start;
     gap: 20px; /* Agrega un espacio de 20px entre las cámaras */
-    margin: 0 60px; /* Margen izquierdo y derecho de 20px */
+    margin: 20px; /* Margen izquierdo y derecho de 20px */
 }
 
 
@@ -577,36 +577,59 @@ font-size: 2rem;
 }
 
   
-/* Flashes bonitos
+/* Flashes bonitos*/
 
 /* Estilos para los flashes */
-.alert {
-    margin-top: 10px;
-    opacity: 0;
-    transition: opacity 0.3s ease-in-out;
-}
-  
-.alert.show {
-    opacity: 1;
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
 }
 
+
+.alert-message {
+    font-family: Arial;
+    font-size: 16px;
+    padding: 15px 32px; /* Espacio alrededor del texto */
+    text-align: center; /* Centra el texto */
+    text-decoration: none;
+    transition-duration: 0.4s; /* Tiempo de transición para el efecto hover */
+    animation-name: fadeOut;
+    animation-duration: 3s;
+    animation-delay: 3s;
+    animation-fill-mode: forwards;
+    position: fixed; /* o "absolute", dependiendo de tus necesidades */
+    height: 10%;
+    width: 99%;
+    z-index: 1;
+}
+
+/* Estilos para la categoria "error" */
 .alert-error {
+    border-radius: 10px;
     background-color: #ff4444; /* Color rojo */
-    color: white;
+    border-color: #b10909;
+    color: #640101;   
 }
 
 /* Estilos para la categoría "success" */
 .alert-success {
-    background-color: #33cc33; /* Color verde */
-    color: white;
+    border-radius: 10px;
+    border-radius: 10px;
+    background-color: #a1cf6b; /* Color verde */
+    border-color: #55a630;
+    color: #176b0c;   
 }
 
 /* Estilos para la categoría "info" */
 .alert-info {
+    border-radius: 10px;
+    border-radius: 10px;
     background-color: #cce5ff;
     border-color: #b8daff;
     color: #004085;
 }
+
+
 
 
 
