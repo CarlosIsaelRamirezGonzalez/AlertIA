@@ -1,13 +1,13 @@
 {% macro show_flashes()%}
   {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
-      <div class="container">
-        {% for category, message in messages %}
-          <div class="alert-{{ category }}">
-            {{ message }}
-          </div>
+          {% for category, message in messages %}
+            <div class="alert-message">
+              <div class="alert-{{ category }}">
+                {{ message }}
+              </div>
+            </div>
         {% endfor %}
-      </div>
     {% endif %}
   {% endwith %}
 {% endmacro %}

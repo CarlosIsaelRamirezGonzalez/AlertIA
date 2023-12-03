@@ -1,24 +1,27 @@
 from app import create_app
-from flask import render_template, flash, session, request, redirect, url_for
+from flask import render_template, flash
 from flask_login import login_required, current_user
 from app.models import CameraModel
+from app.forms import WebCameraForm, SecurityCameraForm
 
 app = create_app()
 
 @app.route('/')
 def index():
-    flash("Mensaje de exito", "success")
+    
     return render_template('index.html')
 
 @app.route('/WelcomePage', methods=['GET', 'POST'])
 @login_required
 def WelcomePage():
+    
     camera_model = CameraModel()
     cameras = camera_model.get_cameras_by_user(current_user.id)
     context = {
         'username': current_user.username,
         'cameras': cameras
     }
+    flash("Registro exitoso", "success")
     return render_template('welcomepage.html', **context)
 
 
