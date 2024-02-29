@@ -1,0 +1,5 @@
+flask==2.0.2
+flask_bootstrap==3.3.7.1
+flask_login==0.6.3
+flask_mongoengine==1.0.0
+werkzeug==2.0.2
