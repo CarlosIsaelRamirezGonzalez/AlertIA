@@ -1,0 +1,9 @@
+body {
+    background-color: black;
+}
+.page-header-alertai {
+    display: flex;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+}
