@@ -3,6 +3,7 @@ import os
 class Config: 
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'Hard to guess'
     REMEMBER_COOKIE_DURATION = int(os.environ.get('REMEMBER_COOKIE_DURATION', 10 * 24 * 3600)) 
+    PYTHONDONTWRITEBYTECODE = 1 
     
     @staticmethod
     def init_app(app):
@@ -10,6 +11,7 @@ class Config:
 
 class DevelopmentConfig(Config):
     DEBUG = True
+    
     MONGODB_SETTINGS = {
         'host' : os.environ.get('MONGODB_SETTINGS') or 'localhost',
         'db' : 'development_db',
