@@ -13,9 +13,19 @@ body {
 /* Navbar styles */
 .navbar-alertai {
     position: sticky;
-}
-
-.navbar-alertai .navbar-logo {
+    background-color: antiquewhite;
     font-family: "Montserrat Alternates", sans-serif;
     font-style: normal;
+    font-size: 30px;
+    top: 0;
+}
+
+.navbar-logo {
+    font-family: "Montserrat Alternates", sans-serif;
+    font-style: normal;
+    font-size: 30px;
+}
+
+.form-content {
+    color: white;
 }
