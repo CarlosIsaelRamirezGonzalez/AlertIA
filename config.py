@@ -5,6 +5,7 @@ class Config:
     REMEMBER_COOKIE_DURATION = int(os.environ.get('REMEMBER_COOKIE_DURATION', 10 * 24 * 3600)) 
     PYTHONDONTWRITEBYTECODE = 1 
     
+    
     @staticmethod
     def init_app(app):
         pass
