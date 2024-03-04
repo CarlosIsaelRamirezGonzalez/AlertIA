@@ -26,12 +26,16 @@ nav {
     width: 100%;
 }
 
-label.logo {
+.logo {
     font-family: "Montserrat Alternates", sans-serif;
     color: white;
     font-size: 35px;
     line-height: 80px;
     padding: 0 100px;
+}
+
+.logo:hover {
+    cursor: pointer;
 }
  
 nav ul {
@@ -55,4 +59,14 @@ nav ul li a {
 nav ul li a:hover {
     background: #dad7cd ;
     transition: .5s;
+}
+/* End navbar styles */
+
+
+.popup {
+    background-color: #1b263b;
+    height: 407px;
+    width: 360px;
+    border-radius: 10px;
+    padding: 64px 32px 32px 32px;
 }
