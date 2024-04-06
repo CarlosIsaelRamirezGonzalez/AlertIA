@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %} Secure your life with our technology, AlertAI{% endblock title %}
+
+{% block head %}
+{{ super() }}
+<meta name="description" content="We are a company specialized in security through our automatic threat detection system through cameras.">
+<meta name="keywords" content="Artificial Intelligence, AI, Cameras, Security">
+<meta name="author" content="AlertAI">
+{% endblock %}
+
+
+{% block page_content %}
+
+    <!-- header -->
+    <header class="header">
+        <div class="brand">
+            <img src="../static/img/alert-logo-png.png" alt="AlertAI-logo" width="90px" height="90px">
+            <h3 class="alertai-heading">Alert AI</h3>
+        </div>
+        <div class="banner">
+            <h1 class="banner-heading">Welcome to AlertAI</h1>
+            <p class="banner-paragraph">Make your life safer</p>
+            <button class="banner-button fill-color">Check out</button>
+        </div>
+    </header>
+    <!-- end of header -->
+    
+    <!-- about us -->
+    <section class="about-us">
+
+        <div class="about-us-content">
+            
+            <h1 class="about-us-heading">About Us</h1>
+
+            <div class="underline">
+                <div class="small-underline"></div>
+                <div class="big-underline"></div>
+            </div>    
+
+            <h3 class="sub-heading">Alert AI</h3>
+            <p class="about-us-paragraph">At our company, we prioritize your safety, whether it's for yourself, your business, your home, or your loved ones. We utilize cutting-edge automatic threat detection systems designed to safeguard your well-being and that of those in your vicinity. Upon detecting any potential threats, we promptly notify both you and law enforcement authorities, providing them with your precise location. Rest assured, help is swiftly dispatched to your aid!</p>
+       
+        </div>
+
+
+        <div class="about-us-images">
+            <img src="../static/img/about-us-img-1.jpg" alt="asalto.jpg" class="image image-1">
+            <img src="../static/img/about-us-img-2.jpg" alt="ataque-perro.jpg" class="image image-2">
+            <img src="../static/img/about-us-img-3.png" alt="choque.png" class="image image-3">
+            <img src="../static/img/about-us-img-4.png" alt="incendio.png" class="image image-4">
+        </div>
+
+    </section>
+    <!-- end of about us -->
+
+    <!-- what do we cover -->
+    <section>
+        
+    </section>
+    <!-- end of what do we cover -->
+
+{% endblock page_content %}
+
