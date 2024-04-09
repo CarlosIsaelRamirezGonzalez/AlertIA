@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}AlertAI - Signup{% endblock %}
+
+{% block page_content %}
+        <section class="signup">
+        <img src="../../static/img/alert-whole-logo.jpg" alt="logo.jpg" class="signup-logo">
+        <div class="signup-wrapper">
+
+            <div class="signup-info">
+
+                <div class="signup-benefit-wrapper">
+                    <i class="fa-solid fa-house-medical signup-icon"></i>
+                    <h4 class="signup-benefit-title">Make your house safer</h2>
+                    <p class="singup-benefit-paragraph">With alertAI you don't have to hire a 24/7 surveillance service, let our threat detection system do the work for you</p>
+                </div>
+
+                <div class="signup-benefit-wrapper">
+                    <i class="fa-solid fa-bell signup-icon"></i>
+                    <h4 class="signup-benefit-title">Be informed of what is happening</h2>
+                    <p class="singup-benefit-paragraph">An emergency in progress? Don't worry, with AlertAI you will be sure to be notified in an instant</p>
+                </div>
+
+                <div class="signup-benefit-wrapper">
+                    <i class="fa-solid fa-handshake signup-icon"></i>
+                    <h4 class="signup-benefit-title">Do your community a favor</h2>
+                    <p class="singup-benefit-paragraph">By hiring AlertAI you not only keep yourself safe, but also the people around you.</p>
+                </div>
+
+            </div>
+
+            <div class="signup-form">
+                
+                <i class="fa-solid fa-user signup-form-icon"></i>
+                <input type="text" placeholder="Username" class="signup-form-input">
+
+                <i class="fa-solid fa-envelope signup-form-icon"></i>
+                <input type="text" placeholder="Email" class="signup-form-input">
+
+                <i class="fa-solid fa-lock signup-form-icon"></i>
+                <input type="password" placeholder="Password" class="signup-form-input">
+
+                <i class="fa-solid fa-lock signup-form-icon"></i>
+                <input type="password" placeholder="Repeat your password" class="signup-form-input">
+
+                <button class="signup-form-button">Create account</button>
+
+                <p class="login-link">Already have an account?<a href="{{url_for('auth.login')}}" >Sign In</a> </p>
+
+            </div>
+        </div>
+    </section>
+{% endblock %}

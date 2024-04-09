@@ -21,7 +21,7 @@
         <div class="banner">
             <h1 class="banner-heading">Welcome to AlertAI</h1>
             <p class="banner-paragraph">Make your life safer</p>
-            <button class="banner-button fill-color">Check out</button>
+            <button class="banner-button" onclick="redirectToPage('auth/login')">Check out</button>
         </div>
     </header>
     <!-- end of header -->
@@ -60,5 +60,11 @@
     </section>
     <!-- end of what do we cover -->
 
+{% block scripts %}
+{{ super() }}
+{% endblock scripts %}
+
 {% endblock page_content %}
+
+
 
