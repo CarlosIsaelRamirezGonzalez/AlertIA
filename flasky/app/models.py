@@ -30,26 +30,34 @@ class User(UserMixin, db.Document):
     def generate_confirmation_token(self):
         data_token = f'{self.email}{self.password_hash}{self.username}'.encode('utf-8')
         hash_result = hashlib.sha256(data_token).hexdigest()
-        token = hash_result[:4]
-        num_random = random.randint(100, 999)
-        return token + str(num_random)
+        token = hash_result[:5]
+        return token 
 
 
     def confirm_token(self, token):
-        token_generated_time = session.get(token)
-        if token_generated_time:
-            current_time = datetime.now(timezone.utc)
-            token_timestap = token_timestap.replace(tzinfo=timezone.utc)
+        token_expiration_time = session.get(token)
+        
+        # If token exists
+        if token_expiration_time:
+            current_time = datetime.datetime.now()
+
+            if current_time < token_expiration_time:
+                
+                self.confirmed = True
+                # Save the changes in the database
+                self.save()
+                return True
             
-            if current_time > token_timestap + timedelta(minutes=3):
-                flash('The token has expired')
-                return 
-            
-            self.confirmed = True
+            flash('The token has expired.')
+            return False
+        
+        flash('The token is incorrect')
+        return False
+        
+        
         
     def verify_password(self, password):
         return check_password_hash(self.password_hash, password)
     
     def __repr__(self):
         return '<User %r>' % self.username
-    

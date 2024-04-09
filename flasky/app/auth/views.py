@@ -1,14 +1,50 @@
-from flask import render_template, request, redirect, url_for, flash
-from flask_login import login_user, login_required, logout_user 
+from flask import render_template, request, redirect, url_for, flash, session
+from flask_login import login_user, login_required, logout_user, current_user
 import random
+import datetime
 from . import auth
-from .forms import LoginForm
+from .forms import LoginForm, SignupForm
 from ..models import User
+from ..email import send_email
+
+@auth.before_app_request
+def before_app_request():
+    if current_user.is_authenticated \
+        and not current_user.confirmed \
+        and request.blueprint != 'auth' \
+        and request.endpoint != 'static':
+        return redirect(url_for('auth.unconfirmed'))
 
 
 @auth.route('/signup', methods=['GET', 'POST'])
 def signup():
-    return render_template('auth/signup.html')
+    
+    form = SignupForm()
+    
+    if form.validate_on_submit():
+        
+        # Create the user object 
+        user = User(email=form.email.data.lower(),
+                    username=form.email.data,
+                    password=form.email.data)
+        
+        # Save in database
+        user.save()
+        
+        # generate token
+        token = user.generate_confirmation_token()
+        
+        # Save the token such a key and token expiration such value
+        session[token] = datetime.datetime.now() + datetime.timedelta(minutes=3) 
+        
+        send_email(user.email, 'Confirm your account.', 'auth/email/confirm', user=user, token=token)
+        
+        return redirect(url_for('auth.token'))        
+    
+    return render_template('auth/signup.html', form=form)
+
+
+
 
 @auth.route('/token', methods=['GET', 'POST'])
 def token():

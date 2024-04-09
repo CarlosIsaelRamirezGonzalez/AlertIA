@@ -8,7 +8,7 @@ class SignupForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired(), Length(1, 64), Regexp('^[A-Za-z][A-Za-z0-9_.]*$', 0,  'Usernames must have only letters, numbers, dots or underscores')])
     password = PasswordField('Password', validators=[DataRequired(), Length(1, 64), EqualTo('password2', message=('Passwords must match.'))])
     password2 = PasswordField('Confirm password', validators=[DataRequired()])
-    submit = SubmitField('Register')
+    submit = SubmitField('Create account')
     
     # validate methods
     def validate_email(self, field): #Campo email field.data = email
