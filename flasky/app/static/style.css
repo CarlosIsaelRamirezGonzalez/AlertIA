@@ -70,6 +70,8 @@ body {
     overflow: hidden;
 
     color: black;
+    font-size: 2rem;
+
     transition: border 0.5s, color .5s, background-color .5s ;
 
     animation: falling-letters 1s 1s backwards;
@@ -301,7 +303,7 @@ body {
     margin-bottom: 5rem;
 }
 
-.form-button {
+.login-form-button {
     margin-top: 1rem;
 
     width: 40%;
@@ -326,7 +328,7 @@ body {
     transition: margin-left .5s;
 }
 
-.form-button:hover .btn-arrow {
+.login-form-button:hover .btn-arrow {
     margin-left: 1.5rem;
 }
 
@@ -446,13 +448,85 @@ body {
 
 }
 
-
-
 /* end of token */
 
 
+/* signup */
+
+.signup {
+    height: 100vh;
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.signup-logo {
+    height: 20vh;
+    border-radius: 20rem;
+
+    position: absolute;
+    margin-top: -35%;
+}
+
+.signup-wrapper {
+    height: 80vh;
+    width: 75vw;
+    background-color: #212529;
+
+    box-shadow: 7px 27px 80px -7px rgba(0,0,0,0.75);
+
+    border-radius: 1rem;
+    display: flex;
+    flex-direction: row; /*SI pongo wrap, tengo que remplazar por column*/
+}
+
+.signup-info {
+    height: 100%;
+    width: 50%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+
+    margin-left: 2rem;
+    text-align: center;
+}
+
+.signup-icon {
+    font-size: 2.5rem;
+    color: #f8edeb;
+}
+
+.signup-benefit-title {
+    font-size: 1.5rem;
+    color: #f8edeb;
+}
+
+.singup-benefit-paragraph {
+    font-size: 1.5rem;
+    color: #fdf0d5;
+
+}
+
+
+.signup-form{
+    height: 100%;
+    width: 50%;
+
+    color: #e5e5e5;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    flex-direction: column;
+}
+/* end of signup */
+
+
+
 /* Media querys */
-@media(max-width: 1200px) {
+@media(max-width: 1200px) and (max-height: 550px) {
 
     /* login */
     .return-icon {

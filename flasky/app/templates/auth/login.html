@@ -1,15 +1,16 @@
 {% extends "base.html" %}
-{% block title %}Flasky - Login{% endblock %}
+{% block title %}AlertAI - Login{% endblock %}
 
 
 {% block page_content %}
+  
 <section class="login">
     <div class="login-wrapper"> 
         <div class="login-info">
-            <i class="fa-solid fa-door-open return-icon"></i>
+            <i class="fa-solid fa-door-open return-icon" onclick="redirectToPage('/')"></i>
             <div class="content-info">
-                <p class="info-paragraph">Did you know that Alert AI can detect more than 10 different accidents?</p>
-                <i class="fa-solid fa-globe info-icon"></i>
+                <p class="info-paragraph">{{phrase}}</p>
+                <i class="{{icon}}"></i>
             </div>
 
 
@@ -17,19 +18,19 @@
         <div class="login-form-wrapper">
 
             <img src="../../static/img/alert-whole-logo.jpg" alt="logo.jpg" class="login-logo">
-            <i class="fa-solid fa-user login-icon" ></i>
-            <input type="text" placeholder="Username" class="login-form-input">
+            <i class="fa-solid fa-envelope login-icon"></i>
+            {{ form.email(class="login-form-input", placeholder="Email") }}
             <i class="fa-solid fa-lock login-icon" ></i>
             <input type="password" placeholder="Password" class="login-form-input">
-            <button class="form-button">
+            <button class="login-form-button">
                 Log In 
                 <i class="fas fa-angle-double-right btn-arrow"></i>
             </button>
 
-            <p class="signup-link">You don't have account yet? <a href="#" class="">Click here</a> </p>
+            <p class="signup-link">You don't have account yet? <a href="{{ url_for('auth.signup') }}">Click here</a> </p>
 
         </div>
 
     </div>
 </section>
-{% endblock page_content %}
+{% endblock %}
