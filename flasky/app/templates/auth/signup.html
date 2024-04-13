@@ -28,9 +28,9 @@
 
             </div>
 
-            <div class="signup-form">
+            <form  class="signup-form" method="post">
                 {{ form.csrf_token }}
-                
+            
                 <i class="fa-solid fa-user signup-form-icon"></i>
                 <!-- <input type="text" placeholder="Username" class="signup-form-input"> -->
                 {{ form.username(class="signup-form-input", placeholder="Username") }}
@@ -49,12 +49,11 @@
                 {{ form.password2(class="signup-form-input", placeholder="Password") }}
 
 
-                <!-- <button class="signup-form-button">Create account</button> -->
-                {{ form.submit(class="signup-form-button") }}
+                <button class="signup-form-button" type="submit">Create account</button>
 
                 <p class="login-link">Already have an account?<a href="{{url_for('auth.login')}}" >Sign In</a> </p>
+            </form>
 
-            </div>
         </div>
     </section>
 {% endblock %}
