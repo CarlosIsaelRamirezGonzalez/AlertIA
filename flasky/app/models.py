@@ -21,8 +21,8 @@ class User(UserMixin, db.Document):
     
     @property
     def password(self):
-        raise AttributeError("password is not readable attribute")
-
+        raise AttributeError('Password is not a readable attribute')
+    
     @password.setter
     def password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -32,6 +32,7 @@ class User(UserMixin, db.Document):
         hash_result = hashlib.sha256(data_token).hexdigest()
         token = hash_result[:5]
         return token 
+
 
 
     def confirm_token(self, token):

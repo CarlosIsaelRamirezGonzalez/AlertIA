@@ -25,8 +25,8 @@ def signup():
         
         # Create the user object 
         user = User(email=form.email.data.lower(),
-                    username=form.email.data,
-                    password=form.email.data)
+                    username=form.username.data,
+                    password=form.password.data)
         
         # Save in database
         user.save()
@@ -34,7 +34,7 @@ def signup():
         # generate token
         token = user.generate_confirmation_token()
         
-        # Save the token such a key and token expiration such value
+        # Save the token like a key and token expiration like value
         session[token] = datetime.datetime.now() + datetime.timedelta(minutes=3) 
         
         send_email(user.email, 'Confirm your account.', 'auth/email/confirm', user=user, token=token)
