@@ -1,3 +1,5 @@
+venv/Scripts/activate
+cd .\flasky\
 $env:FLASK_APP='flasky.py'    
 $env:PYTHONDONTWRITEBYTECODE=1
 $env:FLASK_DEBUG=1

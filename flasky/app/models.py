@@ -2,7 +2,7 @@ from flask_login import UserMixin
 from bson import ObjectId
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask import current_app, session, flash
+from flask import session, flash
 from datetime import datetime, timedelta, timezone
 import hashlib
 from . import db
@@ -17,7 +17,7 @@ class User(UserMixin, db.Document):
     username = db.StringField(required=True)
     email = db.StringField(required=True, unique=True)
     password_hash = db.StringField(required=True)
-    confimed = db.BooleanField(default=False)
+    confirmed = db.BooleanField(default=False)
     
     @property
     def password(self):
@@ -26,6 +26,10 @@ class User(UserMixin, db.Document):
     @password.setter
     def password(self, password):
         self.password_hash = generate_password_hash(password)
+        
+                
+    def verify_password(self, password):
+        return check_password_hash(self.password_hash, password)
         
     def generate_confirmation_token(self):
         data_token = f'{self.email}{self.password_hash}{self.username}'.encode('utf-8')
@@ -40,7 +44,7 @@ class User(UserMixin, db.Document):
         
         # If token exists
         if token_expiration_time:
-            current_time = datetime.datetime.now()
+            current_time = datetime.now()
 
             if current_time < token_expiration_time:
                 
@@ -55,10 +59,6 @@ class User(UserMixin, db.Document):
         flash('The token is incorrect')
         return False
         
-        
-        
-    def verify_password(self, password):
-        return check_password_hash(self.password_hash, password)
     
     def __repr__(self):
         return '<User %r>' % self.username
