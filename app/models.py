@@ -23,3 +23,12 @@ class User(UserMixin, db.Document):
 @login_manager.user_loader
 def load_user(user_id):
     return User.objects(id=ObjectId(user_id)).first()
+
+class Notification(db.Document):
+    user = db.StringField(required=True)
+    date_time = db.DateTimeField(required=True)
+    place = db.StringField(required=True)
+    threat = db.StringField(required=True)
+    camera_name = db.StringField(required=True)
+    certainty = db.StringField(required=True)
+    image = db.BinaryField(required=True)
