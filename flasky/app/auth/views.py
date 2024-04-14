@@ -3,6 +3,7 @@ from flask_login import login_user, login_required, logout_user, current_user
 import random
 import datetime
 from . import auth
+from .. import fernet
 from .forms import LoginForm, SignupForm, TokenForm
 from ..models import User
 from ..email import send_email
@@ -66,6 +67,7 @@ def login():
                 session[token] = datetime.datetime.now() + datetime.timedelta(minutes=3) 
                 send_email(user.email, 'Confirm your account.', 'auth/email/confirm', user=user, token=token)
                 flash('A confirmation email has been sent to you by email.')
+                
                 return redirect(url_for('auth.check'))
                 
             next = request.args.get('next') # Get where the user try to go 
@@ -93,7 +95,9 @@ def logout():
 def check():
     form = TokenForm()
     if form.validate_on_submit():
-        return redirect(url_for('auth.confirm', token=form.token.data, _external=True))
+        token_bytes = form.token.data.encode('utf-8')
+        encyrpt_token = fernet.encrypt(token_bytes)
+        return redirect(url_for('auth.confirm', token=encyrpt_token, _external=True))
     
     return render_template('auth/check.html', form=form)
 
@@ -104,7 +108,9 @@ def confirm(token):
     if current_user.confirmed:
         return redirect(url_for('main.index'))
     
-    if current_user.confirm_token(token):
+    decrypt_token = fernet.decrypt(token).decode()
+    
+    if current_user.confirm_token(decrypt_token):
         flash('You have confirmed your account. Thanks!')
     else:   
         flash('The confirmation link is invalid or has expired.')
