@@ -15,21 +15,26 @@
 
 
         </div>
-        <div class="login-form-wrapper">
+
+        <form class="login-form-wrapper" method="post">
+            {{ form.csrf_token }}
 
             <img src="../../static/img/alert-whole-logo.jpg" alt="logo.jpg" class="login-logo">
+
             <i class="fa-solid fa-envelope login-icon"></i>
             {{ form.email(class="login-form-input", placeholder="Email") }}
+
             <i class="fa-solid fa-lock login-icon" ></i>
-            <input type="password" placeholder="Password" class="login-form-input">
-            <button class="login-form-button">
+            {{ form.password(class="login-form-input", placeholder="Password") }}
+
+            <button class="login-form-button" type="submit"> 
                 Log In 
                 <i class="fas fa-angle-double-right btn-arrow"></i>
             </button>
 
             <p class="signup-link">You don't have account yet? <a href="{{ url_for('auth.signup') }}">Click here</a> </p>
 
-        </div>
+        </form>
 
     </div>
 </section>
