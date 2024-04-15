@@ -1,0 +1,42 @@
+{% extends "bootstrap/base.html"%}
+{% block title %}
+AlertAI
+{% endblock title %}
+
+{% block head %}
+<link rel="stylesheet" href="../static/style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="shortcut icon" href="../static/img/alert-logo.jpg">
+   
+<script src="https://kit.fontawesome.com/e8af35a10c.js" crossorigin="anonym ous"></script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+{% endblock head %}
+
+{% block navbar %}
+{% endblock navbar %}
+
+{% block content %}
+<div class="container">
+    {% for message in get_flashed_messages() %}
+        <div class="alert alert-warning">
+            <button type="button" class="close" data-dismiss="alert">&times;</button> 
+            {{ message }}
+        </div>
+    {% endfor %}
+    {% block page_content %}{% endblock page_content %}
+</div>
+{% endblock content %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+    function redirectToPage(url) {
+        window.location.href = url;
+    }
+</script>
+{% endblock scripts %}
