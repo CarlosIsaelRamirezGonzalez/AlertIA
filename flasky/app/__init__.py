@@ -4,6 +4,7 @@ from flask_bootstrap import Bootstrap
 from flask_mail import Mail
 from flask_login import LoginManager
 from flask_mongoengine import MongoEngine
+from cryptography.fernet import Fernet
 from config import config
 
 # Assign variables to classes
@@ -11,6 +12,10 @@ bootstrap = Bootstrap()
 db = MongoEngine()
 login_manager = LoginManager()
 mail = Mail()
+
+# Init Fernet
+key = Fernet.generate_key()
+fernet = Fernet(key)
 
 # set an endpoint
 login_manager.login_view = 'auth.login'

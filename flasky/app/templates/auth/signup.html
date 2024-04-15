@@ -32,22 +32,17 @@
                 {{ form.csrf_token }}
             
                 <i class="fa-solid fa-user signup-form-icon"></i>
-                <!-- <input type="text" placeholder="Username" class="signup-form-input"> -->
                 {{ form.username(class="signup-form-input", placeholder="Username") }}
 
 
                 <i class="fa-solid fa-envelope signup-form-icon"></i>
-                <!-- <input type="text" placeholder="Email" class="signup-form-input"> -->
                 {{ form.email(class="signup-form-input", placeholder="Email") }}
 
                 <i class="fa-solid fa-lock signup-form-icon"></i>
-                <!-- <input type="password" placeholder="Password" class="signup-form-input"> -->
                 {{ form.password(class="signup-form-input", placeholder="Password") }}
 
                 <i class="fa-solid fa-lock signup-form-icon"></i>
-                <!-- <input type="password" placeholder="Repeat your password" class="signup-form-input"> -->
                 {{ form.password2(class="signup-form-input", placeholder="Password") }}
-
 
                 <button class="signup-form-button" type="submit">Create account</button>
 

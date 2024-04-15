@@ -11,15 +11,22 @@
 
         <p class="token-notification">We send an email to your email with a unique code, please review it and enter that same code below:</p>
 
-        <div class="token-input-wrapper">
+        <!-- <div class="token-input-wrapper">
+            <input type="text" maxlength="1" class="token-input">
+            <input type="text" maxlength="1" class="token-input">
+            <input type="text" maxlength="1" class="token-input">
+            <input type="text" maxlength="1" class="token-input">
+            <input type="text" maxlength="1" class="token-input">
+        </div> -->
 
-            <input type="text" maxlength="1" class="token-input">
-            <input type="text" maxlength="1" class="token-input">
-            <input type="text" maxlength="1" class="token-input">
-            <input type="text" maxlength="1" class="token-input">
-            <input type="text" maxlength="1" class="token-input">
+        <form  class="signup-form" method="post">
+            {{ form.csrf_token }}
 
-        </div>
+            {{ form.token }}
+
+            <button type="submit">Confirm</button>
+        </form>
+
 
     </div>
 </section>
