@@ -1,9 +1,9 @@
 from flask import render_template, request, redirect, url_for, flash, session, current_app
 from flask_login import login_user, login_required, logout_user, current_user
+from itsdangerous import URLSafeSerializer as Serializer
 import random
 import datetime
 from . import auth
-from .. import fernet
 from .forms import LoginForm, SignupForm, TokenForm
 from ..models import User
 from ..email import send_email
@@ -95,10 +95,10 @@ def logout():
 def check():
     form = TokenForm()
     if form.validate_on_submit():
-        token_bytes = form.token.data.encode('utf-8')
-        encyrpt_token = fernet.encrypt(token_bytes)
-        return redirect(url_for('auth.confirm', token=encyrpt_token, _external=True))
-    
+        s = Serializer(current_app.config['SECRET_KEY'])
+        encrypt_token = s.dumps({'token' : form.token.data})
+        return redirect(url_for('auth.confirm', token=encrypt_token, _external=True))
+        
     return render_template('auth/check.html', form=form)
 
 
@@ -108,12 +108,10 @@ def confirm(token):
     if current_user.confirmed:
         return redirect(url_for('main.index'))
     
-    decrypt_token = fernet.decrypt(token).decode()
-    
-    if current_user.confirm_token(decrypt_token):
+    if current_user.confirm_token(token):
         flash('You have confirmed your account. Thanks!')
     else:   
-        flash('The confirmation link is invalid or has expired.')
+        flash('The confirmation token is invalid or has expired.')
         
     return (redirect(url_for('main.index')))
 

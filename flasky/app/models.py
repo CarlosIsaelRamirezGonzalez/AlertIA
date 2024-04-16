@@ -1,9 +1,9 @@
 from flask_login import UserMixin
 from bson import ObjectId
-from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
+from itsdangerous import URLSafeSerializer as Serializer
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask import session, flash
-from datetime import datetime, timedelta, timezone
+from flask import session, flash, current_app
+from datetime import datetime
 import hashlib
 from . import db
 from . import login_manager
@@ -40,7 +40,15 @@ class User(UserMixin, db.Document):
 
 
     def confirm_token(self, token):
-        token_expiration_time = session.get(token)
+        s = Serializer(current_app.config['SECRET_KEY'])
+        try:
+                decrypt_token = s.loads(token)
+        except:
+            return False
+        
+        decrypt_token = decrypt_token.get('token')
+        
+        token_expiration_time = session.get(decrypt_token)
         
         # If token exists
         if token_expiration_time:

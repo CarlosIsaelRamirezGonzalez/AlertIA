@@ -2,18 +2,22 @@
 {% block title %}AlertAI - Unconfirmed{% endblock %}
 
 {% block page_content %}
-<h1>
-    Hello, {{ current_user.username }}!
-</h1>
-<h3>You have not confirmed your account yet.</h3>
-<p>
-    Before you can access this site you need to confirm your account.
-    Check your inbox, you should have received an email with a confirmation token.
-</p>
-<p>
-    Need another confirmation email?
-    <a href="{{ url_for('auth.resend_confirmation') }}">Click here</a>
-    Need to enter token?
-    <a href="{{ url_for('auth.check') }}">Click here</a>
-</p>
+<div class="unconfirmed-wrapper">
+    <h1 class="unconfirmed-greeting">
+        Hello User!
+    </h1>
+    <h3 class="unconfirmed-warning">You have not confirmed your account yet.</h3>
+    <p class="unconfirmed-paragraph">
+        Before you can access this site you need to confirm your account.
+        Check your inbox, you should have received an email with a confirmation token.
+    </p>
+    <p class="unconfirmed-options">
+        Need another confirmation email?
+        <a href="{{ url_for('auth.resend_confirmation') }}">Click here</a>
+        <br><br>
+        Need to enter token?
+        <a href="{{ url_for('auth.check') }}">Click here</a>
+    </p>
+</div>
+
 {% endblock %}
