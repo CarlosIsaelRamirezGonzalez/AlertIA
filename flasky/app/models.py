@@ -7,7 +7,6 @@ from datetime import datetime
 import hashlib
 from . import db
 from . import login_manager
-import random
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -70,3 +69,7 @@ class User(UserMixin, db.Document):
     
     def __repr__(self):
         return '<User %r>' % self.username
+    
+    
+class Camera(db.Document):
+    pass
