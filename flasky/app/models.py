@@ -7,7 +7,6 @@ from datetime import datetime
 import hashlib
 from . import db
 from . import login_manager
-import random
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -36,8 +35,6 @@ class User(UserMixin, db.Document):
         hash_result = hashlib.sha256(data_token).hexdigest()
         token = hash_result[:5]
         return token 
-
-
 
     def confirm_token(self, token):
         s = Serializer(current_app.config['SECRET_KEY'])
@@ -70,3 +67,35 @@ class User(UserMixin, db.Document):
     
     def __repr__(self):
         return '<User %r>' % self.username
+    
+    
+    
+class Alerts(db.EmbeddedDocument):
+    fires = db.BooleanField(default=False)
+    bladedWeapon = db.BooleanField(default=False)
+    stabbing = db.BooleanField(default=False)
+    handgun = db.BooleanField(default=False)
+    longGun = db.BooleanField(default=False)
+    brandishing = db.BooleanField(default=False)
+    dogAggression = db.BooleanField(default=False)
+    carAccident = db.BooleanField(default=False)
+    brawls = db.BooleanField(default=False)
+    injuredPeople = db.BooleanField(default=False)
+    
+    
+    
+class Camera(db.Document):
+    name = db.StringField(required=True)
+    phone_number = db.StringField(required=True)
+    security = db.BooleanField(default=True)
+    IP = db.StrngField()
+    place = db.ListField(require=True, choices=["home", "building", "square", "street", "personalized"])
+    address = db.StringField(required=True)
+    images = db.ListField(db.ImageField())
+    
+    user = db.ReferenceField(User, reverse_delete_rule=db.CASCADE)
+    alerts = db.EmbeddedDocumentField(Alerts)
+    
+    def __repr__(self):
+        return '<Camera %r>' % self.name
+    
