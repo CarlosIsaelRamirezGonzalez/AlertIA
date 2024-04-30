@@ -36,8 +36,6 @@ class User(UserMixin, db.Document):
         token = hash_result[:5]
         return token 
 
-
-
     def confirm_token(self, token):
         s = Serializer(current_app.config['SECRET_KEY'])
         try:
@@ -70,6 +68,20 @@ class User(UserMixin, db.Document):
     def __repr__(self):
         return '<User %r>' % self.username
     
-    
+     
 class Camera(db.Document):
-    pass
+    name = db.StringField(required=True)
+    phone_number = db.StringField(required=True)
+    security = db.BooleanField(default=True)
+    IP = db.StrngField()
+    place = db.ListField(required=True, choices=["home", "building", "square", "street", "personalized"])
+    address = db.StringField(required=True)
+    images = db.ListField(db.ImageField())
+    
+    user = db.ReferenceField(User, reverse_delete_rule=db.CASCADE)
+    alerts = db.ListField(required=True, choices=["Fires", "Bladed Weapon", "Stabbing", "Handgun", "Long Gun", 
+                                                  "Brandishing", "Dog Aggression", "Car Accident", "Brawls",
+                                                  "Injured People"])    
+    def __repr__(self):
+        return '<Camera %r>' % self.name
+    
