@@ -21,7 +21,7 @@ input[type=number]::-webkit-outer-spin-button {
 /* header */
 .header {
     height: 100vh;
-    background: linear-gradient(to top, rgba(0, 0, 0, .6), rgba(0, 0, 0, .5) ),url(../img/header.jpg) center no-repeat;
+    background: linear-gradient(to top, rgba(0, 0, 0, .6), rgba(0, 0, 0, .5) ),url(../static/img/header.jpg) center no-repeat;
     background-size: cover;
 }
 
@@ -416,7 +416,7 @@ input[type=number]::-webkit-outer-spin-button {
 
 
 :where([autocomplete=one-time-code]) {
-    --otp-digits: 6;
+    --otp-digits: 5;
     --otp-ls: 10rem;
     --otp-gap: 1.25; 
   
