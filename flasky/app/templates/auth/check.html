@@ -2,32 +2,26 @@
 {% block title %}AlertAI - Token{% endblock %}
 
 {% block page_content %}
-<section class="token">
-    <div class="token-wrapper">
-
-        <i class="fa-regular fa-envelope-open token-email-open-icon"></i>
+<body>
+    <section class="token">
         
-        <i class="fa-solid fa-envelope  token-email-closed-icon"></i>
-
-        <p class="token-notification">We send an email to your email with a unique code, please review it and enter that same code below:</p>
-
-        <!-- <div class="token-input-wrapper">
-            <input type="text" maxlength="1" class="token-input">
-            <input type="text" maxlength="1" class="token-input">
-            <input type="text" maxlength="1" class="token-input">
-            <input type="text" maxlength="1" class="token-input">
-            <input type="text" maxlength="1" class="token-input">
-        </div> -->
-
-        <form  class="signup-form" method="post">
-            {{ form.csrf_token }}
-
-            {{ form.token }}
-
-            <button type="submit">Confirm</button>
-        </form>
-
-
-    </div>
-</section>
+        <i class="fa-regular fa-envelope-open token-email-open-icon"></i>
+        <i class="fa-regular fa-envelope  token-email-closed-icon"></i>
+        
+        <label for="otp-input">
+            <p class="token-notification">We send an email to your email with a unique code, please review it and enter that same code below:</p>
+            <p class="token-notification">The token has a life time of 3 minutes, after this time the token will expire</p>
+        </label>
+            
+        <input id="otp-input" type="text" autocomplete="one-time-code" inputmode="numeric" maxlength="6" pattern="\d{6}">
+        
+        <button class="token-button">Confirm Token</button>
+        
+        <p class="resend-token-link">Did you not receive any token? <a href="#">Send again</a></p>
+    </section>
+</body>
+<script>
+    const input = document.querySelector('[autocomplete=one-time-code'); 
+    input.addEventListener('input', () => input.style.setProperty('--_otp-digit', input.selectionStart)); 
+</script>
 {% endblock %}

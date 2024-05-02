@@ -223,7 +223,7 @@ input[type=number]::-webkit-outer-spin-button {
     height: 100%;
     width: 50%;
 
-    background: linear-gradient(to top, rgba(0, 0, 0, .6), rgba(0, 0, 0, .5) ), url(../img/login-info-background.jpeg) no-repeat center;
+    background: linear-gradient(to top, rgba(0, 0, 0, .6), rgba(0, 0, 0, .5));
     background-size: cover;
     color: #f8edeb;
 
@@ -356,52 +356,29 @@ input[type=number]::-webkit-outer-spin-button {
 .token {
     height: 100vh;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
 
     background-color: #fffafa;
 }
 
-.token-wrapper {
-    height: 85vh;
-    width: 70vw;
-
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
-    flex-direction: column;
-
-    border-radius: 2rem;
-    background-color: #212529;
-    box-shadow: 1px 10px 42px 4px rgba(0,0,0,0.75);
-
-    box-sizing: border-box;
-    padding: 5rem;
-
-}
-
 .token-email-open-icon {
-    position: absolute;
-    margin-top: -25%;
-
-    font-size: 20rem;
-    color: #fffafa;
-    opacity: 0;
-
     animation: rotation-email 3s cubic-bezier(.89,0,1,.01);
 }
 
 .token-email-closed-icon {
-    position: absolute;
-    margin-top: -25%;
-    
-
-    font-size: 20rem;
-    color: #fffafa;
-    opacity: 0;
-
     animation: show-email-closed 3s 3s cubic-bezier(0,1,.70,1) forwards;
+}
 
+.token-email-open-icon, 
+.token-email-closed-icon {
+    position: absolute;
+    margin-top: -35%;
+    
+    font-size: 20rem;
+    color: #212529;
+    opacity: 0;
 }
 
 @keyframes rotation-email {
@@ -427,50 +404,130 @@ input[type=number]::-webkit-outer-spin-button {
 
 .token-notification {
 
-    margin-top: 20%;
-
     font-size: 2.5rem;
-    color: #fffafa;
+    font-weight: 400;
+    letter-spacing: .1rem;
 
-}
-
-
-.token-input-wrapper {
-    display: flex;
-    align-items: center;
-    justify-content: space-evenly;
-
-}
-
-.token-input {
-    width: 10%;
-    height: 150%;
-
-    
     text-align: center;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 10rem;
-    font-weight: 500;
 
+    color: #212529;
+
+}
+
+
+:where([autocomplete=one-time-code]) {
+    --otp-digits: 6;
+    --otp-ls: 10rem;
+    --otp-gap: 1.25; 
+  
+    --_otp-bgsz: calc(var(--otp-ls) + 1ch); 
+    --_otp-digit: 0;
+  
+
+    all: unset;
+
+    background: 
+        linear-gradient(90deg, var(--otp-bg, #BBB) calc(var(--otp-gap) * var(--otp-ls)), transparent 0),
+        linear-gradient(90deg, var(--otp-bg, #EEE) calc(var(--otp-gap) * var(--otp-ls)), transparent 0);
+        
+    background-position: calc(var(--_otp-digit) * var(--_otp-bgsz)) 0, 0 0;
+
+    background-repeat: no-repeat, repeat-x; 
+
+    background-size: var(--_otp-bgsz) 100%; 
+
+    caret-color: var(--otp-cc, #222); 
+
+    caret-shape: block; 
+
+    clip-path: inset(0% calc(var(--otp-ls) / 2) 0% 0%); 
+
+    font-family: ui-monospace, monospace; 
+
+    font-size: var(--otp-fz, 10rem); 
+
+    inline-size: calc(var(--otp-digits) * var(--_otp-bgsz)); 
+
+    letter-spacing: var(--otp-ls); 
+
+    padding-block: var(--otp-pb, 1ch); 
+
+    padding-inline-start: calc(((var(--otp-ls) - 1ch) / 2) * var(--otp-gap)); 
+
+}
+
+.signup-form-button {
+    width: 40%;
+    height: 3.5rem;
+    padding: .7rem .5rem;
+
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+
+    background-color: transparent;
+    border: .1rem solid #e5e5e5;
     outline: none;
 
-    border-radius: .8rem;
-    border: .5rem solid #c8ccc1;
+    color: #e5e5e5;
 
-    transition: border .5s;
+    cursor: pointer;
+
+    transition: all .5s;
+}
+
+.signup-form-button:hover {
+    border: .1rem solid #161616;
+    color: #161616;
+    background-color: #e5e5e5;
+    border-radius: 2rem;
 
 }
 
-.token-input:hover {
-    border: .5rem solid black ;
+.token-button {
+    width: 20rem;
+    height: 3.5rem;
+    padding: .7rem .5rem;
+
+    position: absolute;
+
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+
+    background-color: transparent;
+    border: .1rem solid #161616;
+    outline: none;
+
+    cursor: pointer;
+
+    transition: all .5s;
+
+    margin-top: 50rem;
 }
 
-.token-input:focus {
-    border: .5rem solid #ba181b ;
+.token-button:hover {
+    border: .1rem solid #e5e5e5;
+    color: #e5e5e5;
+    background-color: #161616;
+    border-radius: 2rem;
 }
 
+.resend-token-link {
+
+    font-size: 1.5rem;
+    font-weight: 400;
+    letter-spacing: .1rem;
 
 
+    position: absolute;    
+    margin-bottom: -70rem;
+}
+
+.resend-token-link a:link,
+.resend-token-link a:visited {
+    color: #4cc9f0;
+}
 
 /* end of token */
 
@@ -478,59 +535,46 @@ input[type=number]::-webkit-outer-spin-button {
 
 .signup {
     height: 100vh;
-    
+    background-color: #f8f9fa;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-.signup-logo {
-    height: 20vh;
-    border-radius: 20rem;
-
-    position: absolute;
-    margin-top: -35%;
-}
 
 .signup-wrapper {
     height: 80vh;
     width: 75vw;
-    background-color: #212529;
+    background-color: #f5f3f4;
+    border: .2rem solid #212529;
 
-    box-shadow: 7px 27px 80px -7px rgba(0,0,0,0.75);
-
-    border-radius: 1rem;
     display: flex;
-    flex-direction: row; /*SI pongo wrap, tengo que remplazar por column*/
 
 }
 
 .signup-info {
     height: 100%;
-    width: 60%;
+    width: 70%;
 
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
 
-    margin-left: 2rem;
     text-align: center;
-}
+    letter-spacing: .1rem;
+    font-weight: 300;
 
+    box-sizing: border-box;
+    padding: 3rem;
+
+    color: #212529;
+
+    font-size: 2rem;
+
+}
 
 .signup-icon {
-    font-size: 2.5rem;
-    color: #f8edeb;
-}
-
-.signup-benefit-title {
-    font-size: 2rem;
-    color: #f8edeb;
-}
-
-.singup-benefit-paragraph {
-    font-size: 2rem;
-    color: #fdf0d5;
+    font-size: 3rem;
 }
 
 
@@ -539,6 +583,7 @@ input[type=number]::-webkit-outer-spin-button {
     width: 40%;
 
     color: #e5e5e5;
+    background: #161616;
 
     display: flex;
     align-items: center;
@@ -546,32 +591,76 @@ input[type=number]::-webkit-outer-spin-button {
     flex-direction: column;
 }
 
-.signup-form-input {
-    width: 70%;
-    height: 5%;
+.signup-form-icon {
+    font-size: 1.5rem;
 
-
-    font-size: 2rem;
+    margin-bottom: -20%;
+    margin-right: -75%;
 }
 
-.login-form-input {
+.signup-form-input {
     width: 80%;
+    height: 4rem;
 
     margin: 2.5rem;
     padding: .5rem ;
 
     background-color: transparent;
     font-family: 'Josefin Sans', sans-serif;
+    text-align: center;
     font-size: 2rem;
-    color: #fffafa;
+    color: #e5e5e5;
     letter-spacing: .1rem;
 
     outline: none;
     border: none;
-    border-bottom: .1rem solid #555;
+    border-bottom: .1rem solid #e5e5e5;
 
     margin-bottom: 5rem;
 }
+
+.signup-form-input::placeholder {
+    color: #e5e5e5;
+}
+
+.signup-form-button {
+    width: 40%;
+    height: 3.5rem;
+    padding: .7rem .5rem;
+
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+
+    background-color: transparent;
+    border: .1rem solid #e5e5e5;
+    outline: none;
+
+    color: #e5e5e5;
+
+    cursor: pointer;
+
+    transition: all .5s;
+}
+
+.signup-form-button:hover {
+    border: .1rem solid #161616;
+    color: #161616;
+    background-color: #e5e5e5;
+    border-radius: 2rem;
+
+}
+
+.login-link {
+    font-size: 1.5rem;
+    color: #e5e5e5;
+}
+
+.login-link a:link,
+.login-link a:visited {
+    color: #4cc9f0;
+}
+
 /* end of signup */
 
 /* unconfirmed */

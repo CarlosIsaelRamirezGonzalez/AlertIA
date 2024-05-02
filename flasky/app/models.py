@@ -73,8 +73,8 @@ class Camera(db.Document):
     name = db.StringField(required=True)
     phone_number = db.StringField(required=True)
     security = db.BooleanField(default=True)
-    IP = db.StrngField()
-    place = db.ListField(required=True, choices=["home", "building", "square", "street", "personalized"])
+    IP = db.StringField()   
+    place = db.StringField(required=True, choices=["Home", "Building", "Square", "Street", "Personalized"])
     address = db.StringField(required=True)
     images = db.ListField(db.ImageField())
     

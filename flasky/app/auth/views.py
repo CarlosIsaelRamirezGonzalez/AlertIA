@@ -74,7 +74,7 @@ def login():
             
             # Protect the user from a possible scam
             if next is None or not next.startswith('/'):
-                next = url_for('main.index')
+                next = url_for('home.home')
                 
             return redirect(next)
         
