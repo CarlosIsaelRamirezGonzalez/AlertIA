@@ -13,11 +13,16 @@
             <p class="token-notification">The token has a life time of 3 minutes, after this time the token will expire</p>
         </label>
             
-        <input id="otp-input" type="text" autocomplete="one-time-code" inputmode="numeric" maxlength="6" pattern="\d{6}">
+        <form method="post" class="token-form">
+            {{ form.csrf_token }}
+
+            {{ form.token(id="otp-input", type="text", autocomplete="one-time-code", inputmode="numeric", maxlength="5") }}
+
+            <button class="token-button" type="submit">Confirm Token</button>
+        </form>
+
         
-        <button class="token-button">Confirm Token</button>
-        
-        <p class="resend-token-link">Did you not receive any token? <a href="#">Send again</a></p>
+        <p class="resend-token-link">Did you not receive any token? <a href="{{url_for('auth.resend_confirmation')}}">Send again</a></p>
     </section>
 </body>
 <script>
