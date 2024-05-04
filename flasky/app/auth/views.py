@@ -13,6 +13,7 @@ def before_app_request():
     if current_user.is_authenticated \
         and not current_user.confirmed \
         and request.blueprint != 'auth' \
+        and request.blueprint != 'main' \
         and request.endpoint != 'static':
         return redirect(url_for('auth.unconfirmed'))
     
@@ -32,7 +33,13 @@ def signup():
                     username=form.username.data)
         user.password = form.password.data
         user.save()
-        return redirect(url_for('auth.login'))        
+        login_user(user)
+
+        token = current_user.generate_confirmation_token()
+        session[token] = datetime.datetime.now() + datetime.timedelta(minutes=3) 
+        send_email(current_user.email, 'Confirm your account.', 'auth/email/confirm', user=current_user, token=token)
+        flash('A confirmation email has been sent to you by email.')
+        return redirect(url_for('auth.check'))        
     
     return render_template('auth/signup.html', form=form)
 
@@ -74,7 +81,7 @@ def login():
             
             # Protect the user from a possible scam
             if next is None or not next.startswith('/'):
-                next = url_for('home.home')
+                next = url_for('home.index')
                 
             return redirect(next)
         
@@ -110,10 +117,11 @@ def confirm(token):
     
     if current_user.confirm_token(token):
         flash('You have confirmed your account. Thanks!')
+        return (redirect(url_for('home.index')))
     else:   
         flash('The confirmation token is invalid or has expired.')
         
-    return (redirect(url_for('main.index')))
+    return (redirect(url_for('auth.check')))
 
 @auth.route('/confirm')
 @login_required

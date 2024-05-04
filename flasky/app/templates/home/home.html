@@ -53,7 +53,7 @@
                     <a href="#" class="navigation-link">Help</a>
                 </li>
                 <li class="navigation-item">
-                    <a href="#" class="navigation-link">Log Out</a>
+                    <a href="{{ url_for('auth.logout') }}" class="navigation-link">Log Out</a>
                 </li>
             </ul>
 
@@ -72,127 +72,7 @@
 
         <div class="cameras-container">
 
-            <div class="camera-card">
-                <div class="front-face">
-                    <div class="front-face-icon">
-                        <i class="fa-solid fa-square-pen"></i>
-                    </div>
-                    <div class="front-face-name">
-                        <h3>Groceries Store</h3>
-                    </div>
-                </div>
-                <div class="back-face">
-                    <div class="back-face-configurations">
-                        <p>Address: Carnicería "El Gaucho", Beverly Hills Drive, North York, Ontario, Canadá</p>
-                        <p>Phone number: 3339533760</p>
-                    </div>
-                    <div class="back-face-buttons">
-                        <button class="back-face-edit-button">
-                            <i class="fa-solid fa-pencil"></i>
-                        </button>
-                        <button class="back-face-delete-button">
-                            <i class="fa-solid fa-trash-can"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-            <div class="camera-card">
-                <div class="front-face">
-                    <div class="front-face-icon">
-                        <i class="fa-solid fa-road"></i>    
-                    </div>
-                    <div class="front-face-name">
-                        <h3>House Corner</h3>
-                    </div>
-                </div>
-                <div class="back-face">
-                    <div class="back-face-configurations">
-                        <p>Address: Calz del Campesino 1097, Moderna, 44190 Guadalajara, Jal., México</p>
-                        <p>Phone number: 3339533760</p>
-                    </div>
-                    <div class="back-face-buttons">
-                        <button class="back-face-edit-button">
-                            <i class="fa-solid fa-pencil"></i>
-                        </button>
-                        <button class="back-face-delete-button">
-                            <i class="fa-solid fa-trash-can"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-            <div class="camera-card">
-                <div class="front-face">
-                    <div class="front-face-icon">
-                        <i class="fa-solid fa-store"></i>
-                    </div>
-                    <div class="front-face-name">
-                        <h3>Plaza Patria</h3>
-                    </div>
-                </div>
-                <div class="back-face">
-                    <div class="back-face-configurations">
-                        <p>Address: Plaza Patria, Zapopan, Jal., México</p>
-                        <p>Phone number: 3339533760</p>
-                    </div>
-                    <div class="back-face-buttons">
-                        <button class="back-face-edit-button">
-                            <i class="fa-solid fa-pencil"></i>
-                        </button>
-                        <button class="back-face-delete-button">
-                            <i class="fa-solid fa-trash-can"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-            <div class="camera-card">
-                <div class="front-face">
-                    <div class="front-face-icon">
-                        <i class="fa-solid fa-building"></i>
-                    </div>
-                    <div class="front-face-name">
-                        <h3>CETI</h3>
-                    </div>
-                </div>
-                <div class="back-face">
-                    <div class="back-face-configurations">
-                        <p>Address: CETI Center Plantel Colomos, Calle Nueva Escocia, Providencia 5a Sección, Guadalajara, Jal., México</p>
-                        <p>Phone number: 3339533760</p>
-                    </div>
-                    <div class="back-face-buttons">
-                        <button class="back-face-edit-button">
-                            <i class="fa-solid fa-pencil"></i>
-                        </button>
-                        <button class="back-face-delete-button">
-                            <i class="fa-solid fa-trash-can"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-            <div class="camera-card">
-                <div class="front-face">
-                    <div class="front-face-icon">
-                        <i class="fa-solid fa-house"></i>
-                    </div>
-                    <div class="front-face-name">
-                        <h3>Master Bedroom</h3>
-                    </div>
-                </div>
-                <div class="back-face">
-                    <div class="back-face-configurations">
-                        <p>Address: Calle Francisco Labastida Izquierda 775, Jardines Alcalde, Guadalajara, Jal., México</p>
-                        <p>Phone number: 3339533760</p>
-                    </div>
-                    <div class="back-face-buttons">
-                        <button class="back-face-edit-button">
-                            <i class="fa-solid fa-pencil"></i>
-                        </button>
-                        <button class="back-face-delete-button">
-                            <i class="fa-solid fa-trash-can"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-            <div class="add-camera-card">
+            <div class="add-camera-card" onclick="redirectToPage('/addCamera')">
                 <div class="front-face">
                     <div class="front-face-icon">
                         <i class="fa-solid fa-plus"></i>
@@ -202,7 +82,9 @@
                     </div>
                 </div>
             </div>
+
         </div>
+
     </section>
     <!-- end of cameras -->
     <script>

@@ -24,4 +24,4 @@ class LoginForm(FlaskForm):
     remember_me = BooleanField('Keep me logged in')    
     
 class TokenForm(FlaskForm):
-    token = StringField(validators=[DataRequired()])
+    token = StringField()
