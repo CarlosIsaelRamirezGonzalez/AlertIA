@@ -42,6 +42,9 @@ def create_app(config_name):
     from .auth import auth as auth_blueprint
     app.register_blueprint(auth_blueprint, url_prefix="/auth")
     
+    from .alert import alert as alert_blueprint
+    app.register_blueprint(alert_blueprint, url_prefix="/alert")
+    
     
     return app
     
