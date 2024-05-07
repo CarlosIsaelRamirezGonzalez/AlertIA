@@ -1,0 +1,738 @@
+/* common styles */
+html {
+    font-size: 62.5%;
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Montserrat', sans-serif;
+}
+/* end of common styles */
+
+/* header */
+.header {
+    height: 100vh;
+    background: linear-gradient(to top, rgba(0, 0, 0, .6), rgba(0, 0, 0, .5) ),url(img/header.jpg) center no-repeat;
+    background-size: cover;
+}
+
+.brand {
+    display: flex;
+    cursor: pointer;
+    height: 10vh;
+}
+
+.alertai-heading {
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 3rem;
+    font-weight: 400;
+    color: #fefae0;
+    letter-spacing: .2rem;
+}
+
+.banner {
+    color: #ddd;
+    height: 80vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.banner-heading {
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 7rem;
+    font-weight: 350;
+    margin-bottom: 0;
+    animation: falling-letters 2s;
+}
+
+.banner-paragraph {
+    font-size: 3.5rem;
+    font-weight: 300;
+    animation: falling-letters 1.5s .5s backwards;
+
+}
+
+.banner-button {
+    height: 5rem;
+    width: 20rem;
+    
+    position: relative;
+
+    background-color: rgba(255, 255, 255, 0.6);
+    border: 2px solid #252525;
+    border-radius: 3rem;
+
+    cursor: pointer;
+    overflow: hidden;
+
+    color: black;
+    font-size: 2rem;
+
+    transition: border 0.5s, color .5s, background-color .5s ;
+
+    animation: falling-letters 1s 1s backwards;
+
+}
+
+.banner-button:hover {
+    border: 2px solid #fff;
+    color: #eff6e0;
+    background-color: rgba(0, 0, 0, .6);
+}
+
+.banner-button:active {
+    transform: translateY(.3rem);
+}
+
+
+@keyframes falling-letters {
+    0% {
+        opacity: 0;
+        margin-bottom: 7rem;
+    }
+}
+
+/* end of header */
+
+
+/* about us */
+.about-us {
+    display: flex;
+    background-color: #131316;
+    height: 100vh;
+}
+
+.about-us-content {
+    flex: 0 1 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 10rem;
+    box-sizing: border-box;
+}
+
+.about-us-heading {
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 4rem;
+    font-weight: 300;
+    text-transform: uppercase;
+    color: #e5e5e5;
+}
+
+.sub-heading {
+    font-size: 3.5rem;
+    font-weight: 300;
+    letter-spacing: .2rem;
+    color: #e5e5e5;
+}
+
+.about-us-paragraph {
+    font-size: 1.6rem;
+    font-style: italic;
+    font-weight: 300;
+    text-align: center;
+    margin-bottom: 5rem;
+    color: #e5e5e5;
+}
+
+.about-us-images {
+    flex: 1 1;
+    position: relative;
+}
+
+.image {
+    width: 32rem;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    box-shadow: 0 3rem 6rem rgba(255, 255, 255, 0.4);
+    border-radius: .4rem;
+    border: .2rem solid #e5e5e5;
+}
+
+.image-1 {
+    transform: translate(-15%, -100%);
+}
+
+.image-2 {
+    transform: translate(-90%, -80%);
+}
+
+.image-3 {
+    transform: translate(-80%, -20%);
+}
+
+.image-4 {
+    transform: translate(-10%, -0%);
+}
+
+/* end of about us */
+
+/* common-header */
+
+.small-underline {
+    width: 9rem;
+    height: .1rem;
+    margin: 0 auto 1rem auto;
+    background-color: #bfc0c0;
+}
+ 
+.big-underline {
+    width: 20rem;
+    height: .1rem;
+    margin: auto;
+    background-color: #bfc0c0;
+}
+
+/* end of common-header */
+
+/* login */
+.login {
+    height: 100vh;
+    background: linear-gradient(to top, rgba(0, 0, 0, .6), rgba(0, 0, 0, .5) ), url(img/background-login.jpg) no-repeat center;
+    background-size: cover;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-wrapper {
+    height: 75vh;
+    width: 60vw;
+    background-color: #212529;
+
+    box-shadow: 7px 27px 80px -7px rgba(0,0,0,0.75);
+
+    border-radius: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.login-info {
+    height: 100%;
+    width: 50%;
+    background-color: #ddd;
+
+    background: linear-gradient(to top, rgba(0, 0, 0, .6), rgba(0, 0, 0, .5) ), url(img/login-info-background.jpeg) no-repeat center;
+    background-size: cover;
+
+}
+
+.return-icon {
+    font-size: 3rem;
+    margin: 1.5rem;
+    cursor: pointer;
+    padding-bottom: 3rem;
+    color: #f8edeb;
+}
+
+.content-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.info-paragraph {
+    text-align: center;
+    font-size: 3rem;
+    color: #f8edeb;
+}
+
+
+.info-icon {
+    font-size: 20rem;
+    margin-top: 10rem;
+    color: #f8edeb;
+}
+
+.login-form-wrapper {
+    height: 100%;
+    width: 50%;
+
+    color: #e5e5e5;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.login-logo {
+    width: 35%;
+    border-radius: 10rem;
+    margin-bottom: 10%;
+    margin-top: -25%;
+
+}
+
+.login-form {
+    width: 100%;
+}
+
+
+.login-icon {
+    font-size: 1.5rem;
+
+    margin-bottom: -8%;
+    margin-right: -75%;
+}
+
+.login-form-input {
+    width: 80%;
+
+    margin: 2.5rem;
+    padding: .5rem ;
+
+    background-color: transparent;
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 2rem;
+    color: #fffafa;
+    letter-spacing: .1rem;
+
+    outline: none;
+    border: none;
+    border-bottom: .1rem solid #555;
+
+    margin-bottom: 5rem;
+}
+
+.login-form-button {
+    margin-top: 1rem;
+
+    width: 40%;
+    height: 3.5rem;
+    padding: .7rem .5rem;
+    
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    color: #fffafa;
+
+    background-color: transparent;
+    border: .1rem solid #fffafa;
+    outline: none;
+    border-radius: 2rem;
+    
+    cursor: pointer;
+}
+
+.btn-arrow {
+    margin-left: .5rem;
+    transition: margin-left .5s;
+}
+
+.login-form-button:hover .btn-arrow {
+    margin-left: 1.5rem;
+}
+
+.signup-link {
+    position: absolute;
+    margin-top: 30%;
+
+    font-size: 1.5rem;
+    color: #fffafa;
+}
+
+.signup-link a:link,
+.signup-link a:visited {
+    color: #4cc9f0;
+}
+
+/* end of login */
+
+/* token */
+
+.token {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background-color: #fffafa;
+}
+
+.token-wrapper {
+    height: 85vh;
+    width: 70vw;
+
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    flex-direction: column;
+
+    border-radius: 2rem;
+    background-color: #212529;
+    box-shadow: 1px 10px 42px 4px rgba(0,0,0,0.75);
+
+    box-sizing: border-box;
+    padding: 5rem;
+
+}
+
+.token-email-open-icon {
+    position: absolute;
+    margin-top: -25%;
+
+    font-size: 20rem;
+    color: #fffafa;
+    opacity: 0;
+
+    animation: rotation-email 3s cubic-bezier(.89,0,1,.01);
+}
+
+.token-email-closed-icon {
+    position: absolute;
+    margin-top: -25%;
+    
+
+    font-size: 20rem;
+    color: #fffafa;
+    opacity: 0;
+
+    animation: show-email-closed 3s 3s cubic-bezier(0,1,.70,1) forwards;
+
+}
+
+@keyframes rotation-email {
+    0% {
+        transform: rotate(0deg);
+        opacity: 1;
+    }
+
+    100% {
+        transform: rotate(3600deg);
+    }
+}
+
+@keyframes show-email-closed {
+    0% {
+        opacity: 1;
+        transform: rotate(-3600deg);
+    }
+    100% {
+        opacity: 1;
+    }
+} 
+
+.token-notification {
+
+    margin-top: 20%;
+
+    font-size: 2.5rem;
+    color: #fffafa;
+
+}
+
+
+.token-input-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+
+}
+
+.token-input {
+    width: 10%;
+    height: 150%;
+
+    
+    text-align: center;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 10rem;
+    font-weight: 500;
+
+    outline: none;
+
+    border-radius: .8rem;
+    border: .5rem solid #c8ccc1;
+
+    transition: border .5s;
+
+}
+
+.token-input:hover {
+    border: .5rem solid black ;
+}
+
+.token-input:focus {
+    border: .5rem solid #ba181b ;
+}
+
+
+/* end of token */
+
+
+/* signup */
+
+.signup {
+    height: 100vh;
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.signup-logo {
+    height: 20vh;
+    border-radius: 20rem;
+
+    position: absolute;
+    margin-top: -35%;
+}
+
+.signup-wrapper {
+    height: 80vh;
+    width: 75vw;
+    background-color: #212529;
+
+    box-shadow: 7px 27px 80px -7px rgba(0,0,0,0.75);
+
+    border-radius: 1rem;
+    display: flex;
+    flex-direction: row; /*SI pongo wrap, tengo que remplazar por column*/
+}
+
+.signup-info {
+    height: 100%;
+    width: 50%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+
+    margin-left: 2rem;
+    text-align: center;
+}
+
+.signup-icon {
+    font-size: 2.5rem;
+    color: #f8edeb;
+}
+
+.signup-benefit-title {
+    font-size: 1.5rem;
+    color: #f8edeb;
+}
+
+.singup-benefit-paragraph {
+    font-size: 1.5rem;
+    color: #fdf0d5;
+
+}
+
+
+.signup-form{
+    height: 100%;
+    width: 50%;
+
+    color: #e5e5e5;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    flex-direction: column;
+}
+/* end of signup */
+
+
+/* unconfirmed */
+
+.unconfirmed-wrapper {
+    height: 100vh;
+
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    flex-direction: column;
+}
+
+.unconfirmed-greeting {
+    font-size: 4rem;
+    margin: 2rem;
+}
+
+.unconfirmed-warning {
+    font-size: 2.5rem;
+    margin: 2rem;
+}
+
+.unconfirmed-paragraph {
+    font-size: 2.5rem;
+    margin: 2rem;
+}
+
+.unconfirmed-options {
+    font-size: 2rem;
+    margin: 2rem;
+}
+/* end of unconfirmed */
+
+/* Media querys */
+@media(max-width: 1200px) and (max-height: 550px) {
+
+    /* login */
+    .return-icon {
+        font-size: 2.5rem;
+    }
+
+    .info-paragraph {
+        font-size: 2rem;
+    }
+    
+    .info-icon {
+        font-size: 15rem;
+    }
+ 
+    .login-icon {
+        font-size: 1rem;
+        position: relative;
+        margin-bottom: -10%;
+        margin-right: -75%;
+    }
+    
+    .login-form-input {
+        font-size: 1.5rem;
+    }
+
+    .signup-link {
+        position: absolute;
+        margin-top: 40%;
+    
+        font-size: 1.5rem;
+
+    }
+
+    /* end of index */
+
+    /* index */
+    .about-us {
+        flex-direction: column;
+    }
+
+    .image {
+        width: 25rem;
+    }
+
+    .about-us-images {
+        margin-bottom: 15rem;
+    }
+    /* end of index */
+
+}
+
+
+@media(max-width: 650px) {
+
+    .brand img {
+        margin-top: .7rem;
+        height: 6.5rem;
+        width: 6.5rem;
+    }
+    .alertai-heading {
+        font-size: 2.5rem;
+    }
+
+    .brand {
+        justify-content: center;
+    }
+
+    .banner-heading {
+        font-size: 5rem;
+        font-weight: 350;
+
+    }
+    
+    .banner-paragraph {
+        font-size: 3rem;
+        font-weight: 300;
+    
+    }
+    
+    .banner-button {
+        height: 4rem;
+        width: 15rem;
+    }
+
+    .about-us-content {
+        margin-top: -10%;
+    }
+
+    .about-us-paragraph {
+        text-align: justify;
+    }
+
+    .image {
+        width: 20rem;
+    }
+
+    .about-us-images {
+        margin-bottom: 15rem;
+    }
+}
+
+
+@media(max-width: 450px){
+
+    .about-us-content {
+        margin-top: -15%;
+    }
+
+    .about-us-paragraph {
+        font-size: 1.3rem ;
+    }
+
+    .image {
+        width: 15rem;
+    }
+
+    .banner-heading {
+        font-size: 4rem;
+        font-weight: 350;
+
+    }
+    
+    .banner-paragraph {
+        font-size: 2rem;
+        font-weight: 300;
+    
+    }
+    
+    .banner-button {
+        height: 4rem;
+        width: 15rem;
+    }
+
+}
+
+
+
+@media(max-width: 375px){
+
+    .about-us-heading {
+        font-size: 3rem;
+        font-weight: 300;
+    }
+    
+    .sub-heading {
+        font-size: 2.5rem;
+        font-weight: 300;
+    }
+
+    .about-us-paragraph {
+        text-align: center;
+    }
+
+    .image {
+        width: 15rem;
+    }
+
+}
+
+/* end of Media querys */
