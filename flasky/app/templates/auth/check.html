@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}AlertAI - Token{% endblock %}
+
+{% block page_content %}
+<section class="token">
+    <div class="token-wrapper">
+
+        <i class="fa-regular fa-envelope-open token-email-open-icon"></i>
+        
+        <i class="fa-solid fa-envelope  token-email-closed-icon"></i>
+
+        <p class="token-notification">We send an email to your email with a unique code, please review it and enter that same code below:</p>
+
+        <!-- <div class="token-input-wrapper">
+            <input type="text" maxlength="1" class="token-input">
+            <input type="text" maxlength="1" class="token-input">
+            <input type="text" maxlength="1" class="token-input">
+            <input type="text" maxlength="1" class="token-input">
+            <input type="text" maxlength="1" class="token-input">
+        </div> -->
+
+        <form  class="signup-form" method="post">
+            {{ form.csrf_token }}
+
+            {{ form.token }}
+
+            <button type="submit">Confirm</button>
+        </form>
+
+
+    </div>
+</section>
+{% endblock %}

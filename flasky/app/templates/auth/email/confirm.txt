@@ -1,0 +1,15 @@
+Dear {{ user.username }},
+
+Welcome to AlertAI!
+
+To confirm your account please insert the following token on the confirm token page:
+
+{{ token }}
+
+If you do not recognize this message just ignore it 
+
+Sincerely, 
+
+The AlertAI team 
+
+Note: replies to this email address are not monitored

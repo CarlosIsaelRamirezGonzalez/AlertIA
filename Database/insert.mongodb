@@ -1,7 +1,0 @@
-use("AlertIA")
-db.users.insertOne({
-    username: "Pollitos Kiki",
-    password: "AMO A CARLOS 3092.",
-    email: "guapoesgay@gmail.com",
-    admin: true
-})

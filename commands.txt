@@ -1,0 +1,8 @@
+venv/Scripts/activate
+cd .\flasky\
+$env:FLASK_APP='flasky.py'    
+$env:PYTHONDONTWRITEBYTECODE=1
+$env:FLASK_DEBUG=1
+$env:MAIL_USERNAME='alertia2023@gmail.com'
+$env:MAIL_PASSWORD = 'fdldnvsfccrrvbfa'
+$env:SECRET_KEY="Mi telefono es un honor X8"
