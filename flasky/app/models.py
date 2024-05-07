@@ -70,3 +70,13 @@ class User(UserMixin, db.Document):
     
     def __repr__(self):
         return '<User %r>' % self.username
+    
+class Notification(db.Document):
+    user = db.StringField(required=True)
+    date_time = db.DateTimeField(required=True)
+    place = db.StringField(required=True)
+    threat = db.StringField(required=True)
+    camera_name = db.StringField(required=True)
+    certainty = db.StringField(required=True)
+    image = db.BinaryField(required=True)
+    read = db.BooleanField(default=False)

@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}AlertAI - notification{% endblock %}
+
+{% block page_content %}
+
+  <h1>Blueprint notificaciones</h1>
+
+  <form method="post" action="{{ url_for('alert.notifications') }}">
+      <button type="submit" class="btn btn-primary">Notificar</button>
+  </form>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div id="flash-container">
+        {% for category, message in messages %}
+          <div class="flash flash-{{ category }}">
+            <p>{{ message }}</p>
+          </div>
+        {% endfor %}
+      </div>
+      <meta http-equiv="refresh" content="2;url={{ url_for('alert.notifications') }}">
+    {% endif %}
+  {% endwith %}
+
+
+  {% if load_notifications %}
+
+      <form method="post" action="{{ url_for('alert.search') }}">
+          <input type="text" name="search" placeholder="Busque aqui :D">
+          <button type="submit" class="btn btn-primary">Buscar</button>
+      </form>
+
+      <a href="{{ url_for('alert.notifications') }}" class="btn btn-primary">Quitar filtros de busqueda</a>
+
+      <h2>notificaciones</h2>
+      <ul>
+          {% for notification in load_notifications %}
+
+            {% if notification.read %}
+                <li style="background-color: #808080;" id="notification_{{ notification.id }}" onclick="viewNotification('{{ notification.id }}')">
+            {% else %}
+                <li style="background-color: #ADD8E6;" id="notification_{{ notification.id }}" onclick="viewNotification('{{ notification.id }}')">
+            {% endif %}
+
+                {{ notification.camera_name }} - {{ notification.date_time }} 
+                <form method="post" action="{{ url_for('alert.delete_notification', notification_id=notification.id) }}">
+                  <button type="submit" class="btn btn-danger">Borrar</button>
+                </form>
+              </li>
+          {% endfor %}
+      </ul>
+  {% else %}
+      <a href="{{ url_for('alert.notifications') }}" class="btn btn-primary">Quitar filtros de busqueda</a>
+      <p>No hay notificaciones</p>
+  {% endif %}
+
+{% endblock %}
+
+{% block scripts %}
+  <script>
+    function viewNotification(notificationId) {
+        window.location.href = "{{ url_for('alert.view_notification', notification_id='') }}" + notificationId;
+    }
+    </script>
+{% endblock %}
