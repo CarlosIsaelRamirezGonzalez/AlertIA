@@ -1,5 +1,5 @@
 from flask import Blueprint
 
-alert = Blueprint('alert', __name__)
+home = Blueprint('home', __name__)
 
 from . import views
