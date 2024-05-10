@@ -12,14 +12,11 @@ db = MongoEngine()
 login_manager = LoginManager()
 mail = Mail()
 
-
-
 # set an endpoint
 login_manager.login_view = 'auth.login'
 
 # set a message when the user try to go to a protected view
 login_manager.login_message = "Please log in before accesing this page."
-
 
 # Create the app function
 def create_app(config_name):
@@ -45,6 +42,8 @@ def create_app(config_name):
     from .alert import alert as alert_blueprint
     app.register_blueprint(alert_blueprint, url_prefix="/alert")
     
+    from .home import home as home_blueprint
+    app.register_blueprint(home_blueprint)
     
     return app
     

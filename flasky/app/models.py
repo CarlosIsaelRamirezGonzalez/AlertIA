@@ -1,4 +1,4 @@
-from flask_login import UserMixin
+from flask_login import UserMixin, current_user
 from bson import ObjectId
 from itsdangerous import URLSafeSerializer as Serializer
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -7,7 +7,6 @@ from datetime import datetime
 import hashlib
 from . import db
 from . import login_manager
-import random
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -36,8 +35,6 @@ class User(UserMixin, db.Document):
         hash_result = hashlib.sha256(data_token).hexdigest()
         token = hash_result[:5]
         return token 
-
-
 
     def confirm_token(self, token):
         s = Serializer(current_app.config['SECRET_KEY'])
@@ -80,3 +77,64 @@ class Notification(db.Document):
     certainty = db.StringField(required=True)
     image = db.BinaryField(required=True)
     read = db.BooleanField(default=False)
+     
+class Camera(db.Document):
+    name = db.StringField(required=True)
+    phone_number = db.StringField(required=True)
+    security = db.BooleanField(default=True)
+    ip = db.StringField()   
+    place = db.StringField(required=True, choices=["Home", "Building", "Square", "Street", "Personalized"])
+    address = db.StringField(required=True)
+    images = db.ListField(db.ImageField())
+    
+    user = db.ReferenceField(User, reverse_delete_rule=db.CASCADE)
+    alerts = db.IntField(required=True)    
+    
+    
+    def __init__(self, **kargs):
+        super(Camera, self).__init__(**kargs)
+        if self.user is None:
+            self.user = current_user
+    
+    def __repr__(self):
+        return '<Camera %r>' % self.name
+    
+    def insert_alerts(self, place, alerts=None):
+        if ( place == "Home" ): # Hubiera usado match :c
+            self.alerts = 629
+        elif ( place == "Building" ):
+            self.alerts = 871
+        elif ( place == "Square" ):
+            self.alerts = 883
+        elif ( place == "Street" ):
+            self.alerts = 1007
+        else:
+            for alert in alerts:
+                self.add_alert(alert)
+
+    
+    def has_alert(self, alert):
+        return self.alerts & alert == alert
+    
+    def add_alert(self, alert):
+        if not self.has_alert(alert):
+            self.alerts += alert
+
+    def remove_alert(self, alert):
+        if self.has_alert(alert):
+            self.alerts -= alert 
+    
+    def reset_alerts(self):
+        self.alerts = 0   
+
+class Alerts: 
+    FIRES = 1
+    BLADED_WEAPON = 2
+    STABBING = 4
+    HANDGUN = 8
+    LONG_GUN = 16
+    BRANDISHING = 32
+    DOG_AGGRESION = 64
+    CAR_ACCIDENT = 128
+    BRAWLS = 256
+    INJURED_PEOPLE = 512
