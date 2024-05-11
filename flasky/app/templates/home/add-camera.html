@@ -16,13 +16,15 @@
 
     </div>
 
-    <form action="POST" class="add-camera-form">
+    <form method="POST" class="add-camera-form"> 
+        {{ form.csrf_token }}
 
         <br>
         <i class="fa-solid fa-pencil add-camera-icon"></i>
-        <input type="text" placeholder="Camera Name" class="add-camera-input">
+        {{ form.name(class='add-camera-input') placeholder="Camera Name" }}
+
         <i class="fa-solid fa-phone add-camera-icon"></i>
-        <input type="number"  placeholder="Phone Number" class="add-camera-input" maxlength="10">
+        {{ form.phone_number(class='add-camera-input' placeholder="Phone Number") }}
         
         <div class="add-camera-type-camera">
             <h3 class="add-camera-type-camera-question">What type of camera do you want to enter?</h3>

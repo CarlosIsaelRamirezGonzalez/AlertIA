@@ -14,11 +14,11 @@ class AddCameraForm(FlaskForm):
                                                 ('Personalized', 'Personalized'),])
 
     address = StringField(validators=[DataRequired()])
-    alerts = SelectMultipleField(choices=[("Fires", "Fires"),  ("Bladed Weapon", "Bladed Weapon"), 
-                                  ("Stabbing", "Stabbing"), ("Handgun", "Handgun"),
-                                  ("Long Gun", "Long Gun"), ("Brandishing", "Brandishing"),
-                                  ("Dog Aggression", "Dog Aggression"), ("Car Accident", "Car Accident"), 
-                                  ("Brawls", "Brawls"), ("Injured People", "Injured People")], default="Fires")
+    alerts = SelectMultipleField(choices=[(1, "Fires"),  (2, "Bladed Weapon"), 
+                                  (4, "Stabbing"), (8, "Handgun"),
+                                  (16, "Long Gun"), (32, "Brandishing"),
+                                  (64, "Dog Aggression"), (128, "Car Accident"), 
+                                  (256, "Brawls"), (512, "Injured People")])
     
     # validate methods
     def validate_name(self, field):
