@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, BooleanField, ValidationError, SelectField, SelectMultipleField
+from wtforms import StringField, BooleanField, ValidationError, SelectField, SelectMultipleField, RadioField
 from wtforms.validators import DataRequired, Length, Regexp
 from ..models import Camera, User
 from flask_login import current_user
@@ -7,7 +7,7 @@ from flask_login import current_user
 class AddCameraForm(FlaskForm):
     name = StringField(validators=[DataRequired(), Length(1, 64)])
     phone_number = StringField(validators=[DataRequired(), Length(1, 10)])
-    security = BooleanField()
+    camera_type = RadioField('Camera Type', choices=[('WebCamera', 'Web Camera'), ('SecurityCamera', 'Security Camera')], validators=[DataRequired()])
     ip = StringField(validators=[Regexp(r'^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$')])
     place = SelectField(default='Home', choices=[('Home', 'Home'), ('Building', 'Building'), 
                                                 ('Square', 'Square'), ('Sreet', 'Street'), 

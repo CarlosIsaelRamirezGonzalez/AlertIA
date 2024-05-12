@@ -20,28 +20,29 @@
 
         <br>
         <i class="fa-solid fa-pencil add-camera-icon"></i>
-        <input type="text" placeholder="Camera Name" class="add-camera-input">
+        {{ form.name(type="text", class="add-camera-input", placeholder="Camera Name") }}
         <i class="fa-solid fa-phone add-camera-icon"></i>
-        <input type="number"  placeholder="Phone Number" class="add-camera-input" maxlength="10">
+        {{ form.phone_number(type="number", class="add-camera-input", placeholder="Phone Number", maxlength="10") }}
         
         <div class="add-camera-type-camera">
             <h3 class="add-camera-type-camera-question">What type of camera do you want to enter?</h3>
+            <br>   
+            <label class="add-camera-type-camera-selection">
+                <input type="radio" name="{{ form.camera_type.name }}" value="WebCamera" id="WebCamera"> Web Camera
+            </label>
             <br>
-                <label class="add-camera-type-camera-selection">
-                    <input type="radio" name="option" value="WebCamera" id="WebCamera"> Web Camera
-                </label>
-                <br>
-                <label class="add-camera-type-camera-selection">
-                    <input type="radio" name="option" value="SecurityCamera" id="SecurityCamera"> Security Camera 
-                </label>
+            <label class="add-camera-type-camera-selection">
+                <input type="radio" name="{{ form.camera_type.name }}" value="SecurityCamera" id="SecurityCamera"> Security Camera 
+            </label>
+
         </div>
         <br>
 
         <i class="fa-solid fa-wifi add-camera-icon" id="IP-icon"></i>
-        <input type="text" placeholder="IP Address" class="add-camera-input" >
+        {{ form.ip(type="text", class="add-camera-input", placeholder="IP Address") }}
 
         <i class="fa-solid fa-location-dot add-camera-icon"></i>
-        <input type="text" placeholder="Location Camera" class="add-camera-input">
+        {{ form.address(type="text", placeholder="Location Camera", class="add-camera-input")}}
 
         <div class="add-camera-alerts">
             <h2 class="add-camera-alerts-details">Types of alerts you would like to be notified of</h2>
@@ -107,6 +108,7 @@
             </label>
         </div>
 
+        <button class="signup-form-button add-camera-button" type="submit">Add camera</button>
     </form>
 
 </section>
@@ -215,7 +217,7 @@
             ipInput.style.display = 'none';
             ipInput.value = "";
             ipIcon.style.display = 'none';
-        });
+        }); 
     });
     
 </script>

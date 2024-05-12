@@ -8,6 +8,7 @@ import io
 import base64
 from flask import request
 from mongoengine import Q
+from flask_login import current_user
 
 
 @alert.route('/notifications', methods=['GET', 'POST'])
@@ -43,7 +44,7 @@ def notifications():
         cap.release()
         flash('Alerta creada correctamente', 'success')
         
-    load_notifications = Notification.objects(user="enriquerc260@gmail.com")
+    load_notifications = Notification.objects(user=current_user.email)
         
     return render_template('alert/notifications.html', load_notifications = load_notifications)
 
@@ -66,7 +67,7 @@ def search():
                                                      Q(threat__icontains=filter_value) |
                                                      Q(camera_name__icontains=filter_value) |
                                                      Q(certainty__icontains=filter_value),
-                                                     user="enriquerc260@gmail.com")
+                                                     user=current_user.email)
     
     return render_template('alert/notifications.html', load_notifications = load_notifications)
     
