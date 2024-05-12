@@ -31,4 +31,4 @@ def add_camera():
         return redirect(url_for('home.index'))        
 
                 
-    return render_template('home/add-camera.html')
+    return render_template('home/add-camera.html', form=form)

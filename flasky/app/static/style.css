@@ -1238,9 +1238,16 @@ input[type=number]::-webkit-outer-spin-button {
     color: #da1e37;
 }
 
+.add-camera-button {
+    border: .1rem solid #161616;
+    color: #161616;
+}
 
-
-
+.add-camera-button:hover {
+    border: .1rem solid #e5e5e5;
+    color: #e5e5e5;
+    background-color: #161616;
+}
 
 /* end of cameras */
 
@@ -1406,3 +1413,9 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 /* end of Media querys */
+
+.container-main {
+    margin-left: 8.3rem;
+    padding-right: 2rem;
+}
+
