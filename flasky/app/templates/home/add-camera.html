@@ -16,209 +16,122 @@
 
     </div>
 
-    <form action="POST" class="add-camera-form">
+    <form method="post" class="add-camera-form">
+        {{ form.csrf_token }}
 
-        <br>
-        <i class="fa-solid fa-pencil add-camera-icon"></i>
-        {{ form.name(type="text", class="add-camera-input", placeholder="Camera Name") }}
-        <i class="fa-solid fa-phone add-camera-icon"></i>
-        {{ form.phone_number(type="number", class="add-camera-input", placeholder="Phone Number", maxlength="10") }}
+        <div class="add-camera-form-left-side">
         
-        <div class="add-camera-type-camera">
-            <h3 class="add-camera-type-camera-question">What type of camera do you want to enter?</h3>
-            <br>   
-            <label class="add-camera-type-camera-selection">
-                <input type="radio" name="{{ form.camera_type.name }}" value="WebCamera" id="WebCamera"> Web Camera
-            </label>
-            <br>
-            <label class="add-camera-type-camera-selection">
-                <input type="radio" name="{{ form.camera_type.name }}" value="SecurityCamera" id="SecurityCamera"> Security Camera 
-            </label>
+            <h1 class="add-camera-form-title">Camera Information</h1>
+
+            <i class="fa-solid fa-pencil add-camera-icon"></i>
+            {{ form.name(class='add-camera-input', placeholder="Camera Name", autoComplete="off") }}
+
+            <i class="fa-solid fa-phone add-camera-icon"></i>
+            {{ form.phone_number(class='add-camera-input', placeholder="Phone Number", maxlength="10", autoComplete="off") }}
+
+            <i class="fa-solid fa-location-dot add-camera-icon"></i>
+            {{ form.address(placeholder="Location Camera", class="add-camera-input", autoComplete="off")  }}
 
         </div>
-        <br>
+        
+        <div class="add-camera-form-right-side">
 
-        <i class="fa-solid fa-wifi add-camera-icon" id="IP-icon"></i>
-        {{ form.ip(type="text", class="add-camera-input", placeholder="IP Address") }}
+            <h1 class="add-camera-form-title">Camera Configuration</h1>
 
-        <i class="fa-solid fa-location-dot add-camera-icon"></i>
-        {{ form.address(type="text", placeholder="Location Camera", class="add-camera-input")}}
+            <div class="add-camera-type-camera">
+                <h3 class="add-camera-type-camera-question">What type of camera do you want to enter?</h3>
+                    <label class="add-camera-type-camera-selection">
+                        {{ form.security(type="radio", id="WebCamera", value="WebCamera") }} Web Camera
+                    </label>
+                    <br>
+                    <label class="add-camera-type-camera-selection">
+                        <input type="radio" name="option" value="SecurityCamera" id="SecurityCamera"> Security Camera 
+                    </label>
+            </div>
 
-        <div class="add-camera-alerts">
-            <h2 class="add-camera-alerts-details">Types of alerts you would like to be notified of</h2>
+            {{ form.ip(placeholder="IP Address", class='add-camera-input', autoComplete="off")  }}
+            
+            {{ form.place(class="add-camera-alert-select", id="place-select") }}
 
-           
+        
+            <h2 class="add-camera-type-camera-question" id="personalized-alert-title">Types of alerts you would like to be notified of</h2>
+        
+            <div class="add-camera-alerts" id="personalized-alert">
+                
             <label class="add-camera-alert-container">
                 <h3 class="add-camera-alert-name">Fires</h3> 
                 <i class="fa-solid fa-house-fire add-camera-icon-alert"></i>
-                <input type="checkbox" class="add-camera-checkbox-alert">
+                {{ form.fires(type="checkbox") }}
             </label>
             
 
 
             <label class="add-camera-alert-container">
-                <h3 class="add-camera-alert-name">Knives</h3>
+                <h3 class="add-camera-alert-name">Bladed weapons</h3>
                 <i class="fa-solid fa-wand-sparkles add-camera-icon-alert"></i>
-                <input type="checkbox">
+                {{ form.bladed_weapon(type="checkbox") }}
             </label>
 
 
 
             <label class="add-camera-alert-container">
-                <h3 class="add-camera-alert-name">Short Weapons</h3>
+                <h3 class="add-camera-alert-name">Hand Gun</h3>
                 <i class="fa-solid fa-gun add-camera-icon-alert"></i>
-                <input type="checkbox">
+                {{ form.handgun(type="checkbox") }}
             </label>
 
 
             <label class="add-camera-alert-container">
-                <h3 class="add-camera-alert-name">Long Weapons</h3>
+                <h3 class="add-camera-alert-name">Long Gun</h3>
                 <i class="fa-solid fa-gun add-camera-icon-alert"></i>
-                <input type="checkbox">
+                {{ form.long_gun(type="checkbox") }}
             </label>
 
             <label class="add-camera-alert-container">
                 <h3 class="add-camera-alert-name">Cannoning</h3>
                 <i class="fa-solid fa-people-robbery add-camera-icon-alert"></i>
-                <input type="checkbox">
+                {{ form.cannoning(type="checkbox") }}
             </label>
 
             <label class="add-camera-alert-container">
-                <h3 class="add-camera-alert-name">Crashes</h3>
+                <h3 class="add-camera-alert-name">Car Accident</h3>
                 <i class="fa-solid fa-car-burst add-camera-icon-alert"></i>
-                <input type="checkbox">                
+                {{ form.car_accident(type="checkbox") }}               
             </label>
 
             <label class="add-camera-alert-container">
                 <h3 class="add-camera-alert-name">Dog Atack</h3>
                 <i class="fa-solid fa-paw add-camera-icon-alert"></i>
-                <input type="checkbox">
+                {{ form.dog_attack(type="checkbox") }}
             </label>
 
             <label class="add-camera-alert-container">                  
-                <h3 class="add-camera-alert-name">Fights</h3>
+                <h3 class="add-camera-alert-name">Brawls</h3>
                 <i class="fa-solid fa-user-ninja add-camera-icon-alert"></i>
-                <input type="checkbox">               
+                {{ form.brawls(type="checkbox") }}            
             </label>
 
             <label class="add-camera-alert-container">                    
                 <h3 class="add-camera-alert-name">Injured People</h3>
                 <i class="fa-solid fa-person-falling-burst add-camera-icon-alert"></i>
-                <input type="checkbox">                   
+                {{ form.injured_people(type="checkbox") }}                
             </label>
+        </div> 
+        
+        <div class="add-camera-form-bottom-side">
+            <button class="add-camera-form-button" type="submit">
+                Save
+            </button>
         </div>
 
-        <button class="signup-form-button add-camera-button" type="submit">Add camera</button>
     </form>
 
 </section>
-<script src="js/googleMap.js"></script>
-<script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCHOslXEWFjWLvxr2EPcxER3QC44_T1sgY&libraries=places&callback=initMap"></script>
-<script>
-    const argCoords = {lat:  19.42847, lng: -99.12766}
-    const mapDiv = document.getElementById("map");
-    const input = document.getElementById("place_input")
-    let map;
-    let marker;
-    let autoComplete;
+<!-- <script src="js/googleMap.js"></script>
+<script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCHOslXEWFjWLvxr2EPcxER3QC44_T1sgY&libraries=places&callback=initMap"></script> -->
+<script src="{{ url_for('static', filename='Js/addCameraDOM.js') }}"></script>
+<script src="{{ url_for('static', filename='Js/googleMapPopup.js') }}"></script>
+<script src="{{ url_for('static', filename='Js/googleMapService.js') }}"></script>
 
-    function initMap(){
-        
-        map = new google.maps.Map(mapDiv, {
-            center: argCoords,
-            zoom: 10,
-        });
-        
-        marker = new google.maps.Marker({
-            map: map,
-        });
+{% endblock page_content %}
 
-        map.addListener('click', function(event) {
-            
-            const newLocation = event.latLng;
-            marker.setPosition(newLocation)
-
-
-            const geoCoder = new google.maps.Geocoder();
-            geoCoder.geocode({ location: newLocation }, function(results, status) {
-                if (status == "OK") {
-                    if (results[0]) {
-                        const newAddress = results[0].formatted_address;
-                        input.value = newAddress
-                    }
-                }
-            });
-
-        });
-
-        initAutoComplete();
-    }
-
-    function initAutoComplete() {
-
-        autoComplete = new google.maps.places.Autocomplete(input);
-
-        autoComplete.addListener("place_changed", function() {
-            const place = autoComplete.getPlace();
-            map.setCenter(place.geometry.location);
-            marker.setPosition(place.geometry.location)
-        }); // Elemento que se activa cuando cambiamos de lugar
-    }
-
-</script>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const locationInput = document.querySelector('.add-camera-input[placeholder="Location Camera"]');
-        const ipInput =  document.querySelector('.add-camera-input[placeholder="IP Address"]');
-        const ipIcon = document.getElementById('IP-icon');
-        const popup = document.querySelector('.add-camera-popup');
-        const closeButton = popup.querySelector('.add-camera-popup-icon');
-        const mapInput = popup.querySelector('.add-camera-popup-map-input');
-        const confirmButton = popup.querySelector('.add-camera-popup-map-buttton');
-        const securityCameraOption = document.getElementById("SecurityCamera");
-        const webCameraOption = document.getElementById("WebCamera");
-
-        popup.style.display = 'none';
-
-        ipInput.style.display = 'none';
-        ipIcon.style.display = 'none';
-    
-        // Mostrar popup cuando se hace clic en el input de ubicación
-        locationInput.addEventListener('click', function() {
-            popup.style.display = 'flex';
-        });
-    
-        // Ocultar popup cuando se hace clic en el botón de cierre
-        closeButton.addEventListener('click', function() {
-            popup.style.display = 'none';
-        });
-    
-        // Ocultar popup cuando se hace clic fuera de él
-        window.addEventListener('click', function(event) {
-            if (event.target !== popup && !popup.contains(event.target) && event.target !== locationInput) {
-                popup.style.display = 'none';
-            }
-        });
-    
-        // Poner la informacion de el input del mapa en el input de register camera
-        confirmButton.addEventListener("click", function() {
-            locationInput.value = mapInput.value;
-            popup.style.display = 'none';
-        });
-
-        // Mostrar campo de IP y icono cuando se selecciona la opción "SecurityCamera"
-        securityCameraOption.addEventListener('change', function() {
-            ipInput.style.display = 'flex';
-            ipIcon.style.display = 'flex';
-        
-        });
-
-        webCameraOption.addEventListener('change', function() {
-            ipInput.style.display = 'none';
-            ipInput.value = "";
-            ipIcon.style.display = 'none';
-        }); 
-    });
-    
-</script>
-{% endblock %}
