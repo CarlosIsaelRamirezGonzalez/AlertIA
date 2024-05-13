@@ -10,6 +10,42 @@
         <h2 class="cameras-header">Cameras</h2>
 
         <div class="cameras-container">
+            {% for camera in cameras %}
+            <div class="camera-card">
+                <div class="front-face">
+                    <div class="front-face-icon">
+                        {% if camera.place == "Home" %}
+                        <i class="fa-solid fa-house"></i>
+                        {% elif camera.place == "Building" %}
+                        <i class="fa-solid fa-building"></i>
+                        {% elif camera.place == "Square" %}
+                        <i class="fa-solid fa-store"></i>
+                        {% elif camera.place == "Street" %}
+                        <i class="fa-solid fa-road"></i>   
+                        {% elif camera.place == "Personalized" %}
+                        <i class="fa-solid fa-square-pen"></i>
+                        {% endif %}
+                    </div>
+                    <div class="front-face-name">
+                        <h3>{{ camera.name }}</h3>
+                    </div>
+                </div>
+                <div class="back-face">
+                    <div class="back-face-configurations">
+                        <p>Address: {{ camera.address }} </p>
+                        <p>Phone number: {{ camera.phone_number }}</p>
+                    </div>
+                    <div class="back-face-buttons">
+                        <button class="back-face-edit-button">
+                            <i class="fa-solid fa-pencil"></i>
+                        </button>
+                        <button class="back-face-delete-button">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
 
             <div class="add-camera-card" onclick="redirectToPage('/addCamera')">
                 <div class="front-face">
@@ -26,15 +62,5 @@
 
     </section>
     <!-- end of cameras -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const cameraCards = document.querySelectorAll('.camera-card');
-        
-            cameraCards.forEach(card => {
-                card.addEventListener('click', function() {
-                    this.classList.toggle('active');
-                });
-            });
-        });        
-    </script>
+    <script src="{{ url_for('static', filename='Js/cards.js') }}"></script>
 {% endblock %}

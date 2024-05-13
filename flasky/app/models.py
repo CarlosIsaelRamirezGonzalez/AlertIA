@@ -94,12 +94,28 @@ class Camera(db.Document):
     def __init__(self, **kargs):
         super(Camera, self).__init__(**kargs)
         if self.user is None:
-            self.user = current_user
+            self.user = current_user.id
     
     def __repr__(self):
         return '<Camera %r>' % self.name
     
-    def insert_alerts(self, place, alerts=None):
+    def insert_personalized_alerts(self, form):
+        calculated_value = 0
+        
+        if form.fires.data:
+            calculated_value = 1
+        
+        values = [form.bladed_weapon.data, form.stabbing.data, form.handgun.data, 
+                form.long_gun.data, form.cannoning.data, form.dog_attack.data, 
+                form.car_accident.data, form.brawls.data, form.injured_people.data]
+        
+        for i, val in enumerate(values):
+            if val:
+                calculated_value += 2 ** i    
+        
+        self.alerts = calculated_value
+ 
+    def insert_place_alerts(self, place):
         if ( place == "Home" ): # Hubiera usado match :c
             self.alerts = 629
         elif ( place == "Building" ):
@@ -108,11 +124,7 @@ class Camera(db.Document):
             self.alerts = 883
         elif ( place == "Street" ):
             self.alerts = 1007
-        else:
-            for alert in alerts:
-                self.add_alert(alert)
-
-    
+ 
     def has_alert(self, alert):
         return self.alerts & alert == alert
     
@@ -133,8 +145,8 @@ class Alerts:
     STABBING = 4
     HANDGUN = 8
     LONG_GUN = 16
-    BRANDISHING = 32
-    DOG_AGGRESION = 64
+    CANNONING = 32
+    DOG_ATTACK = 64
     CAR_ACCIDENT = 128
     BRAWLS = 256
     INJURED_PEOPLE = 512
