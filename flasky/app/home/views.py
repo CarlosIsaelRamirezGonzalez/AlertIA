@@ -13,6 +13,16 @@ def index():
     
     return render_template('home/home.html', cameras=cameras)
 
+@home.route('/deleteCamera', methods=["GET", "POST"])
+@login_required
+def delete_camera(id_camera):
+    try:
+        camera = Camera.objects(id=id_camera)
+        camera.delete()
+        return 200
+    except: 
+        return 404
+
 @home.route('/addCamera', methods=['GET', 'POST'])
 @login_required
 def add_camera():

@@ -117,7 +117,7 @@ class Camera(db.Document):
             self.alerts = 1007
  
     def has_alert(self, alert):
-        return self.alerts & alert == alert
+        return self.alerts & alert == alert 
     
     def add_alert(self, alert):
         if not self.has_alert(alert):
