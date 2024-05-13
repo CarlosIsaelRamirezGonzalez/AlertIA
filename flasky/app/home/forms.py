@@ -31,6 +31,7 @@ class AddCameraForm(FlaskForm):
         existing_camera = Camera.objects(user=current_user.id, name=field.data).first()
         if existing_camera:
             raise ValidationError('You have already registered a camera with this name.')
+     
     
         
         
