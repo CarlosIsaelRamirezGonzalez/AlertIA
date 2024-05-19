@@ -40,16 +40,19 @@
 
             <div class="add-camera-type-camera">
                 <h3 class="add-camera-type-camera-question">What type of camera do you want to enter?</h3>
-                    <label class="add-camera-type-camera-selection">
-                        {{ form.security(type="radio", id="WebCamera", value="WebCamera") }} Web Camera
-                    </label>
-                    <br>
-                    <label class="add-camera-type-camera-selection">
-                        <input type="radio" name="option" value="SecurityCamera" id="SecurityCamera"> Security Camera 
-                    </label>
+                <br>   
+                <label class="add-camera-type-camera-selection">
+                    <input type="radio" name="{{ form.camera_type.name }}" value="WebCamera" id="WebCamera"> Web Camera
+                </label>
+                <br>
+                <label class="add-camera-type-camera-selection">
+                    <input type="radio" name="{{ form.camera_type.name }}" value="SecurityCamera" id="SecurityCamera"> Security Camera 
+                </label>
             </div>
+            <br>
 
-            {{ form.ip(placeholder="IP Address", class='add-camera-input', autoComplete="off")  }}
+
+            {{ form.url(placeholder="URL camera", class='add-camera-input', autoComplete="off")  }}
             
             {{ form.place(class="add-camera-alert-select", id="place-select") }}
 

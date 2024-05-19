@@ -3,6 +3,11 @@ from flask_login import login_required, current_user
 from ..models import Camera
 from .forms import AddCameraForm
 from . import home
+import numpy as np
+from tensorflow.keras.preprocessing import image
+from tensorflow.keras.applications.mobilenet_v2 import preprocess_input
+
+
 
 @home.route('/home')
 @login_required
@@ -22,7 +27,7 @@ def add_camera():
         
         # Create model
         camera = Camera(name=form.name.data, phone_number=form.phone_number.data,
-                        security=form.security.data, ip=form.ip.data, place=form.place.data,
+                        camera_type=form.camera_type.data, url=form.url.data, place=form.place.data,
                         address=form.address.data)
         
         if form.place.data != 'Personalized':
@@ -33,6 +38,6 @@ def add_camera():
         camera.save()
         flash("Camera saved successfully")
         return redirect(url_for('home.index'))        
-
-                
+     
     return render_template('home/add-camera.html', form=form)
+
