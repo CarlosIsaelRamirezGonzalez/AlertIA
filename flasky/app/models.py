@@ -81,8 +81,8 @@ class Notification(db.Document):
 class Camera(db.Document):
     name = db.StringField(required=True)
     phone_number = db.StringField(required=True)
-    security = db.BooleanField(default=True)
-    ip = db.StringField()   
+    camera_type = db.StringField(required=True)
+    url = db.StringField()   
     place = db.StringField(required=True, choices=["Home", "Building", "Square", "Street", "Personalized"])
     address = db.StringField(required=True)
     images = db.ListField(db.ImageField())
