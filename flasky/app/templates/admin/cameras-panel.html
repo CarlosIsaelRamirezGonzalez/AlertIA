@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}AlertAI - Login{% endblock %}
+
+{% block page_content %}
+<section class="supervisor-panel">
+    <nav class="navbar-supervisor">
+        <button class="navbar-supervisor-button" onclick="redirectToPage('/admin/cameras')">Camera</button>
+        <button class="navbar-supervisor-button" onclick="redirectToPage('/admin/reports')">Reports</button>
+    </nav>
+    <div class="supervisor-container">
+        {% for report in reports %}
+        <!-- Enrique aqui es lo mismo que en tu html -->
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

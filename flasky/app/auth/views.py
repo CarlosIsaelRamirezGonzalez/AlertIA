@@ -14,6 +14,7 @@ def before_app_request():
         and not current_user.confirmed \
         and request.blueprint != 'auth' \
         and request.blueprint != 'main' \
+        and request.blueprint != 'admin' \
         and request.endpoint != 'static':
         return redirect(url_for('auth.unconfirmed'))
     
@@ -34,6 +35,9 @@ def signup():
         user.password = form.password.data
         user.save()
         login_user(user)
+        print(current_app.config['FLASKY_ADMIN'])
+        if user.email == current_app.config['FLASKY_ADMIN']:
+            return redirect(url_for('admin.cameras_panel'))
 
         token = current_user.generate_confirmation_token()
         session[token] = datetime.datetime.now() + datetime.timedelta(minutes=3) 
@@ -76,6 +80,9 @@ def login():
                 flash('A confirmation email has been sent to you by email.')
                 
                 return redirect(url_for('auth.check'))
+        
+            if user.email == current_app.config['FLASKY_ADMIN']:
+                return redirect(url_for('admin.cameras_panel'))
                 
             next = request.args.get('next') # Get where the user try to go 
             
