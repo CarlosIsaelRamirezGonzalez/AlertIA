@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, ValidationError
+from wtforms import StringField, PasswordField, BooleanField, ValidationError, EmailField
 from wtforms.validators import DataRequired, Length, Email, Regexp, EqualTo
 from ..models import User
 
@@ -25,3 +25,14 @@ class LoginForm(FlaskForm):
     
 class TokenForm(FlaskForm):
     token = StringField()
+    
+class ResetPasswordForm(FlaskForm):
+    password = PasswordField(validators=[DataRequired(), Length(1,64), EqualTo("password2", message=('Passwords must match.'))])
+    password2 = PasswordField('Confirm password', validators=[DataRequired()])
+
+class PasswordResetRequestForm(FlaskForm):
+    email = EmailField(validators=[DataRequired()])
+    
+    def validate_email(self, field): 
+        if not User.objects(email = field.data).first():
+            raise ValidationError("This email doesn't exists in the system.")

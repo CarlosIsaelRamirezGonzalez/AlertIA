@@ -4,7 +4,7 @@ from itsdangerous import URLSafeSerializer as Serializer
 import random
 import datetime
 from . import auth
-from .forms import LoginForm, SignupForm, TokenForm
+from .forms import LoginForm, SignupForm, TokenForm, PasswordResetRequestForm
 from ..models import User
 from ..email import send_email
 
@@ -16,6 +16,24 @@ def before_app_request():
         and request.blueprint != 'main' \
         and request.endpoint != 'static':
         return redirect(url_for('auth.unconfirmed'))
+    
+
+@auth.route('/reset', methods=['GET', 'POST'])
+def password_reset_request():
+    if not current_user.is_anonymous:
+        return redirect(url_for('main.index'))
+    
+    form = PasswordResetRequestForm()
+    if form.validate_on_submit():
+        user =  User.objects(email = form.email.data).first()
+        token = current_user.generate_confirmation_token()
+        session[token] = datetime.datetime.now() + datetime.timedelta(minutes=3) 
+        send_email(current_user.email, 'Confirm your account.', 'auth/email/reset_password', user=current_user, token=token)
+        flash('A confirmation email has been sent to you by email.')
+        return redirect(url_for('auth.check'))        
+    return render_template('auth/reset-password-email.html')
+    
+    
     
 @auth.route('/unconfirmed')
 def unconfirmed():
