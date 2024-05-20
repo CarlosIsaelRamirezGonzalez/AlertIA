@@ -7,9 +7,7 @@ from . import home
 @home.route('/home')
 @login_required
 def index():
-    
-    cameras = Camera.objects(user=current_user.id).all()
-    
+    cameras = Camera.objects(user=current_user.id).all()    
     
     return render_template('home/home.html', cameras=cameras)
 
