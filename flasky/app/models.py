@@ -18,6 +18,11 @@ class User(UserMixin, db.Document):
     password_hash = db.StringField(required=True)
     confirmed = db.BooleanField(default=False)
     
+    def __init__(self, **kargs):
+        super(User, self).__init__(**kargs)
+        if self.email == current_app.config['FLASKY_ADMIN']:
+            self.confirmed = True
+    
     @property
     def password(self):
         raise AttributeError('Password is not a readable attribute')
@@ -141,3 +146,8 @@ class Alerts:
     CAR_ACCIDENT = 128
     BRAWLS = 256
     INJURED_PEOPLE = 512
+    
+    
+class Report(db.Document):
+    body = db.StringField()
+    user = db.ReferenceField(User, reverse_delete_rule=db.CASCADE)
