@@ -1334,6 +1334,71 @@ input[type=number]::-webkit-outer-spin-button {
     color: #da1e37;
 }
 
+/* end of cameras
+
+/* supervisor */
+.supervisor-panel {
+    height: 100vh;
+    width: 100vw;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.navbar-supervisor {
+    height: 8rem;
+    width: 100vw;
+
+    display: flex;
+    align-items: center;
+    justify-content:flex-end;
+
+    box-sizing: border-box;
+    padding: 2rem;
+
+    border: .1rem solid black;
+}
+
+.navbar-supervisor-button {
+    height: 3rem;
+    width: 10rem;
+
+
+    cursor: pointer;
+
+    outline: none;
+    border: .1rem solid black;
+
+    background-color: transparent;
+    margin: 1rem;
+
+    transition: background-color .5s;
+}
+
+.navbar-supervisor-button:hover {
+    background-color: rgb(211, 211, 211);
+}
+
+.navbar-supervisor-button:active {
+    height: 2.8rem;
+    width: 9.8rem;
+} 
+
+
+.supervisor-container {
+    height: 97rem;
+    width: 100vw;
+    
+    display: flex;
+    flex-wrap: wrap;
+
+    box-sizing: border-box;
+    padding: 5rem;
+    
+    margin: 0;
+}
+
+/* end of supervisor */
 /* end of cameras */
 
 /* reset password request */
