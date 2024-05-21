@@ -68,7 +68,10 @@ class User(UserMixin, db.Document):
         
         flash('The token is incorrect')
         return False
-        
+    
+    def reset_password(self, new_password):
+        self.password = new_password
+        self.save()
     
     def __repr__(self):
         return '<User %r>' % self.username

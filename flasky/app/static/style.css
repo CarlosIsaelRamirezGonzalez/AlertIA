@@ -349,6 +349,20 @@ input[type=number]::-webkit-outer-spin-button {
     color: #4cc9f0;
 }
 
+.restore-password-link {
+    position: absolute;
+    margin-top: 32%;
+
+    font-size: 1.5rem;
+    color: #0b090a;
+}
+
+.restore-password-link a:link,
+.restore-password-link a:visited {
+    color: #4cc9f0;
+}
+
+
 /* end of login */
 
 /* token */
@@ -1407,6 +1421,7 @@ input[type=number]::-webkit-outer-spin-button {
     width: 100vw;
 
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
 }
@@ -1417,6 +1432,8 @@ input[type=number]::-webkit-outer-spin-button {
 
     border: .2rem solid black;
     border-radius: 3rem;
+
+    margin: 10rem;
 
     display: flex;
     flex-direction: column;
@@ -1468,9 +1485,85 @@ input[type=number]::-webkit-outer-spin-button {
     background-color: black;
     color: white;
 }
+
+.reset-password-advice {
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 2rem;
+    color: #212529;
+    letter-spacing: .1rem;
+}
 /* end of reset password request */
 
+/* Change passwowrd */
+.change_password {
+    height: 100vh;
+    width: 100vw;
 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.change-password-request-form {
+    height: 30rem;
+    width: 45rem;
+
+    border: .2rem solid black;
+    border-radius: 3rem;
+
+    margin: 10rem;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.change-password-request-form-input {
+    width: 70%;
+    height: 4rem;
+
+    margin: 2.5rem;
+    padding: .5rem ;
+
+    background-color: transparent;
+    font-family: 'Josefin Sans', sans-serif;
+    text-align: center;
+    font-size: 2rem;
+    color: #1c1b1b;
+    letter-spacing: .1rem;
+
+    outline: none;
+    border: none;
+    border-bottom: .1rem solid #000000;
+}
+
+.change-password-request-form-button {
+    width: 40%;
+    height: 3.5rem;
+    padding: .7rem .5rem;
+
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+
+    background-color: transparent;
+    border: .1rem solid #000000;
+    outline: none;
+
+    color: #1c1b1b;
+
+    cursor: pointer;
+
+    transition: all .5s;
+}
+
+.change-password-request-form-button:hover {
+    background-color: black;
+    color: white;
+}
+/* end of Change password */
 
 /* Media querys */
 @media(max-width: 1200px) {

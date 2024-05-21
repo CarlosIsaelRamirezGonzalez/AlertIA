@@ -4,7 +4,7 @@ from itsdangerous import URLSafeSerializer as Serializer
 import random
 import datetime
 from . import auth
-from .forms import LoginForm, SignupForm, TokenForm, PasswordResetRequestForm
+from .forms import LoginForm, SignupForm, TokenForm, PasswordResetRequestForm, ResetPasswordForm
 from ..models import User
 from ..email import send_email
 
@@ -19,20 +19,6 @@ def before_app_request():
         return redirect(url_for('auth.unconfirmed'))
     
 
-@auth.route('/reset', methods=['GET', 'POST'])
-def password_reset_request():
-    if not current_user.is_anonymous:
-        return redirect(url_for('main.index'))
-    
-    form = PasswordResetRequestForm()
-    if form.validate_on_submit():
-        user =  User.objects(email = form.email.data).first()
-        token = current_user.generate_confirmation_token()
-        session[token] = datetime.datetime.now() + datetime.timedelta(minutes=3) 
-        send_email(current_user.email, 'Confirm your account.', 'auth/email/reset_password', user=current_user, token=token)
-        flash('A confirmation email has been sent to you by email.')
-        return redirect(url_for('auth.check'))        
-    return render_template('auth/reset-password-email.html')
     
     
     
@@ -123,16 +109,41 @@ def logout():
 
 
 @auth.route('/check', methods=['GET', 'POST'])
-@login_required
 def check():
     form = TokenForm()
     if form.validate_on_submit():
         s = Serializer(current_app.config['SECRET_KEY'])
         encrypt_token = s.dumps({'token' : form.token.data})
+        
+        if session['Reset_Password']:
+            return redirect(url_for('auth.password_token', token=encrypt_token, email = session['Reset_Password_Email'], _external=True ))
+        
         return redirect(url_for('auth.confirm', token=encrypt_token, _external=True))
         
     return render_template('auth/check.html', form=form)
 
+
+@auth.route('/confirm/<token>/<email>', methods=['GET', 'POST'])
+def password_token(token, email):
+    user = User.objects(email=email).first()
+    if user and user.confirm_token(token):
+        login_user(user)
+        return(redirect(url_for('auth.password_reset')))
+                
+    else:
+        flash("The confirmation token is invalid or has expired.")
+        
+@auth.route('/password_reset', methodss=['GET', 'POST'])
+@login_required
+def password_reset():
+    form = ResetPasswordForm()
+    if form.validate_on_submit():
+        current_user.reset_password(password=form.password.data)
+        flash('Your password has been updated.')
+        return redirect(url_for('auth.login'))
+    
+    return render_template('auth/change-password.html')
+        
 
 @auth.route('/confirm/<token>', methods=['GET', 'POST'])
 @login_required
@@ -157,3 +168,21 @@ def resend_confirmation():
     flash('A confirmation email has been sent to you by email.')
     return redirect(url_for('auth.check'))
     
+    
+
+@auth.route('/reset', methods=['GET', 'POST'])
+def password_reset_request():
+    if not current_user.is_anonymous:
+        return redirect(url_for('main.index'))
+    
+    form = PasswordResetRequestForm()
+    if form.validate_on_submit():
+        user =  User.objects(email = form.email.data).first()
+        token = user.generate_confirmation_token()
+        session[token] = datetime.datetime.now() + datetime.timedelta(minutes=3) 
+        session["Reset_Password"] = True
+        session["Reset_Password_Email"] = user.email
+        send_email(user.email, 'Confirm your account.', 'auth/email/reset_password', user=user, token=token)
+        flash('A confirmation email has been sent to you by email.')
+        return redirect(url_for('auth.check'))        
+    return render_template('auth/reset-password-email.html', form=form)
