@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}AlertAI - Login{% endblock %}
+{% block title %}AlertAI - {% if edit_mode %}Edit{% else %}Add{% endif %} Camera{% endblock %}
 
 {% block page_content %}
 <section class="add-camera">
@@ -16,7 +16,7 @@
 
     </div>
 
-    <form method="post" class="add-camera-form">
+    <form method="post" class="add-camera-form" {% if edit_mode %} action="{{ url_for('home.edit_camera', camera_id=camera.id) }}"{% endif %}>
         {{ form.csrf_token }}
 
         <div class="add-camera-form-left-side">
@@ -123,7 +123,7 @@
         
         <div class="add-camera-form-bottom-side">
             <button class="add-camera-form-button" type="submit">
-                Save
+                {% if edit_mode %} Update {% else %} Save {% endif %}
             </button>
         </div>
 
