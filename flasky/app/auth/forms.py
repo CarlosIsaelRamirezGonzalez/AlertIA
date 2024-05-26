@@ -31,7 +31,7 @@ class ResetPasswordForm(FlaskForm):
     password2 = PasswordField('Confirm password', validators=[DataRequired()])
 
 class PasswordResetRequestForm(FlaskForm):
-    email = EmailField(validators=[DataRequired()])
+    email = StringField(validators=[DataRequired(), Email()])
     
     def validate_email(self, field): 
         if not User.objects(email = field.data).first():
