@@ -36,12 +36,17 @@
                         <p>Phone number: {{ camera.phone_number }}</p>
                     </div>
                     <div class="back-face-buttons">
-                        <button class="back-face-edit-button">
-                            <i class="fa-solid fa-pencil"></i>
-                        </button>
-                        <button class="back-face-delete-button">
-                            <i class="fa-solid fa-trash-can"></i>
-                        </button>
+                        <form action="{{ url_for('home.edit_camera', camera_id=camera.id) }}">
+                            <button type="submit" class="back-face-edit-button">
+                                <i class="fa-solid fa-pencil"></i>
+                            </button>  
+                        </form>
+                        </form action="{{ url_for('home.delete_camera', camera_id=camera.id) }}">
+                            <button class="back-face-delete-button">
+                                <i class="fa-solid fa-trash-can"></i>
+                            </button>
+                        <form>
+                            
                     </div>
                 </div>
             </div>
