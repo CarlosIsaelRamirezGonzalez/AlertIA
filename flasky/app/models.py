@@ -153,3 +153,4 @@ class Alerts:
 class Report(db.Document):
     body = db.StringField()
     user = db.ReferenceField(User, reverse_delete_rule=db.CASCADE)
+    camera = db.ReferenceField(Camera, reverse_delte_rule=db.CASCADE)

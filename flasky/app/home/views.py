@@ -2,7 +2,7 @@ from flask import render_template, flash, url_for, redirect
 from flask_login import login_required, current_user
 from ..models import Camera
 from .forms import AddCameraForm
-# from ..decorators import 
+from ..decorators import post_only
 from . import home
 
 @home.route('/home')
@@ -14,6 +14,7 @@ def index():
 
 @home.route('/deleteCamera/<id_camera>', methods=["GET", "POST"])
 @login_required
+@post_only
 def delete_camera(id_camera):
     try:
         camera = Camera.objects(id=id_camera)
