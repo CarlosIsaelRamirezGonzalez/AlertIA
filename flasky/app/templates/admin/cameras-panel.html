@@ -8,7 +8,7 @@
         <button class="navbar-supervisor-button" onclick="redirectToPage('/admin/reports')">Reports</button>
     </nav>
     <div class="supervisor-container">
-        {% for report in reports %}
+        {% for camera in cameras %}
         <div class="camera-card">
             <div class="front-face">
                 <div class="front-face-icon">
@@ -47,4 +47,6 @@
         {% endfor %}
     </div>
 </section>
+<script src="{{ url_for('static', filename='Js/cards.js') }}"></script>
+
 {% endblock %}
