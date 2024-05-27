@@ -1,6 +1,6 @@
 from flask import render_template, request, redirect, url_for, flash
 from . import alert
-from ..models import Notification
+from ..models import Notification, Camera
 from datetime import datetime
 from PIL import Image
 import cv2
@@ -33,7 +33,7 @@ def notifications():
         
         notificacion = Notification(
             user = "enriquerc260@gmail.com",
-            date_time=datetime.utcnow(),
+            date_time=datetime.now(),
             place='Lugar por defecto',  
             threat='Ataque de perros',  
             camera_name='Camara 2', 
@@ -79,3 +79,39 @@ def view_notification(notification_id):
     image_base64 = base64.b64encode(load_notification.image).decode('utf-8')
     load_notification.image = image_base64
     return render_template('alert/details.html', load_notification=load_notification)
+
+
+def create_notifications(frame, camera, predicted):
+    image = Image.fromarray(frame)
+    output = io.BytesIO()
+    image.save(output, format='PNG')
+    image_data_compressed = output.getvalue()
+    
+    diccionario = {
+        0: "Arma blanca",
+        1: "Arma corta",
+        2: "Arma larga",
+        3: "Ataque de perro",
+        4: "Choques",
+        5: "Encañonamiento",
+        6: "Forcejeos",
+        7: "Incendios",
+        8: "Patadas",
+        9: "Personas heridas",
+        10: "Golpes"
+    }
+    
+    threat = diccionario.get(predicted[0])
+    print(threat)
+    
+    notificacion = Notification(
+        user = current_user.email,
+        date_time = datetime.now(),
+        place = camera.address,  
+        threat = threat,  
+        camera_name = camera.name, 
+        certainty = 'Certeza por defecto',
+        image = image_data_compressed 
+    )
+    notificacion.save()
+    flash('Alerta creada correctamente', 'success')
