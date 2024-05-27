@@ -11,27 +11,31 @@ import time
 from tensorflow.keras.preprocessing import image
 from tensorflow.keras.applications.mobilenet_v2 import preprocess_input
 from tensorflow.keras.models import load_model
+from app.alert.views import create_notifications
+from colorama import Fore
 
 notification_queue = Queue()
 active_cameras = {}
+monitoring_threads = {}
 
 @home.route('/home')
 @login_required
 def index():
-    
     cameras = Camera.objects(user=current_user.id).all()
     
-    modelo_ruta = 'D:/Respaldo/Escuela/Proyecto/AlertAI/Artificial_Intelligence/AlertAI.keras'
+    modelo_ruta = 'D:/Respaldo/Escuela/Proyecto/AlertAI/Artificial_Intelligence/AlertAI_V2.keras'
     modelo = load_model(modelo_ruta)
     
-    monitoring_thread = threading.Thread(target=monitor_notifications)
+    monitoring_thread = threading.Thread(target=monitor_notifications, daemon=True)
     monitoring_thread.start()
     
     threads_monitoring_cameras = list()
     for camera in cameras:
-        t = threading.Thread(target=start_camera_monitoring, args=(camera, modelo))
-        threads_monitoring_cameras.append(t)
-        t.start()
+        if camera.name not in monitoring_threads:
+            t = threading.Thread(target=start_camera_monitoring, args=(camera, modelo), daemon=True)
+            threads_monitoring_cameras.append(t)
+            t.start()
+            monitoring_threads[camera.name] = t
         
 
     
@@ -114,34 +118,67 @@ def delete_camera(camera_id):
     imagen_preprocesada = preprocess_input(imagen_array)
     
     print(modelo.predict(np.array([imagen_preprocesada])))'''
-    
+        
 def start_camera_monitoring(camera, modelo):
-    if camera.camera_type == "SecurityCamera":
-        cap = cv2.VideoCapture(camera.url)
-    else:
-        cap = cv2.VideoCapture(0)
-        
-    active_cameras[camera.name] = cap
-        
-    while cap.isOpened():
+    #definir array aqui
+    def connect_camera():
+        if camera.camera_type == "SecurityCamera":
+            cap = cv2.VideoCapture(camera.url)
+        else:
+            cap = cv2.VideoCapture(0)
+            
+        if not cap.isOpened():
+            notification_queue.put(f"Failed to connect to camera {camera.name}")
+            return None
+        return cap
+    
+    def process_frame(cap):
         ret, frame = cap.read()
         if not ret:
-            notification_queue.put(f'Camera {camera.name} disconnected')
-            break
+            return False
         
         frame_resized = cv2.resize(frame, (255, 255))
         image_array = image.img_to_array(frame_resized)
         imagen_preprocesada = preprocess_input(image_array)
         
-        print(modelo.predict(np.array([imagen_preprocesada])))
+        predictions = modelo.predict(np.array([imagen_preprocesada]))
+        predicted_classes = np.argmax(predictions, axis=1)
+        if predicted_classes != None:
+            create_notifications(frame, camera, predicted_classes)
+        print(predicted_classes)
+        print(camera.name)
+        return True
+
+    try:
+        cap = connect_camera()
+        if cap is None:
+            return
         
-    cap.release()
-    if camera.name in active_cameras:
-        del active_cameras[camera.name]
+        active_cameras[camera.name] = cap
+
+        while cap.isOpened():
+            if not process_frame(cap):
+                notification_queue.put(f'Camera {camera.name} disconnected, attempting to reconnect...')
+                time.sleep(.5)  
+                cap.release()
+                cap = connect_camera()
+                active_cameras[camera.name] = cap
+                
+                if not cap.isOpened() or not process_frame(cap):
+                    notification_queue.put(f'Camera {camera.name} disconnected')
+                    break
+            
+            time.sleep(3)
+        
+        cap.release()
+        if camera.name in active_cameras:
+            del active_cameras[camera.name]
+    except Exception as e:
+        print(Fore.RED, f"Exception in start_camera_monitoring for camera {camera.name}: {e}")
             
 def monitor_notifications():
     while True:
         if not notification_queue.empty():
             notification = notification_queue.get()
-            flash(notification, 'danger')
+            print(notification)
         time.sleep(1)
