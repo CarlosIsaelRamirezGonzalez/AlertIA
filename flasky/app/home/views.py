@@ -2,6 +2,7 @@ from flask import render_template, flash, url_for, redirect
 from flask_login import login_required, current_user
 from ..models import Camera
 from .forms import AddCameraForm
+# from ..decorators import 
 from . import home
 
 @home.route('/home')
@@ -11,7 +12,7 @@ def index():
     
     return render_template('home/home.html', cameras=cameras)
 
-@home.route('/deleteCamera', methods=["GET", "POST"])
+@home.route('/deleteCamera/<id_camera>', methods=["GET", "POST"])
 @login_required
 def delete_camera(id_camera):
     try:
