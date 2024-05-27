@@ -115,15 +115,14 @@ class Camera(db.Document):
         self.alerts = calculated_value
  
     def insert_place_alerts(self, place):
-        if ( place == "Home" ): # Hubiera usado match :c
-            self.alerts = 629
-        elif ( place == "Building" ):
-            self.alerts = 871
-        elif ( place == "Square" ):
-            self.alerts = 883
-        elif ( place == "Street" ):
-            self.alerts = 1007
- 
+        match place:
+            case "Home": self.alerts = 629
+            case "Building": self.alerts = 871
+            case "Square":  self.alerts = 883
+            case "Street": self.alerts = 1007
+
+
+
     def has_alert(self, alert):
         return self.alerts & alert == alert 
     
