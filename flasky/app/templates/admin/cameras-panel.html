@@ -9,7 +9,41 @@
     </nav>
     <div class="supervisor-container">
         {% for report in reports %}
-        <!-- Enrique aqui es lo mismo que en tu html -->
+        <div class="camera-card">
+            <div class="front-face">
+                <div class="front-face-icon">
+                    {% if camera.place == "Home" %}
+                    <i class="fa-solid fa-house"></i>
+                    {% elif camera.place == "Building" %}
+                    <i class="fa-solid fa-building"></i>
+                    {% elif camera.place == "Square" %}
+                    <i class="fa-solid fa-store"></i>
+                    {% elif camera.place == "Street" %}
+                    <i class="fa-solid fa-road"></i>   
+                    {% elif camera.place == "Personalized" %}
+                    <i class="fa-solid fa-square-pen"></i>
+                    {% endif %}
+                </div>
+                <div class="front-face-name">
+                    <h3>{{ camera.name }}</h3>
+                    <h2>{{ camera.email }}</h2>
+                </div>
+            </div>
+            <div class="back-face">
+                <div class="back-face-configurations">
+                    <p>Address: {{ camera.address }} </p>
+                    <p>Phone number: {{ camera.phone_number }}</p>
+                </div>
+                <div class="back-face-buttons">
+                    <button class="back-face-edit-button">
+                        <i class="fa-solid fa-pencil"></i>
+                    </button>
+                    <button class="back-face-delete-button">
+                        <i class="fa-solid fa-trash-can"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
         {% endfor %}
     </div>
 </section>
