@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}AlertAI - Login{% endblock %}
+{% block title %}AlertAI - {% if edit_mode %}Edit{% else %}Add{% endif %} Camera{% endblock %}
 
 {% block page_content %}
 <section class="add-camera">
@@ -16,7 +16,7 @@
 
     </div>
 
-    <form method="post" class="add-camera-form">
+    <form method="post" class="add-camera-form" {% if edit_mode %} action="{{ url_for('home.edit_camera', camera_id=camera.id) }}"{% endif %}>
         {{ form.csrf_token }}
 
         <div class="add-camera-form-left-side">
@@ -40,16 +40,19 @@
 
             <div class="add-camera-type-camera">
                 <h3 class="add-camera-type-camera-question">What type of camera do you want to enter?</h3>
-                    <label class="add-camera-type-camera-selection">
-                        {{ form.security(type="radio", id="WebCamera", value="WebCamera") }} Web Camera
-                    </label>
-                    <br>
-                    <label class="add-camera-type-camera-selection">
-                        <input type="radio" name="option" value="SecurityCamera" id="SecurityCamera"> Security Camera 
-                    </label>
+                <br>   
+                <label class="add-camera-type-camera-selection">
+                    <input type="radio" name="{{ form.camera_type.name }}" value="WebCamera" id="WebCamera"> Web Camera
+                </label>
+                <br>
+                <label class="add-camera-type-camera-selection">
+                    <input type="radio" name="{{ form.camera_type.name }}" value="SecurityCamera" id="SecurityCamera"> Security Camera 
+                </label>
             </div>
+            <br>
 
-            {{ form.ip(placeholder="IP Address", class='add-camera-input', autoComplete="off")  }}
+
+            {{ form.url(placeholder="URL camera", class='add-camera-input', autoComplete="off")  }}
             
             {{ form.place(class="add-camera-alert-select", id="place-select") }}
 
@@ -120,7 +123,7 @@
         
         <div class="add-camera-form-bottom-side">
             <button class="add-camera-form-button" type="submit">
-                Save
+                {% if edit_mode %} Update {% else %} Save {% endif %}
             </button>
         </div>
 

@@ -1398,6 +1398,16 @@ input[type=number]::-webkit-outer-spin-button {
     width: 9.8rem;
 } 
 
+.add-camera-button {
+    border: .1rem solid #161616;
+    color: #161616;
+}
+
+.add-camera-button:hover {
+    border: .1rem solid #e5e5e5;
+    color: #e5e5e5;
+    background-color: #161616;
+}
 
 .supervisor-container {
     height: 97rem;
@@ -1727,3 +1737,9 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 /* end of Media querys */
+
+.container-main {
+    margin-left: 8.3rem;
+    padding-right: 2rem;
+}
+
