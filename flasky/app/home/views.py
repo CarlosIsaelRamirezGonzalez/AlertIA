@@ -1,6 +1,6 @@
 from flask import render_template, flash, url_for, redirect
 from flask_login import login_required, current_user
-from ..models import Camera
+from ..models import Camera, User, Notification
 from .forms import AddCameraForm, EditCameraForm
 from . import home
 import numpy as np
@@ -8,10 +8,16 @@ import threading
 from queue import Queue
 import cv2
 import time
+
+import base64
+from datetime import datetime
+from PIL import Image
+import io
+
 from tensorflow.keras.preprocessing import image
 from tensorflow.keras.applications.mobilenet_v2 import preprocess_input
 from tensorflow.keras.models import load_model
-from app.alert.views import create_notifications
+#from app.alert.views import create_notifications
 from colorama import Fore
 
 notification_queue = Queue()
@@ -32,7 +38,7 @@ def index():
     threads_monitoring_cameras = list()
     for camera in cameras:
         if camera.name not in monitoring_threads:
-            t = threading.Thread(target=start_camera_monitoring, args=(camera, modelo), daemon=True)
+            t = threading.Thread(target=start_camera_monitoring, args=(camera, modelo, current_user.id), daemon=True)
             threads_monitoring_cameras.append(t)
             t.start()
             monitoring_threads[camera.name] = t
@@ -119,7 +125,7 @@ def delete_camera(camera_id):
     
     print(modelo.predict(np.array([imagen_preprocesada])))'''
         
-def start_camera_monitoring(camera, modelo):
+def start_camera_monitoring(camera, modelo, user_id):
     #definir array aqui
     def connect_camera():
         if camera.camera_type == "SecurityCamera":
@@ -132,7 +138,7 @@ def start_camera_monitoring(camera, modelo):
             return None
         return cap
     
-    def process_frame(cap):
+    def process_frame(cap, user_id):
         ret, frame = cap.read()
         if not ret:
             return False
@@ -144,10 +150,46 @@ def start_camera_monitoring(camera, modelo):
         predictions = modelo.predict(np.array([imagen_preprocesada]))
         predicted_classes = np.argmax(predictions, axis=1)
         if predicted_classes != None:
-            create_notifications(frame, camera, predicted_classes)
+            create_notifications(frame, camera, predicted_classes, user_id)
         print(predicted_classes)
         print(camera.name)
         return True
+    
+    def create_notifications(frame, camera, predicted, user_id):
+        image = Image.fromarray(frame)
+        output = io.BytesIO()
+        image.save(output, format='PNG')
+        image_data_compressed = output.getvalue()
+        user = User.objects.get(id = user_id)
+        
+        
+        diccionario = {
+            0: "Arma blanca",
+            1: "Arma corta",
+            2: "Arma larga",
+            3: "Ataque de perro",
+            4: "Choques",
+            5: "Encañonamiento",
+            6: "Forcejeos",
+            7: "Incendios",
+            8: "Patadas",
+            9: "Personas heridas",
+            10: "Golpes"
+        }
+        
+        threat = diccionario.get(predicted[0])
+        
+        notificacion = Notification(
+            user = user.email,
+            date_time = datetime.now(),
+            place = camera.address,  
+            threat = threat,  
+            camera_name = camera.name, 
+            certainty = 'Certeza por defecto',
+            image = image_data_compressed 
+        )
+        notificacion.save()
+        #flash('Alerta creada correctamente', 'success')
 
     try:
         cap = connect_camera()
@@ -157,14 +199,14 @@ def start_camera_monitoring(camera, modelo):
         active_cameras[camera.name] = cap
 
         while cap.isOpened():
-            if not process_frame(cap):
+            if not process_frame(cap, user_id):
                 notification_queue.put(f'Camera {camera.name} disconnected, attempting to reconnect...')
                 time.sleep(.5)  
                 cap.release()
                 cap = connect_camera()
                 active_cameras[camera.name] = cap
                 
-                if not cap.isOpened() or not process_frame(cap):
+                if not cap.isOpened() or not process_frame(cap, user_id):
                     notification_queue.put(f'Camera {camera.name} disconnected')
                     break
             
@@ -182,3 +224,4 @@ def monitor_notifications():
             notification = notification_queue.get()
             print(notification)
         time.sleep(1)
+        
