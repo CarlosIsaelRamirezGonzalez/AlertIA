@@ -31,7 +31,7 @@ monitoring_threads = {}
 def index():
     cameras = Camera.objects(user=current_user.id).all()
     
-    modelo_ruta = 'D:/Respaldo/Escuela/Proyecto/AlertAI/Artificial_Intelligence/AlertAI_V2.keras'
+    modelo_ruta = '../Artificial_Intelligence/AlertAI_V2.keras'
     modelo = load_model(modelo_ruta)
     
     monitoring_thread = threading.Thread(target=monitor_notifications, daemon=True)
@@ -49,17 +49,6 @@ def index():
     
     
     return render_template('home/home.html', cameras=cameras)
-
-@home.route('/deleteCamera/<id_camera>', methods=["GET", "POST"])
-@login_required
-@post_only
-def delete_camera(id_camera):
-    try:
-        camera = Camera.objects(id=id_camera)
-        camera.delete()
-        return 200
-    except: 
-        return 404
 
 @home.route('/addCamera', methods=['GET', 'POST'])
 @login_required
@@ -114,6 +103,7 @@ def edit_camera(camera_id):
 
 @home.route('/home/deleteCamera/<camera_id>', methods=['GET', 'POST'])
 @login_required
+@post_only
 def delete_camera(camera_id):
     camera = Camera.objects(id=camera_id).first()
     camera.delete()
