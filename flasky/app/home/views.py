@@ -1,5 +1,10 @@
+from tensorflow.keras.preprocessing import image
+from tensorflow.keras.applications.mobilenet_v2 import preprocess_input
+from tensorflow.keras.models import load_model
+
 from flask import render_template, flash, url_for, redirect
 from flask_login import login_required, current_user
+from ..decorators import post_only
 from ..models import Camera, User, Notification
 from .forms import AddCameraForm, EditCameraForm
 from . import home
@@ -14,11 +19,8 @@ from datetime import datetime
 from PIL import Image
 import io
 
-from tensorflow.keras.preprocessing import image
-from tensorflow.keras.applications.mobilenet_v2 import preprocess_input
-from tensorflow.keras.models import load_model
-#from app.alert.views import create_notifications
 from colorama import Fore
+
 
 notification_queue = Queue()
 active_cameras = {}
@@ -29,7 +31,7 @@ monitoring_threads = {}
 def index():
     cameras = Camera.objects(user=current_user.id).all()
     
-    modelo_ruta = 'D:/Respaldo/Escuela/Proyecto/AlertAI/Artificial_Intelligence/AlertAI_V2.keras'
+    modelo_ruta = '../Artificial_Intelligence/AlertAI_V2.keras'
     modelo = load_model(modelo_ruta)
     
     monitoring_thread = threading.Thread(target=monitor_notifications, daemon=True)
@@ -72,7 +74,7 @@ def add_camera():
      
     return render_template('home/add-camera.html', form=form)
 
-@home.route('/home/editCamera/<camera_id>', methods=['GET', 'POST'])
+@home.route('/editCamera/<camera_id>', methods=['GET', 'POST'])
 @login_required
 def edit_camera(camera_id):
     print("Si entre")
@@ -101,6 +103,7 @@ def edit_camera(camera_id):
 
 @home.route('/home/deleteCamera/<camera_id>', methods=['GET', 'POST'])
 @login_required
+@post_only
 def delete_camera(camera_id):
     camera = Camera.objects(id=camera_id).first()
     camera.delete()

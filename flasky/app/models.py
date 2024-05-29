@@ -18,6 +18,11 @@ class User(UserMixin, db.Document):
     password_hash = db.StringField(required=True)
     confirmed = db.BooleanField(default=False)
     
+    def __init__(self, **kargs):
+        super(User, self).__init__(**kargs)
+        if self.email == current_app.config['FLASKY_ADMIN']:
+            self.confirmed = True
+    
     @property
     def password(self):
         raise AttributeError('Password is not a readable attribute')
@@ -63,7 +68,10 @@ class User(UserMixin, db.Document):
         
         flash('The token is incorrect')
         return False
-        
+    
+    def reset_password(self, new_password):
+        self.password = new_password
+        self.save()
     
     def __repr__(self):
         return '<User %r>' % self.username
@@ -116,17 +124,16 @@ class Camera(db.Document):
         self.alerts = calculated_value
  
     def insert_place_alerts(self, place):
-        if ( place == "Home" ): # Hubiera usado match :c
-            self.alerts = 629
-        elif ( place == "Building" ):
-            self.alerts = 871
-        elif ( place == "Square" ):
-            self.alerts = 883
-        elif ( place == "Street" ):
-            self.alerts = 1007
- 
+        match place:
+            case "Home": self.alerts = 629
+            case "Building": self.alerts = 871
+            case "Square":  self.alerts = 883
+            case "Street": self.alerts = 1007
+
+
+
     def has_alert(self, alert):
-        return self.alerts & alert == alert
+        return self.alerts & alert == alert 
     
     def add_alert(self, alert):
         if not self.has_alert(alert):
@@ -150,3 +157,9 @@ class Alerts:
     CAR_ACCIDENT = 128
     BRAWLS = 256
     INJURED_PEOPLE = 512
+    
+    
+class Report(db.Document):
+    body = db.StringField()
+    user = db.ReferenceField(User, reverse_delete_rule=db.CASCADE)
+    camera = db.ReferenceField(Camera, reverse_delte_rule=db.CASCADE)
