@@ -36,17 +36,13 @@
                         <p>Phone number: {{ camera.phone_number }}</p>
                     </div>
                     <div class="back-face-buttons">
-                        <form action="{{ url_for('home.edit_camera', camera_id=camera.id) }}">
-                            <button type="submit" class="back-face-edit-button">
-                                <i class="fa-solid fa-pencil"></i>
-                            </button>  
-                        </form>
-                        </form action="{{ url_for('home.delete_camera', camera_id=camera.id) }}">
-                            <button class="back-face-delete-button">
-                                <i class="fa-solid fa-trash-can"></i>
-                            </button>
-                        <form>
-                            
+                        <button class="back-face-delete-button" onclick="redirectToPage('/addCamera/{{camera._id}}')">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                        <button type="submit" class="back-face-edit-button" onclick="redirectToPage('/edit_camera/{{camera.id}}')">
+                            <i class="fa-solid fa-pencil"></i>
+                        </button>  
+                        
                     </div>
                 </div>
             </div>
@@ -68,4 +64,8 @@
     </section>
     <!-- end of cameras -->
     <script src="{{ url_for('static', filename='Js/cards.js') }}"></script>
+    {% block scripts %}
+    {{ super() }}
+    {% endblock scripts %}
+
 {% endblock %}
