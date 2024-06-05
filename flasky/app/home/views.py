@@ -5,7 +5,7 @@ from tensorflow.keras.models import load_model
 from flask import render_template, flash, url_for, redirect
 from flask_login import login_required, current_user
 from ..decorators import post_only
-from ..models import Camera, User, Notification
+from ..models import Camera, Notification
 from .forms import AddCameraForm, EditCameraForm
 from . import home
 import numpy as np
@@ -13,9 +13,9 @@ import threading
 from queue import Queue
 import cv2
 import time
-from collections import Counter
+import pythoncom
+import win32com.client
 
-import base64
 from datetime import datetime
 from PIL import Image
 import io
@@ -56,6 +56,11 @@ def index():
 def add_camera():
     form = AddCameraForm()
     
+    camera_details = get_camera_details()
+    form.device_id.choices = [(cam["DeviceID"], cam["Name"]) for cam in camera_details]
+    
+    print(camera_details)
+    
     if form.validate_on_submit():
         
         # Create model
@@ -74,6 +79,34 @@ def add_camera():
         return redirect(url_for('home.index'))        
      
     return render_template('home/add-camera.html', form=form)
+
+def get_camera_details():
+    pythoncom.CoInitialize()
+    str_name = "root\\cimv2"
+    wmi = win32com.client.Dispatch("WbemScripting.SWbemLocator")
+    obj_swm = wmi.ConnectServer(".", str_name)
+    col_items = obj_swm.ExecQuery("Select * from Win32_PnPEntity where Description like '%USB Video Device%'")
+    camera_details = []
+    for item in col_items:
+        camera_details.append({
+            "DeviceID": item.DeviceID,
+            "Name": item.Name
+        })
+        
+    index = 0
+    while True:
+        cap = cv2.VideoCapture(index)
+        if not cap.read()[0]:
+            break
+        # Verificar si ya está en la lista de cámaras USB
+        if not any(cam['DeviceID'] == str(index) for cam in camera_details):
+            camera_details.append({
+                "DeviceID": str(index),
+                "Name": f"Camera {index} (Integrated)" if index == 0 else f"Camera {index}"
+            })
+        cap.release()
+        index += 1
+    return camera_details
 
 @home.route('/editCamera/<camera_id>', methods=['GET', 'POST'])
 @login_required
