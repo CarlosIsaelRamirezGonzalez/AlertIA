@@ -93,7 +93,7 @@ class Camera(db.Document):
     url = db.StringField()   
     place = db.StringField(required=True, choices=["Home", "Building", "Square", "Street", "Personalized"])
     address = db.StringField(required=True)
-    images = db.ListField(db.ImageField())
+    device_id = db.StringField()
     
     user = db.ReferenceField(User, reverse_delete_rule=db.CASCADE)
     alerts = db.IntField(required=True)    

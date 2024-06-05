@@ -51,6 +51,11 @@
             </div>
             <br>
 
+            <!-- Añadir el campo select para mostrar las cámaras web disponibles -->
+            <div class="add-camera-webcam-selection" id="webcam-selection" style="display: none;">
+                <h3 class="add-camera-webcam-question">Select the web camera you want to use</h3>
+                {{ form.device_id(class='add-camera-input') }}
+            </div>
 
             {{ form.url(placeholder="URL camera", class='add-camera-input', autoComplete="off")  }}
             
@@ -135,6 +140,26 @@
 <script src="{{ url_for('static', filename='Js/addCameraDOM.js') }}"></script>
 <script src="{{ url_for('static', filename='Js/googleMapPopup.js') }}"></script>
 <script src="{{ url_for('static', filename='Js/googleMapService.js') }}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const webCameraRadio = document.getElementById('WebCamera');
+        const securityCameraRadio = document.getElementById('SecurityCamera');
+        const webcamSelection = document.getElementById('webcam-selection');
+
+        function toggleWebcamSelection() {
+            if (webCameraRadio.checked) {
+                webcamSelection.style.display = 'block';
+            } else {
+                webcamSelection.style.display = 'none';
+            }
+        }
+
+        webCameraRadio.addEventListener('change', toggleWebcamSelection);
+        securityCameraRadio.addEventListener('change', toggleWebcamSelection);
+
+        toggleWebcamSelection(); // Run on page load in case Web Camera is already selected
+    });
+</script>
 
 {% endblock page_content %}
 
