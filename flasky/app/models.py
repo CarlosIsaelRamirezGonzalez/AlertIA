@@ -76,12 +76,21 @@ class User(UserMixin, db.Document):
     def __repr__(self):
         return '<User %r>' % self.username
     
+class Notification(db.Document):
+    user = db.StringField(required=True)
+    date_time = db.DateTimeField(required=True)
+    place = db.StringField(required=True)
+    threat = db.StringField(required=True)
+    camera_name = db.StringField(required=True)
+    certainty = db.StringField(required=True)
+    image = db.BinaryField(required=True)
+    read = db.BooleanField(default=False)
      
 class Camera(db.Document):
     name = db.StringField(required=True)
     phone_number = db.StringField(required=True)
-    security = db.BooleanField(default=True)
-    ip = db.StringField()   
+    camera_type = db.StringField(required=True)
+    url = db.StringField()   
     place = db.StringField(required=True, choices=["Home", "Building", "Square", "Street", "Personalized"])
     address = db.StringField(required=True)
     images = db.ListField(db.ImageField())
@@ -153,3 +162,4 @@ class Alerts:
 class Report(db.Document):
     body = db.StringField()
     user = db.ReferenceField(User, reverse_delete_rule=db.CASCADE)
+    camera = db.ReferenceField(Camera, reverse_delte_rule=db.CASCADE)

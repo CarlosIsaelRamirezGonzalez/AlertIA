@@ -39,7 +39,6 @@ def signup():
         user.password = form.password.data
         user.save()
         login_user(user)
-        print(current_app.config['FLASKY_ADMIN'])
         if user.email == current_app.config['FLASKY_ADMIN']:
             return redirect(url_for('admin.cameras_panel'))
 
@@ -133,16 +132,16 @@ def password_token(token, email):
     else:
         flash("The confirmation token is invalid or has expired.")
         
-@auth.route('/password_reset', methodss=['GET', 'POST'])
+@auth.route('/password_reset', methods=['GET', 'POST'])
 @login_required
 def password_reset():
     form = ResetPasswordForm()
     if form.validate_on_submit():
-        current_user.reset_password(password=form.password.data)
+        current_user.reset_password(new_password=form.password.data)
         flash('Your password has been updated.')
         return redirect(url_for('auth.login'))
     
-    return render_template('auth/change-password.html')
+    return render_template('auth/change-password.html', form=form)
         
 
 @auth.route('/confirm/<token>', methods=['GET', 'POST'])
@@ -172,8 +171,9 @@ def resend_confirmation():
 
 @auth.route('/reset', methods=['GET', 'POST'])
 def password_reset_request():
+    
     if not current_user.is_anonymous:
-        return redirect(url_for('main.index'))
+        logout_user()
     
     form = PasswordResetRequestForm()
     if form.validate_on_submit():

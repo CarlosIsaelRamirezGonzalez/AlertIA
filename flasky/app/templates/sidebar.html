@@ -1,0 +1,63 @@
+<!-- navbar -->
+<div class="navbar">
+
+    <input type="checkbox" class="navbar-checkbox-sidebar" hidden id="click">
+    <!-- sidebar -->
+    <div class="sidebar">
+        
+        <label for="click">
+            <div class="menu-icon">
+               <div class="line line-1"></div>
+               <div class="line line-2"></div>
+               <div class="line line-3"></div>
+            </div>
+        </label>
+
+        <ul class="sidebar-icons-list">
+            <li>
+                <a href="#" class="sidebar-social-link"><i class="fa-brands fa-square-youtube sidebar-icon-youtube"></i></a>
+            </li>
+            <li>
+                <a href="#" class="sidebar-social-link"><i class="fa-brands fa-square-twitter sidebar-icon-twitter"></i></a>
+            </li>
+            <li>    
+                <a href="#" class="sidebar-social-link"><i class="fa-brands fa-square-facebook sidebar-icon-facebook"></i></a>
+            </li>
+        </ul>
+
+        <div class="sidebar-year">
+            <p>2024</p>
+        </div>
+    </div>
+    <!-- end of sidebar -->
+
+    <!-- navigation -->
+    <nav class="navigation">
+        <h1 class="navigation-heading">Alert AI</h1>    
+        
+        <ul class="navigation-list">
+            <li class="navigation-item">
+                <a href="{{ url_for('home.index') }}" class="navigation-link">Home</a>
+            </li>
+            <li class="navigation-item">
+                <a href="{{ url_for('alert.notifications') }}" class="navigation-link">Alerts</a>
+            </li>
+            <li class="navigation-item">
+                <a href="#" class="navigation-link">Settings</a>
+            </li>
+            <li class="navigation-item">
+                <a href="#" class="navigation-link">Help</a>
+            </li>
+            <li class="navigation-item">
+                <a href="{{ url_for('auth.logout') }}" class="navigation-link">Log Out</a>
+            </li>
+        </ul>
+
+        
+        <div class="copyright">
+            <p>&copy; 2024. Alert AI. All Rights Reserved</p>
+        </div>
+    </nav>
+    <!-- end of navigation -->
+</div>
+<!-- end of navbar -->
