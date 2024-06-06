@@ -28,7 +28,7 @@ class TokenForm(FlaskForm):
     
 class ResetPasswordForm(FlaskForm):
     password = PasswordField(validators=[DataRequired(), Length(1,64), EqualTo("password2", message=('Passwords must match.'))])
-    password2 = PasswordField('Confirm password', validators=[DataRequired()])
+    password2 = PasswordField(validators=[DataRequired()])
 
 class PasswordResetRequestForm(FlaskForm):
     email = StringField(validators=[DataRequired(), Email()])
