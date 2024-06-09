@@ -18,6 +18,8 @@ import win32com.client
 import platform
 from twilio.rest import Client
 import os
+from ..email import send_email
+
 
 from datetime import datetime
 from PIL import Image
@@ -248,7 +250,16 @@ def start_camera_monitoring(camera, modelo, user_email):
             certainty = 'Certeza por defecto',
             image = image_data_compressed 
         )
+        
         notificacion.save()
+        link = url_for('alert.view_notification', notification_id=notificacion.id, _external=True)
+        alert = "I don't know from where i can get the alert"
+        send_email(current_user.email, 'Alert Detected', 'auth/email/alert', user=current_user,  
+                    alert=alert, camera_name = camera.name, 
+                    time=datetime.now, link = link ) 
+
+        
+    
         
         #send_alert_message_sms(camera, threat)
         #flash('Alerta creada correctamente', 'success')
