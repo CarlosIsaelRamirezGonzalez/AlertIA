@@ -79,3 +79,32 @@ def view_notification(notification_id):
     image_base64 = base64.b64encode(load_notification.image).decode('utf-8')
     load_notification.image = image_base64
     return render_template('alert/details.html', load_notification=load_notification)
+
+@alert.route('/filterStarred', methods=['GET', 'POST'])
+def filter_starred():
+    load_notifications = Notification.objects(user=current_user.email, starred = True)
+        
+    return render_template('alert/notifications.html', load_notifications = load_notifications)
+
+@alert.route('/deleteAllNotifications', methods=['GET', 'POST'])
+def delete_all_notifications():
+    notifications = Notification.objects(user = current_user.email, starred = False)
+    
+    notifications.delete()
+    
+    flash('Notificaciones eliminadas correctamente', 'success')
+    return redirect(url_for('alert.notifications'))
+
+@alert.route('/add-QuitStarred/<notification_id>', methods=['GET', 'POST'])
+def add_quit_starred(notification_id):
+    load_notification = Notification.objects.get(id = notification_id)
+    if load_notification.starred == False:
+        load_notification.update(set__starred = True)
+        flash("Alerta añadida a destacadas")
+    else:
+        load_notification.update(set__starred = False)
+        flash("Alerta eliminada de destacadas")
+        
+    return redirect(url_for('alert.notifications'))
+        
+        
