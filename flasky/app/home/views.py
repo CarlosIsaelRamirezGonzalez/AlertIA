@@ -15,6 +15,9 @@ import cv2
 import time
 import pythoncom
 import win32com.client
+import platform
+from twilio.rest import Client
+import os
 
 from datetime import datetime
 from PIL import Image
@@ -64,9 +67,15 @@ def add_camera():
     if form.validate_on_submit():
         
         # Create model
-        camera = Camera(name=form.name.data, phone_number=form.phone_number.data,
-                        camera_type=form.camera_type.data, url=form.url.data, place=form.place.data,
-                        address=form.address.data)
+        camera = Camera(
+            name = form.name.data, 
+            phone_number = form.phone_number.data,
+            camera_type = form.camera_type.data, 
+            url = form.url.data, 
+            place = form.place.data,
+            address = form.address.data, 
+            device_id = form.device_id.data, 
+            registered = platform.node())
         
         
         if form.place.data != 'Personalized':
@@ -240,6 +249,8 @@ def start_camera_monitoring(camera, modelo, user_email):
             image = image_data_compressed 
         )
         notificacion.save()
+        
+        #send_alert_message_sms(camera, threat)
         #flash('Alerta creada correctamente', 'success')
         
     def check_before_notify(frame, camera, user_email):
@@ -262,6 +273,9 @@ def start_camera_monitoring(camera, modelo, user_email):
         
 
     try:
+        if camera.registered != platform.node():
+            print(f"{camera.name} no fue registrada en {platform.node()}")
+            return
         cap = connect_camera()
         if cap is None:
             return
@@ -296,4 +310,19 @@ def monitor_notifications():
             print(notification)
         time.sleep(1)
         
-        
+def send_alert_message_sms(camera, threat):
+    account_sid = os.environ.get('TWILIO_ACCOUNT_SID')
+    auth_token = os.environ.get('TWILIO_AUTH_TOKEN')
+    client = Client(account_sid, auth_token)
+    body_message = f"AlertAI detecto: {threat} en la camara {camera.name} ubicada en {camera.address}"
+    
+    if len(body_message) > 160:
+        body_message = body_message[:160]
+    
+    message = client.messages.create(
+        from_ = '+19378979119',
+        to = f"+52{camera.phone_number}",
+        body = body_message
+    )
+    
+    print(message.sid)
