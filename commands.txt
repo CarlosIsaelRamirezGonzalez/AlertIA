@@ -7,4 +7,4 @@ $env:MAIL_USERNAME='alertia2023@gmail.com'
 $env:MAIL_PASSWORD = 'fdldnvsfccrrvbfa'
 $env:SECRET_KEY="Mi telefono es un honor X8"
 $env:SEND_FILE_MAX_AGE_DEFAULT=0
-$env:FLASKY_ADMIN="a20100322@ceti.mx"
+$env:FLASKY_ADMIN="alertai.admin@gmail.com"

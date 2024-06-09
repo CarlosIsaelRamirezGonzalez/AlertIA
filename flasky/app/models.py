@@ -16,6 +16,7 @@ class User(UserMixin, db.Document):
     username = db.StringField(required=True)
     email = db.StringField(required=True, unique=True)
     password_hash = db.StringField(required=True)
+    available = db.BooleanField(default=True)
     confirmed = db.BooleanField(default=False)
     
     def __init__(self, **kargs):
@@ -160,6 +161,7 @@ class Alerts:
     
     
 class Report(db.Document):
+    title = db.StringField()
     body = db.StringField()
     user = db.ReferenceField(User, reverse_delete_rule=db.CASCADE)
     camera = db.ReferenceField(Camera, reverse_delte_rule=db.CASCADE)
