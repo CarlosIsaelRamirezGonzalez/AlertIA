@@ -14,6 +14,7 @@ class BaseCameraForm(FlaskForm):
                                                 ('Square', 'Square'), ('Street', 'Street'), 
                                                 ('Personalized', 'Personalized'),])
     address = StringField(validators=[DataRequired()])
+    device_id = SelectField('Device ID', choices=[], coerce=str)
     fires = BooleanField()
     bladed_weapon = BooleanField()
     stabbing = BooleanField()

@@ -86,6 +86,7 @@ class Notification(db.Document):
     certainty = db.StringField(required=True)
     image = db.BinaryField(required=True)
     read = db.BooleanField(default=False)
+    starred = db.BooleanField(default=False)
      
 class Camera(db.Document):
     name = db.StringField(required=True)
@@ -94,7 +95,9 @@ class Camera(db.Document):
     url = db.StringField()   
     place = db.StringField(required=True, choices=["Home", "Building", "Square", "Street", "Personalized"])
     address = db.StringField(required=True)
-    images = db.ListField(db.ImageField())
+    device_id = db.StringField()
+    registered = db.StringField()
+    
     
     user = db.ReferenceField(User, reverse_delete_rule=db.CASCADE)
     alerts = db.IntField(required=True)    
