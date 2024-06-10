@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}AlertAI - Report Notification{% endblock %}
+
+
+{% block page_content %}
+  
+<section class="report-notification">
+
+    <h3 class="report-notification-advice">Write the conflicts that you have with this notification.</h3>
+
+    <form method="post" class="report-notification-form">
+        {{ form.csrf_token }}
+
+        {{ form.title(class="report-notification-form-input", placeholder="Title of the problem", autoComplete="off")}}
+        {{ form.description(class="report-notification-form-input", placeholder="Problem", autoComplete="off")}}
+
+        <button class="report-notification-form-button" type="submit">Report</button>
+
+    </form>
+
+</section>
+{% endblock %}

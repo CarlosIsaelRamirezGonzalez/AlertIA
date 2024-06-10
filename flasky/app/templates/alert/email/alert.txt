@@ -1,0 +1,9 @@
+Dear {{ user.username }},
+
+We have detected an alert that may interest you.
+
+Alert detected: {{ alert }}
+Time it was detected: {{ time }}
+Detected by: {{ camera_name }}
+
+View Details: {{ link }}

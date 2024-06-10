@@ -17,7 +17,7 @@ flask_mongoengine==1.0.0
 pillow==9.5.0
 opencv-python
 colorama
-tensorflow==3.2.2
-keras==2.13.1
-pywin32
+tensorflow==2.16.1
+keras==3.3.3
+mongoengine
 twilio

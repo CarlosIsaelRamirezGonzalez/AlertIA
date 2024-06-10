@@ -5,8 +5,8 @@ from tensorflow.keras.models import load_model
 from flask import render_template, flash, url_for, redirect
 from flask_login import login_required, current_user
 from ..decorators import post_only
-from ..models import Camera, Notification
-from .forms import AddCameraForm, EditCameraForm
+from ..models import Camera, Notification, Report
+from .forms import AddCameraForm, EditCameraForm, ReportNotification
 from . import home
 import numpy as np
 import threading
@@ -18,6 +18,8 @@ import win32com.client
 import platform
 from twilio.rest import Client
 import os
+from ..email import send_email
+
 
 from datetime import datetime
 from PIL import Image
@@ -54,6 +56,28 @@ def index():
     
     return render_template('home/home.html', cameras=cameras)
 
+@home.route('/reportNotification/<id_notification>/<id_camera>', methods=['GET', 'POST'])
+@login_required
+def report_notification(id_notification, id_camera):
+    form = ReportNotification()
+    notification = Notification.objects(id=id_notification).first()
+    camera = Camera.objects(id=id_camera).first()
+    if not notification:
+        flash("That notification doesn't exists")
+        return redirect(url_for('home.index'))
+    
+    if form.validate_on_submit():
+        report = Report(title=form.title.data,
+                        body=form.description.data,
+                        user = current_user,
+                        camera = camera)
+        report.save()
+        flash("Report done successfully")
+    
+    return render_template('home/report_notigfication.html', form=form)
+
+    
+
 @home.route('/addCamera', methods=['GET', 'POST'])
 @login_required
 def add_camera():
@@ -66,7 +90,7 @@ def add_camera():
     
     if form.validate_on_submit():
         
-        # Create model
+        # Borraste a que usuario se conectaba???
         camera = Camera(
             name = form.name.data, 
             phone_number = form.phone_number.data,
@@ -248,7 +272,16 @@ def start_camera_monitoring(camera, modelo, user_email):
             certainty = 'Certeza por defecto',
             image = image_data_compressed 
         )
+        
         notificacion.save()
+        link = url_for('alert.view_notification', notification_id=notificacion.id, _external=True)
+        alert = "I don't know from where i can get the alert"
+        send_email(current_user.email, 'Alert Detected', 'auth/email/alert', user=current_user,  
+                    alert=alert, camera_name = camera.name, 
+                    time=datetime.now, link = link ) 
+
+        
+    
         
         #send_alert_message_sms(camera, threat)
         #flash('Alerta creada correctamente', 'success')

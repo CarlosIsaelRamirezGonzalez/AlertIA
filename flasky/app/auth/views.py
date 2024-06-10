@@ -114,8 +114,8 @@ def check():
         s = Serializer(current_app.config['SECRET_KEY'])
         encrypt_token = s.dumps({'token' : form.token.data})
         
-        if session['Reset_Password']:
-            return redirect(url_for('auth.password_token', token=encrypt_token, email = session['Reset_Password_Email'], _external=True ))
+        if session.get('reset_password') == True:
+            return redirect(url_for('auth.password_token', token=encrypt_token, email = session.get('reset_password_email'), _external=True ))
         
         return redirect(url_for('auth.confirm', token=encrypt_token, _external=True))
         
@@ -127,6 +127,7 @@ def password_token(token, email):
     user = User.objects(email=email).first()
     if user and user.confirm_token(token):
         login_user(user)
+        session['reset_password'] = False
         return(redirect(url_for('auth.password_reset')))
                 
     else:
@@ -180,9 +181,9 @@ def password_reset_request():
         user =  User.objects(email = form.email.data).first()
         token = user.generate_confirmation_token()
         session[token] = datetime.datetime.now() + datetime.timedelta(minutes=3) 
-        session["Reset_Password"] = True
-        session["Reset_Password_Email"] = user.email
-        send_email(user.email, 'Confirm your account.', 'auth/email/reset_password', user=user, token=token)
-        flash('A confirmation email has been sent to you by email.')
+        session["reset_password"] = True
+        session["reset_password_email"] = user.email
+        send_email(user.email, 'Reset the password.', 'auth/email/reset_password', user=user, token=token)
+        flash('A reset password email has been sent to you by email.')
         return redirect(url_for('auth.check'))        
     return render_template('auth/reset-password-email.html', form=form)
