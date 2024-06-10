@@ -1575,6 +1575,39 @@ input[type=number]::-webkit-outer-spin-button {
 }
 /* end of Change password */
 
+/* report notification */
+.report-notification {
+    height: 100vh;
+    width: 100vw;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.report-notification-advice {
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 2rem;
+    color: #212529;
+    letter-spacing: .1rem;
+}
+
+.report-notification-form {
+    height: 70vh;
+    width: 60vw;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 1rem;
+    border: solid black .1rem;
+}
+/* end of report notification */
+
+
 /* Media querys */
 @media(max-width: 1200px) {
 
