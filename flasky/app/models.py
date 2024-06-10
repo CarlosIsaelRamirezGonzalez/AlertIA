@@ -78,7 +78,7 @@ class User(UserMixin, db.Document):
         return '<User %r>' % self.username
     
 class Notification(db.Document):
-    user = db.StringField(required=True)
+    user = db.StringField(required=True) #Corregir esto ¿Por que no conecta directamente con un usuario?
     date_time = db.DateTimeField(required=True)
     place = db.StringField(required=True)
     threat = db.StringField(required=True)
