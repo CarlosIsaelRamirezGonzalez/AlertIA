@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, BooleanField, ValidationError, SelectField, RadioField
+from wtforms import StringField, BooleanField, ValidationError, SelectField, RadioField, TextAreaField
 from wtforms.validators import DataRequired, Length, Regexp
 from ..models import Camera, User
 from flask_login import current_user
@@ -35,10 +35,7 @@ class AddCameraForm(BaseCameraForm):
         existing_camera = Camera.objects(user=current_user.id, name=field.data).first()
         if existing_camera:
             raise ValidationError('You have already registered a camera with this name.')
-     
-    
-        
-        
+             
     def validate_ip(self, field):
         if Camera.objects(ip=field.data).first() and self.camera_type.data == "SecurityCamera":
             raise ValidationError("A camera already exists with this IP address.")
@@ -50,3 +47,8 @@ class EditCameraForm(BaseCameraForm):
 
         if cameras_with_same_name.count() > 1:
             raise ValidationError('You have already registered a camera with this name.')
+        
+        
+class ReportNotification(FlaskForm):
+    title = StringField(validators=[DataRequired(), Length(1, 64)])
+    description = TextAreaField(validators=[DataRequired(), Length(1, 312)])
