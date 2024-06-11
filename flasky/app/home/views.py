@@ -5,7 +5,7 @@ from tensorflow.keras.models import load_model
 from flask import render_template, flash, url_for, redirect
 from flask_login import login_required, current_user
 from ..decorators import post_only
-from ..models import Camera, Notification, Report
+from ..models import Camera, Notification, Report, User
 from .forms import AddCameraForm, EditCameraForm, ReportNotification
 from . import home
 import numpy as np
@@ -36,8 +36,7 @@ monitoring_threads = {}
 @login_required
 def index():
     cameras = Camera.objects(user=current_user.id).all()
-    
-    modelo_ruta = 'D:\Respaldo\Escuela\Proyecto\AlertAI\Artificial_Intelligence\AlertAI-Deluxe.keras'
+    modelo_ruta = 'C:/Users/Carlos Ramirez/Desktop/Programas/AlertIA/Artificial_Intelligence/AlertAI-Deluxe.keras'
     modelo = load_model(modelo_ruta)
     
     monitoring_thread = threading.Thread(target=monitor_notifications, daemon=True)
@@ -183,6 +182,7 @@ def start_camera_monitoring(camera, modelo, user_email):
     arr_check_damage = []
     alert_mode_time = time.time()
     alert_mode = False
+    user = User.objects(email=user_email).first()
     
     def connect_camera():
         if camera.camera_type == "SecurityCamera":
@@ -275,9 +275,8 @@ def start_camera_monitoring(camera, modelo, user_email):
         
         notificacion.save()
         link = url_for('alert.view_notification', notification_id=notificacion.id, _external=True)
-        alert = "I don't know from where i can get the alert"
-        send_email(current_user.email, 'Alert Detected', 'auth/email/alert', user=current_user,  
-                    alert=alert, camera_name = camera.name, 
+        send_email(user.email, 'Alert Detected', 'auth/email/alert', user=user,  
+                    alert=threat, camera_name = camera.name, 
                     time=datetime.now, link = link ) 
 
         
@@ -324,6 +323,9 @@ def start_camera_monitoring(camera, modelo, user_email):
                 active_cameras[camera.name] = cap
                 
                 if not cap.isOpened() or not process_frame(cap, user_email):
+                    # Que camara se desconecto y a que hora camera.id
+                    send_email(user.email, 'Alert Detected', 'auth/email/alert', user=user,  
+                                camera_name = camera.name, time=datetime.now) 
                     notification_queue.put(f'Camera {camera.name} disconnected')
                     break
             if alert_mode == False:

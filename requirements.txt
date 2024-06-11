@@ -19,5 +19,5 @@ opencv-python
 colorama
 tensorflow==2.16.1
 keras==3.3.3
-mongoengine
+pywin32
 twilio
