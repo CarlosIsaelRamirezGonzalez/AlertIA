@@ -94,6 +94,7 @@ class Camera(db.Document):
     camera_type = db.StringField(required=True)
     url = db.StringField()   
     place = db.StringField(required=True, choices=["Home", "Building", "Square", "Street", "Personalized"])
+    place_default = db.IntField(required = True)
     address = db.StringField(required=True)
     device_id = db.StringField()
     registered = db.StringField()

@@ -69,7 +69,7 @@
             <label class="add-camera-alert-container">
                 <h3 class="add-camera-alert-name">Fires</h3> 
                 <i class="fa-solid fa-house-fire add-camera-icon-alert"></i>
-                {{ form.fires(type="checkbox") }}
+                {{ form.fires(type="checkbox", **{'title':"This alert is specifically for fires, home fires, forest fires, gas station fires, and others"}) }}
             </label>
             
 
@@ -77,7 +77,7 @@
             <label class="add-camera-alert-container">
                 <h3 class="add-camera-alert-name">Bladed weapons</h3>
                 <i class="fa-solid fa-wand-sparkles add-camera-icon-alert"></i>
-                {{ form.bladed_weapon(type="checkbox") }}
+                {{ form.bladed_weapon(type="checkbox", title='This alert is bladed weapons like knifes, axes, machetes, katanas and razors') }}
             </label>
 
 
@@ -85,44 +85,44 @@
             <label class="add-camera-alert-container">
                 <h3 class="add-camera-alert-name">Hand Gun</h3>
                 <i class="fa-solid fa-gun add-camera-icon-alert"></i>
-                {{ form.handgun(type="checkbox") }}
+                {{ form.handgun(type="checkbox", title='This alert is for fire guns, specially for short fire guns, like revolvers') }}
             </label>
 
 
             <label class="add-camera-alert-container">
                 <h3 class="add-camera-alert-name">Long Gun</h3>
                 <i class="fa-solid fa-gun add-camera-icon-alert"></i>
-                {{ form.long_gun(type="checkbox") }}
+                {{ form.long_gun(type="checkbox", title='This alert is for fire guns, specially for long guns, like ak-47, and others') }}
             </label>
 
             <label class="add-camera-alert-container">
                 <h3 class="add-camera-alert-name">Cannoning</h3>
                 <i class="fa-solid fa-people-robbery add-camera-icon-alert"></i>
-                {{ form.cannoning(type="checkbox") }}
+                {{ form.cannoning(type="checkbox", **{'title': "This alert works when a person pointed a fire gun to other person, doesn't matter if is a long fire gun or a short fire gun"}) }}
             </label>
 
             <label class="add-camera-alert-container">
                 <h3 class="add-camera-alert-name">Car Accident</h3>
                 <i class="fa-solid fa-car-burst add-camera-icon-alert"></i>
-                {{ form.car_accident(type="checkbox") }}               
+                {{ form.car_accident(type="checkbox", title='This alert works when one or more cars crashed, doesn't matter with what it crashed, only matter that it crashed') }}               
             </label>
 
             <label class="add-camera-alert-container">
                 <h3 class="add-camera-alert-name">Dog Atack</h3>
                 <i class="fa-solid fa-paw add-camera-icon-alert"></i>
-                {{ form.dog_attack(type="checkbox") }}
+                {{ form.dog_attack(type="checkbox", title='This alert works when a dog atack to a person or a other dog') }}
             </label>
 
             <label class="add-camera-alert-container">                  
                 <h3 class="add-camera-alert-name">Brawls</h3>
                 <i class="fa-solid fa-user-ninja add-camera-icon-alert"></i>
-                {{ form.brawls(type="checkbox") }}            
+                {{ form.brawls(type="checkbox", title='This alert works when two people fight, only works when they hit, kick, or struggle') }}            
             </label>
 
             <label class="add-camera-alert-container">                    
                 <h3 class="add-camera-alert-name">Injured People</h3>
                 <i class="fa-solid fa-person-falling-burst add-camera-icon-alert"></i>
-                {{ form.injured_people(type="checkbox") }}                
+                {{ form.injured_people(type="checkbox", title='This alert works when a person has exposed wounds, whether partial or total amputations of their body, prominent bleeding, or an opening in their skin where blood oozes') }}                
             </label>
         </div> 
         

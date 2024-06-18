@@ -6,8 +6,8 @@ from flask_login import current_user
 
 
 class BaseCameraForm(FlaskForm):
-    name = StringField(validators=[DataRequired(), Length(1, 64)])
-    phone_number = StringField(validators=[DataRequired()])
+    name = StringField(validators=[DataRequired(), Length(1, 30)])
+    phone_number = StringField(validators=[DataRequired(), Regexp('^\d{10}$', 0, 'Phone numbers must be exactly 10 digits and contain only numbers.')])
     camera_type = RadioField('Camera Type', choices=[('WebCamera', 'Web Camera'), ('SecurityCamera', 'Security Camera')], validators=[DataRequired()])
     url = StringField()
     place = SelectField(default='Personalized', choices=[('Home', 'Home'), ('Building', 'Building'), 
@@ -41,12 +41,10 @@ class AddCameraForm(BaseCameraForm):
             raise ValidationError("A camera already exists with this IP address.")
         
 class EditCameraForm(BaseCameraForm):
-    
-    def validate_name(self, field):
-        cameras_with_same_name = Camera.objects(user=current_user.id, name=field.data)
-
-        if cameras_with_same_name.count() > 1:
-            raise ValidationError('You have already registered a camera with this name.')
+    place = SelectField(default='Personalized', choices=[('Home', 'Home'), ('Building', 'Building'), 
+                                                ('Square', 'Square'), ('Street', 'Street'), 
+                                                ('Personalized', 'Personalized'), 
+                                                ('Default', 'Default'),])
         
         
 class ReportNotification(FlaskForm):
