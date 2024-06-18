@@ -2,10 +2,10 @@ from tensorflow.keras.preprocessing import image
 from tensorflow.keras.applications.mobilenet_v2 import preprocess_input
 from tensorflow.keras.models import load_model
 
-from flask import render_template, flash, url_for, redirect
+from flask import render_template, flash, url_for, redirect, current_app
 from flask_login import login_required, current_user
 from ..decorators import post_only
-from ..models import Camera, Notification, Report, User
+from ..models import Camera, Notification, Report, User, Alerts
 from .forms import AddCameraForm, EditCameraForm, ReportNotification
 from . import home
 import numpy as np
@@ -35,17 +35,19 @@ monitoring_threads = {}
 @home.route('/home')
 @login_required
 def index():
+    
     cameras = Camera.objects(user=current_user.id).all()
-    modelo_ruta = 'C:/Users/Carlos Ramirez/Desktop/Programas/AlertIA/Artificial_Intelligence/AlertAI-Deluxe.keras'
+    modelo_ruta = 'D:\Respaldo\Escuela\Proyecto\AlertAI\Artificial_Intelligence\AlertAI-Deluxe.keras'
     modelo = load_model(modelo_ruta)
     
     monitoring_thread = threading.Thread(target=monitor_notifications, daemon=True)
     monitoring_thread.start()
     
+    app = current_app._get_current_object()
     threads_monitoring_cameras = list()
     for camera in cameras:
         if camera.name not in monitoring_threads:
-            t = threading.Thread(target=start_camera_monitoring, args=(camera, modelo, current_user.email), daemon=True)
+            t = threading.Thread(target=start_camera_monitoring, args=[app, camera, modelo, current_user.email], daemon=True)
             threads_monitoring_cameras.append(t)
             t.start()
             monitoring_threads[camera.name] = t
@@ -105,10 +107,18 @@ def add_camera():
             camera.insert_place_alerts(form.place.data)
         else:
             camera.insert_personalized_alerts(form)
+        camera.place_default = camera.alerts
         # save model
-        camera.save()
-        flash("Camera saved successfully")
-        return redirect(url_for('home.index'))        
+        if camera.alerts == 0:
+            flash('Error: You must select at least one place or alert.')
+        else:
+            camera.save()
+            flash("Camera saved successfully")
+            return redirect(url_for('home.index'))   
+    else:
+        for field, errors in form.errors.items():
+            for error in errors:
+                flash(f"Error in the {getattr(form, field).label.text} field - {error}", 'error')     
      
     return render_template('home/add-camera.html', form=form)
 
@@ -161,9 +171,24 @@ def edit_camera(camera_id):
         camera.place = form.place.data
         camera.address = form.address.data
         
-        camera.save()
-        flash("Camera updated successfully")
-        return redirect(url_for('home.index'))
+        if form.place.data != 'Personalized':
+            camera.insert_place_alerts(form.place.data)
+        elif form.place.data == 'Default':
+            camera.alerts = camera.place_default
+        else:
+            camera.insert_personalized_alerts(form)
+        
+        # save model
+        if camera.alerts == 0:
+            flash('Error: You must select at least one place or alert.')
+        else:
+            camera.save()
+            flash("Camera updated successfully")
+            return redirect(url_for('home.index'))  
+    else:
+        for field, errors in form.errors.items():
+            for error in errors:
+                flash(f"Error in the {getattr(form, field).label.text} field - {error}", 'error') 
     
     return render_template('home/add-camera.html', form=form, edit_mode=True, camera=camera)
 
@@ -178,165 +203,167 @@ def delete_camera(camera_id):
 
         
     
-def start_camera_monitoring(camera, modelo, user_email):
-    arr_check_damage = []
-    alert_mode_time = time.time()
-    alert_mode = False
-    user = User.objects(email=user_email).first()
-    
-    def connect_camera():
-        if camera.camera_type == "SecurityCamera":
-            cap = cv2.VideoCapture(camera.url)
-        else:
-            cap = cv2.VideoCapture(0)
+def start_camera_monitoring(app, camera, modelo, user_email):
+    with app.app_context():
+        arr_check_damage = []
+        alert_mode_time = time.time()
+        alert_mode = False
+        
+        def connect_camera():
+            if camera.camera_type == "SecurityCamera":
+                cap = cv2.VideoCapture(camera.url)
+            else:
+                cap = cv2.VideoCapture(0)
+                
+            if not cap.isOpened():
+                notification_queue.put(f"Failed to connect to camera {camera.name}")
+                return None
+            return cap
+        
+        def process_frame(cap, user_email):
+            nonlocal alert_mode, alert_mode_time
+            ret, frame = cap.read()
+            if not ret:
+                return False
             
-        if not cap.isOpened():
-            notification_queue.put(f"Failed to connect to camera {camera.name}")
-            return None
-        return cap
-    
-    def process_frame(cap, user_email):
-        nonlocal alert_mode, alert_mode_time
-        ret, frame = cap.read()
-        if not ret:
-            return False
+            #Forma comun
+            frame_resized = cv2.resize(frame, (255, 255))
+            image_array = image.img_to_array(frame_resized)
+            imagen_preprocesada = preprocess_input(image_array)
+            
+            predictions = modelo.predict(np.array([imagen_preprocesada]))
+            predicted_classes = np.argmax(predictions, axis=1)
+            
+            #Forma dada por Carlos
+            '''frame_resized = cv2.resize(frame, (256, 256))
+            image_array = image.img_to_array(frame_resized)
+            image_array = image_array/255.0
+            image_array = np.expand_dims(image_array, axis=0)
+            #imagen_preprocesada = preprocess_input(image_array)
+            
+            predictions = modelo.predict(image_array)
+            predicted_classes = np.argmax(predictions, axis=1)'''
+            
+            if predicted_classes[0] != 11:
+                print("Paso algo")
+                arr_check_damage.append(predicted_classes[0])
+                alert_mode = True
+                alert_mode_time = time.time()
+                check_before_notify(frame, camera, user_email)
+            elif (time.time() - alert_mode_time) > 5: #Aqui es 20
+                alert_mode = False
+                arr_check_damage.clear()
+            print(predicted_classes)
+            print(camera.name)
+            print(alert_mode)
+            return True
         
-        #Forma comun
-        frame_resized = cv2.resize(frame, (255, 255))
-        image_array = image.img_to_array(frame_resized)
-        imagen_preprocesada = preprocess_input(image_array)
+        def create_notifications(frame, camera, threat, user_email):
+            last_notification = Notification.objects(user = user_email, threat = threat).order_by('-date_time').first()
+            if last_notification:
+                if ((datetime.now() - last_notification.date_time).total_seconds())/60 <= 3:
+                    print("No han pasado 3 minutos con la misma amenaza")
+                    return
+            image = Image.fromarray(frame)
+            output = io.BytesIO()
+            image.save(output, format='PNG')
+            image_data_compressed = output.getvalue()
+            
+            print(f"Ya entre, creando notificacion de {threat}")
+            
+            
+            notificacion = Notification(
+                user = user_email,
+                date_time = datetime.now(),
+                place = camera.address,  
+                threat = threat,  
+                camera_name = camera.name, 
+                certainty = 'Certeza por defecto',
+                image = image_data_compressed 
+            )
+            notificacion.save()
+                     
+            info_user = User.objects.get(email = user_email)   
+            send_email(user_email,
+                       'Damage detected',
+                       "alert/email/alert",
+                       user = info_user, 
+                       alert = threat,
+                       camera_name = camera.name,
+                       time = datetime.now(),
+                       link = f"http://127.0.0.1:5000/alert/notifications/view/{notificacion.id}")
+
+            
         
-        predictions = modelo.predict(np.array([imagen_preprocesada]))
-        predicted_classes = np.argmax(predictions, axis=1)
-        
-        #Forma dada por Carlos
-        '''frame_resized = cv2.resize(frame, (256, 256))
-        image_array = image.img_to_array(frame_resized)
-        image_array = image_array/255.0
-        image_array = np.expand_dims(image_array, axis=0)
-        #imagen_preprocesada = preprocess_input(image_array)
-        
-        predictions = modelo.predict(image_array)
-        predicted_classes = np.argmax(predictions, axis=1)'''
-        
-        if predicted_classes[0] != 11:
-            print("Paso algo")
-            arr_check_damage.append(predicted_classes[0])
-            alert_mode = True
-            alert_mode_time = time.time()
-            check_before_notify(frame, camera, user_email)
-        elif (time.time() - alert_mode_time) > 5: #Aqui es 20
-            alert_mode = False
-            arr_check_damage.clear()
-        print(predicted_classes)
-        print(camera.name)
-        print(alert_mode)
-        return True
-    
-    def create_notifications(frame, camera, threat, user_email):
-        last_notification = Notification.objects(user = user_email, threat = threat).order_by('-date_time').first()
-        if last_notification:
-            if ((datetime.now() - last_notification.date_time).total_seconds())/60 <= 3:
-                print("No han pasado 3 minutos con la misma amenaza")
+            
+            #send_alert_message_sms(camera, threat)
+            #flash('Alerta creada correctamente', 'success')
+            
+        def check_before_notify(frame, camera, user_email):
+            
+            if arr_check_damage.count(1) + arr_check_damage.count(2) +  arr_check_damage.count(5) >= 10:
+                create_notifications(frame, camera, "Armas de fuego", user_email)
+            elif arr_check_damage.count(0) >= 10:
+                create_notifications(frame, camera, "Armas blancas", user_email)
+            elif arr_check_damage.count(3) >= 15:
+                create_notifications(frame, camera, "Ataque de perros", user_email)
+            elif arr_check_damage.count(7) >= 5: #Aqui deben ser 20
+                if camera.has_alert(Alerts.FIRES):
+                    create_notifications(frame, camera, "Incendios", user_email)
+                else:
+                    print(Fore.LIGHTRED_EX, "No se hizo por la restriccion")
+            elif arr_check_damage.count(4) >= 5: #Aqui deben ser 30
+                if camera.has_alert(Alerts.CAR_ACCIDENT):
+                    create_notifications(frame, camera, "Choques", user_email)
+                else:
+                    print(Fore.GREEN, "No se hizo por la restriccion")
+            elif arr_check_damage.count(9) >= 5: #Tambien aqui
+                create_notifications(frame, camera, "Persona herida", user_email)
+            elif arr_check_damage.count(6) + arr_check_damage.count(8) + arr_check_damage.count(10) >= 30:
+                create_notifications(frame, camera, "Pelea", user_email)
+            elif arr_check_damage.count(5) >= 10:
+                create_notifications(frame, camera, "Encañonamiento", user_email)
+            
+
+        try:
+            if camera.registered != platform.node():
+                print(f"{camera.name} no fue registrada en {platform.node()}")
                 return
-        image = Image.fromarray(frame)
-        output = io.BytesIO()
-        image.save(output, format='PNG')
-        image_data_compressed = output.getvalue()
-        
-        print("Ya entre")
-        
-        
-        '''diccionario = {
-            0: "Arma blanca",
-            1: "Arma corta",
-            2: "Arma larga",
-            3: "Ataque de perro",
-            4: "Choques",
-            5: "Encañonamiento",
-            6: "Forcejeos",
-            7: "Incendios",
-            8: "Patadas",
-            9: "Personas heridas",
-            10: "Golpes",
-            11: "Normalidad"
-        }'''
-        
-        
-        notificacion = Notification(
-            user = user_email,
-            date_time = datetime.now(),
-            place = camera.address,  
-            threat = threat,  
-            camera_name = camera.name, 
-            certainty = 'Certeza por defecto',
-            image = image_data_compressed 
-        )
-        
-        notificacion.save()
-        link = url_for('alert.view_notification', notification_id=notificacion.id, _external=True)
-        send_email(user.email, 'Alert Detected', 'auth/email/alert', user=user,  
-                    alert=threat, camera_name = camera.name, 
-                    time=datetime.now, link = link ) 
+            cap = connect_camera()
+            if cap is None:
+                return
+            
+            active_cameras[camera.name] = cap
 
-        
-    
-        
-        #send_alert_message_sms(camera, threat)
-        #flash('Alerta creada correctamente', 'success')
-        
-    def check_before_notify(frame, camera, user_email):
-        if arr_check_damage.count(1) + arr_check_damage.count(2) +  arr_check_damage.count(5) >= 10:
-            create_notifications(frame, camera, "Armas de fuego", user_email)
-        elif arr_check_damage.count(0) >= 10:
-            create_notifications(frame, camera, "Armas blancas", user_email)
-        elif arr_check_damage.count(3) >= 15:
-            create_notifications(frame, camera, "Ataque de perros", user_email)
-        elif arr_check_damage.count(7) >= 5: #Aqui deben ser 20
-            create_notifications(frame, camera, "Incendios", user_email)
-        elif arr_check_damage.count(4) >= 30:
-            create_notifications(frame, camera, "Choques", user_email)
-        elif arr_check_damage.count(9) >= 5: #Tambien aqui
-            create_notifications(frame, camera, "Persona herida", user_email)
-        elif arr_check_damage.count(6) + arr_check_damage.count(8) + arr_check_damage.count(10) >= 30:
-            create_notifications(frame, camera, "Pelea", user_email)
-        elif arr_check_damage.count(5) >= 10:
-            create_notifications(frame, camera, "Encañonamiento", user_email)
-        
-
-    try:
-        if camera.registered != platform.node():
-            print(f"{camera.name} no fue registrada en {platform.node()}")
-            return
-        cap = connect_camera()
-        if cap is None:
-            return
-        
-        active_cameras[camera.name] = cap
-
-        while cap.isOpened():
-            if not process_frame(cap, user_email):
-                notification_queue.put(f'Camera {camera.name} disconnected, attempting to reconnect...')
-                time.sleep(.5)  
-                cap.release()
-                cap = connect_camera()
-                active_cameras[camera.name] = cap
-                
-                if not cap.isOpened() or not process_frame(cap, user_email):
-                    # Que camara se desconecto y a que hora camera.id
-                    send_email(user.email, 'Alert Detected', 'auth/email/alert', user=user,  
-                                camera_name = camera.name, time=datetime.now) 
-                    notification_queue.put(f'Camera {camera.name} disconnected')
-                    break
-            if alert_mode == False:
-                time.sleep(3)
-                
-        
-        cap.release()
-        if camera.name in active_cameras:
-            del active_cameras[camera.name]
-    except Exception as e:
-        print(Fore.RED, f"Exception in start_camera_monitoring for camera {camera.name}: {e}")
+            while cap.isOpened():
+                if not process_frame(cap, user_email):
+                    notification_queue.put(f'Camera {camera.name} disconnected, attempting to reconnect...')
+                    time.sleep(.5)  
+                    cap.release()
+                    cap = connect_camera()
+                    active_cameras[camera.name] = cap
+                    
+                    if not cap.isOpened() or not process_frame(cap, user_email):
+                        # Que camara se desconecto y a que hora camera.id
+                        info_user = User.objects.get(email = user_email)
+                        send_email(user_email,
+                            'Camera disconected', 
+                            'alert/email/camera_disconected',
+                            user = info_user,  
+                            camera_name = camera.name, 
+                            time = datetime.now)
+                        
+                        notification_queue.put(f'Camera {camera.name} disconnected')
+                        break
+                if alert_mode == False:
+                    time.sleep(1)
+                    
+            
+            cap.release()
+            if camera.name in active_cameras:
+                del active_cameras[camera.name]
+        except Exception as e:
+            print(Fore.RED, f"Exception in start_camera_monitoring for camera {camera.name}: {e}")
             
 def monitor_notifications():
     while True:
@@ -361,3 +388,4 @@ def send_alert_message_sms(camera, threat):
     )
     
     print(message.sid)
+    

@@ -8,7 +8,7 @@ import io
 import base64
 from flask import request
 from mongoengine import Q
-from flask_login import current_user
+from flask_login import current_user, login_required
 
 
 @alert.route('/notifications', methods=['GET', 'POST'])
@@ -72,6 +72,7 @@ def search():
     return render_template('alert/notifications.html', load_notifications = load_notifications)
     
 @alert.route('/notifications/view/<notification_id>', methods=['GET', 'POST'])
+@login_required
 def view_notification(notification_id):
     load_notification = Notification.objects.get(id=notification_id)
     if load_notification.read == False:

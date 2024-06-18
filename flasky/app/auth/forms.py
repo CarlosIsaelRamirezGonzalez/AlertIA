@@ -6,7 +6,12 @@ from ..models import User
 class SignupForm(FlaskForm):
     email = StringField('Email', validators=[Email(), DataRequired(), Length(1, 64)])
     username = StringField('Username', validators=[DataRequired(), Length(1, 64), Regexp('^[A-Za-z][A-Za-z0-9_.]*$', 0,  'Usernames must have only letters, numbers, dots or underscores')])
-    password = PasswordField('Password', validators=[DataRequired(), Length(1, 64), EqualTo('password2', message=('Passwords must match.'))])
+    password = PasswordField('Password', validators=[
+        DataRequired(), 
+        Length(1, 64), 
+        EqualTo('password2', message=('Passwords must match.')),
+        Regexp('^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$', 0, 'Password must contain at least 8 characters, including an uppercase letter, a lowercase letter, a number, and a symbol.')
+        ])
     password2 = PasswordField('Confirm password', validators=[DataRequired()])
     
     # validate methods
