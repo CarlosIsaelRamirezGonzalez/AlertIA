@@ -8,7 +8,7 @@ import io
 import base64
 from flask import request
 from mongoengine import Q
-from flask_login import current_user
+from flask_login import current_user, login_required
 
 
 @alert.route('/notifications', methods=['GET', 'POST'])
@@ -44,9 +44,14 @@ def notifications():
         cap.release()
         flash('Alerta creada correctamente', 'success')
         
-    load_notifications = Notification.objects(user=current_user.email)
+    page = request.args.get('page', 1, type=int)
+    per_page = 25
+    pagination = Notification.objects(user=current_user.email).paginate(page=page, per_page=per_page)
+    load_notifications = pagination.items
         
-    return render_template('alert/notifications.html', load_notifications = load_notifications)
+    #load_notifications = Notification.objects(user=current_user.email)
+        
+    return render_template('alert/notifications.html', load_notifications = load_notifications, pagination=pagination)
 
 @alert.route('/notifications/delete/<notification_id>', methods=['POST'])
 def delete_notification(notification_id):
@@ -72,6 +77,7 @@ def search():
     return render_template('alert/notifications.html', load_notifications = load_notifications)
     
 @alert.route('/notifications/view/<notification_id>', methods=['GET', 'POST'])
+@login_required
 def view_notification(notification_id):
     load_notification = Notification.objects.get(id=notification_id)
     if load_notification.read == False:
@@ -98,6 +104,10 @@ def delete_all_notifications():
 @alert.route('/add-QuitStarred/<notification_id>', methods=['GET', 'POST'])
 def add_quit_starred(notification_id):
     load_notification = Notification.objects.get(id = notification_id)
+    notifications_amount = Notification.objects(starred = True).count()
+    if notifications_amount >= 100:
+        flash("Starred limit reached")
+    
     if load_notification.starred == False:
         load_notification.update(set__starred = True)
         flash("Alerta añadida a destacadas")
