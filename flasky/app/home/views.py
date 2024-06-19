@@ -37,7 +37,7 @@ monitoring_threads = {}
 def index():
     
     cameras = Camera.objects(user=current_user.id).all()
-    modelo_ruta = 'D:\Respaldo\Escuela\Proyecto\AlertAI\Artificial_Intelligence\AlertAI-Deluxe.keras'
+    modelo_ruta = 'C:/Users/Carlos Ramirez/Desktop/Programas/AlertIA/Artificial_Intelligence/ARIA.keras'
     modelo = load_model(modelo_ruta)
     
     monitoring_thread = threading.Thread(target=monitor_notifications, daemon=True)
@@ -153,13 +153,10 @@ def get_camera_details():
 @home.route('/editCamera/<camera_id>', methods=['GET', 'POST'])
 @login_required
 def edit_camera(camera_id):
-    print("Si entre")
     camera = Camera.objects(id=camera_id).first()
     if not camera:
         flash("Camera not found")
         return redirect(url_for('home.index'))
-    
-    
     
     form = EditCameraForm(obj=camera)
     

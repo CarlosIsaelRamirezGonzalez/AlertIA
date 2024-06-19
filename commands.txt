@@ -10,3 +10,4 @@ $env:SEND_FILE_MAX_AGE_DEFAULT=0
 $env:FLASKY_ADMIN="alertai.admin@gmail.com"
 $env:TWILIO_ACCOUNT_SID="AC3001539da3569914a24718bcdc6b61cd"
 $env:TWILIO_AUTH_TOKEN="9feb45c093f13915ef797358c837e6b6"
+$env:STRING_CONNECTION="mongodb+srv://enriquerc260:erJvAyN1zF9guAkV@alertai.2fssau2.mongodb.net/"
