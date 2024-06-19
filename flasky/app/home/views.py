@@ -271,7 +271,6 @@ def start_camera_monitoring(app, camera, modelo, user_email):
             
             print(f"Ya entre, creando notificacion de {threat}")
             
-            
             notificacion = Notification(
                 user = user_email,
                 date_time = datetime.now(),
@@ -283,7 +282,14 @@ def start_camera_monitoring(app, camera, modelo, user_email):
             )
             notificacion.save()
                      
-            info_user = User.objects.get(email = user_email)   
+            info_user = User.objects.get(email = user_email) 
+            attachments = [
+                {
+                    'filename': 'alert_image.png',
+                    'content_type': 'image/png',
+                    'data': image_data_compressed
+                }
+            ]
             send_email(user_email,
                        'Damage detected',
                        "alert/email/alert",
@@ -291,7 +297,8 @@ def start_camera_monitoring(app, camera, modelo, user_email):
                        alert = threat,
                        camera_name = camera.name,
                        time = datetime.now(),
-                       link = f"http://127.0.0.1:5000/alert/notifications/view/{notificacion.id}")
+                       link = f"http://127.0.0.1:5000/alert/notifications/view/{notificacion.id}",
+                       attachments=attachments)
 
             
         
@@ -303,24 +310,31 @@ def start_camera_monitoring(app, camera, modelo, user_email):
             
             if arr_check_damage.count(1) + arr_check_damage.count(2) +  arr_check_damage.count(5) >= 10:
                 create_notifications(frame, camera, "Armas de fuego", user_email)
+                
             elif arr_check_damage.count(0) >= 10:
                 create_notifications(frame, camera, "Armas blancas", user_email)
+                
             elif arr_check_damage.count(3) >= 15:
                 create_notifications(frame, camera, "Ataque de perros", user_email)
+                
             elif arr_check_damage.count(7) >= 5: #Aqui deben ser 20
                 if camera.has_alert(Alerts.FIRES):
                     create_notifications(frame, camera, "Incendios", user_email)
                 else:
                     print(Fore.LIGHTRED_EX, "No se hizo por la restriccion")
+                    
             elif arr_check_damage.count(4) >= 5: #Aqui deben ser 30
                 if camera.has_alert(Alerts.CAR_ACCIDENT):
                     create_notifications(frame, camera, "Choques", user_email)
                 else:
                     print(Fore.GREEN, "No se hizo por la restriccion")
+                    
             elif arr_check_damage.count(9) >= 5: #Tambien aqui
                 create_notifications(frame, camera, "Persona herida", user_email)
+                
             elif arr_check_damage.count(6) + arr_check_damage.count(8) + arr_check_damage.count(10) >= 30:
                 create_notifications(frame, camera, "Pelea", user_email)
+                
             elif arr_check_damage.count(5) >= 10:
                 create_notifications(frame, camera, "Encañonamiento", user_email)
             
