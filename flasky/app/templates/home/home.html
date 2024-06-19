@@ -36,7 +36,7 @@
                         <p>Phone number: {{ camera.phone_number }}</p>
                     </div>
                     <div class="back-face-buttons">
-                        <button class="back-face-delete-button" onclick="redirectToPage('/deleteCamera/{{camera.id}}')">
+                        <button class="back-face-delete-button" onclick="confirmDeletion('/deleteCamera/{{camera.id}}', 'Do you want delete this camera?')">
                             <i class="fa-solid fa-trash-can"></i>
                         </button>
                         <button class="back-face-edit-button" onclick="redirectToPage('/editCamera/{{camera.id}}')">
@@ -64,6 +64,7 @@
     </section>
     <!-- end of cameras -->
     <script src="{{ url_for('static', filename='Js/cards.js') }}"></script>
+    <script src="{{ url_for('static', filename='Js/confirmDelete.js') }}"></script>
     {% block scripts %}
     {{ super() }}
     {% endblock scripts %}

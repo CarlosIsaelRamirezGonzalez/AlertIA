@@ -46,7 +46,11 @@ def signup():
         session[token] = datetime.datetime.now() + datetime.timedelta(minutes=3) 
         send_email(current_user.email, 'Confirm your account.', 'auth/email/confirm', user=current_user, token=token)
         flash('A confirmation email has been sent to you by email.')
-        return redirect(url_for('auth.check'))        
+        return redirect(url_for('auth.check')) 
+    else:
+        for field, errors in form.errors.items():
+            for error in errors:
+                flash(f"Error in the {getattr(form, field).label.text} field - {error}", 'error')      
     
     return render_template('auth/signup.html', form=form)
 
