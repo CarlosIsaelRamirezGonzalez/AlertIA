@@ -79,7 +79,8 @@ def report_notification(id_notification):
                         date_time=datetime.now(),
                         label = notification.threat,
                         user = current_user.username,
-                        camera = camera)
+                        camera = camera,
+                        image = notification.image)
                     
 
         report.save()
