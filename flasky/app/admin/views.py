@@ -20,6 +20,14 @@ def reports_panel():
     return render_template('admin/reports-panel.html', reports = reports)
 
 
+@admin.route('/reports/<report_id>', methods=['GET', 'POST'])
+@login_required
+@admin_required
+def report_panel(report_id):
+    report = Report.objects(id=report_id).first()
+    return render_template('admin/report-panel.html', report = report)
+
+
 # Is this necessary?
 @admin.route('/delete/<id_camera>')
 @login_required

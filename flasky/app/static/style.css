@@ -968,6 +968,8 @@ input[type=number]::-webkit-outer-spin-button {
     align-items: center;
     justify-content: space-evenly;
 
+    cursor: pointer;
+
     padding: .5rem;
     margin: 1rem;
 }   
@@ -1445,6 +1447,37 @@ input[type=number]::-webkit-outer-spin-button {
     margin: 0;
 }
 
+
+
+.supervisor-report-table {
+    font-family: Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 90%;
+
+    text-align: center;
+    font-size: 1.5rem;
+    text-transform: uppercase;
+
+}
+
+.supervisor-report-table td, .supervisor-report-table th {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+.supervisor-report-table tr:nth-child(even){background-color: #f2f2f2;}
+
+.supervisor-report-table tr:hover {background-color: #ddd;}
+
+.supervisor-report-table th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #d4a373;
+  color: white;
+}
+
+
 /* end of supervisor */
 /* end of cameras */
 
@@ -1630,7 +1663,6 @@ input[type=number]::-webkit-outer-spin-button {
 }
 /* end of report notification */
 
-
 /* Media querys */
 @media(max-width: 1200px) {
 
@@ -1683,6 +1715,7 @@ input[type=number]::-webkit-outer-spin-button {
     /* end of index */
 
 }
+
 
 
 @media(max-width: 650px) {
