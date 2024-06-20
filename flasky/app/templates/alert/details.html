@@ -4,17 +4,21 @@
 
 {% block page_content %}
 
-    <h1>Seccion de detalles</h1>
+<div class="notification-details">
+    <h1 class="details-header">Sección de detalles</h1>
 
-    <h2>{{ load_notification.id }}</h2>
+    <div class="notification-info">
+        <h4>Fecha y Hora: {{ load_notification.date_time }}</h4>
+        <h4>Lugar: {{ load_notification.place }}</h4>
+        <h4>Amenaza: {{ load_notification.threat }}</h4>
+        <h4>Nombre de la Cámara: {{ load_notification.camera_name }}</h4>
+        <h4>Certeza: {{ load_notification.certainty }}</h4>
+    </div>
 
-    <h4>{{ load_notification.date_time }}</h4>
-    <h4>{{ load_notification.place }}</h4>
-    <h4>{{ load_notification.threat }}</h4>
-    <h4>{{ load_notification.camera_name }}</h4>
-    <h4>{{ load_notification.certainty }}</h4>
+    <div class="notification-image">
+        <img src="data:image/png;base64,{{ load_notification.image }}" alt="Imagen de la notificación">
+    </div>
 
-    <img src="data:image/png;base64,{{ load_notification.image }}" alt="Imagen de la notificación">
-
-    <a href="{{ url_for('alert.notifications') }}">Regresar al panel de notificaciones</a>
+    <button class="back-button" onclick="redirectToPage('/alert/notifications')">Regresar al panel de notificaciones</button>
+</div>
 {% endblock %}

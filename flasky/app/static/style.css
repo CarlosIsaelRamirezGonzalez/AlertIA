@@ -1316,7 +1316,9 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 .back-face-edit-button, 
-.back-face-delete-button{
+.back-face-delete-button,
+.starred-button,
+.search-button{
     height: 3rem;
     width: 9rem;
 
@@ -1348,6 +1350,27 @@ input[type=number]::-webkit-outer-spin-button {
 .back-face-delete-button:hover {
     background-color: #6e1423;
     color: #da1e37;
+}
+
+.starred-button {
+    height: 3.5rem;
+    width: 9.5rem;
+    background-color: #f8f9fa;
+    color: #212529;
+}
+
+.delete-all-notification{
+    height: 5.5rem;
+}
+
+.search-button{
+    background-color: black;
+    color: wheat;
+}
+
+.search-button:hover {
+    background-color: wheat;
+    color: black;
 }
 
 /* end of cameras
@@ -1838,4 +1861,160 @@ input[type=number]::-webkit-outer-spin-button {
     color: black;
     border: .1rem solid wheat;
     transition: all .5s;
+}
+
+/* end of Flash style */
+
+/* list notifications */
+
+.list_notifications{
+    position: relative;
+    width: 80rem;
+    margin: 10rem auto 0;
+    box-sizing: border-box;
+}
+
+.element_notification {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem 2rem;
+    margin: .5rem 0;
+    transition: .5s;
+}
+
+.element_notification:hover {
+    transform: scale(1.06);
+}
+
+.buttons_notifications{
+    display: flex;
+    width: 20rem;
+    align-items:center;
+    gap: 1rem;
+}
+
+.span-notification{
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.text-notification {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin: 2rem 0;
+}
+
+.pagination a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.pagination-prev,
+.pagination-next {
+    font-size: 2rem; 
+}
+
+.pagination-text {
+    font-size: 1.2rem; 
+    font-weight: bold; 
+    color: #333; 
+}
+
+.search-input {
+    padding: 0.5rem 1rem;
+    font-size: 2rem; 
+    border: 2px solid #ccc; 
+    border-radius: 5px; 
+    width: 100%; 
+    box-sizing: border-box; 
+    transition: border-color 0.3s;
+}
+
+.search-input:focus {
+    border-color: #888; 
+    outline: none; 
+}
+
+.search-form {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.notifications-buttons{
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    margin-top: 2rem;
+}
+
+/* end of list notifications */
+
+/* details notification */
+.notification-details {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.details-header {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    color: #333;
+}
+
+.notification-id h2 {
+    font-size: 1.5rem;
+    color: #555;
+}
+
+.notification-info h4 {
+    font-size: 1.2rem;
+    color: #666;
+    margin: 0.5rem 0;
+}
+
+.notification-image {
+    text-align: center;
+    margin: 1.5rem 0;
+}
+
+.notification-image img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+}
+
+.back-button {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 4px;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    text-decoration: none;
+}
+
+.back-button:hover {
+    background-color: #0056b3;
 }
