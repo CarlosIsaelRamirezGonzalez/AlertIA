@@ -53,7 +53,7 @@ def notifications():
         
     return render_template('alert/notifications.html', load_notifications = load_notifications, pagination=pagination)
 
-@alert.route('/notifications/delete/<notification_id>', methods=['POST'])
+@alert.route('/notifications/delete/<notification_id>', methods=['GET', 'POST'])
 def delete_notification(notification_id):
     notification = Notification.objects.get(id=notification_id)
     print(notification_id)
@@ -74,7 +74,16 @@ def search():
                                                      Q(certainty__icontains=filter_value),
                                                      user=current_user.email)
     
-    return render_template('alert/notifications.html', load_notifications = load_notifications)
+    page = request.args.get('page', 1, type=int)
+    per_page = 25
+    pagination = Notification.objects.filter(Q(place__icontains=filter_value) |
+                                                     Q(threat__icontains=filter_value) |
+                                                     Q(camera_name__icontains=filter_value) |
+                                                     Q(certainty__icontains=filter_value),
+                                                     user=current_user.email).paginate(page=page, per_page=per_page)
+    load_notifications = pagination.items
+    
+    return render_template('alert/notifications.html', load_notifications = load_notifications, pagination=pagination)
     
 @alert.route('/notifications/view/<notification_id>', methods=['GET', 'POST'])
 @login_required
@@ -88,9 +97,12 @@ def view_notification(notification_id):
 
 @alert.route('/filterStarred', methods=['GET', 'POST'])
 def filter_starred():
-    load_notifications = Notification.objects(user=current_user.email, starred = True)
+    page = request.args.get('page', 1, type=int)
+    per_page = 25
+    pagination = Notification.objects(user=current_user.email, starred = True).paginate(page=page, per_page=per_page)
+    load_notifications = pagination.items
         
-    return render_template('alert/notifications.html', load_notifications = load_notifications)
+    return render_template('alert/notifications.html', load_notifications = load_notifications, pagination=pagination)
 
 @alert.route('/deleteAllNotifications', methods=['GET', 'POST'])
 def delete_all_notifications():
@@ -105,7 +117,7 @@ def delete_all_notifications():
 def add_quit_starred(notification_id):
     load_notification = Notification.objects.get(id = notification_id)
     notifications_amount = Notification.objects(starred = True).count()
-    if notifications_amount >= 100:
+    if notifications_amount > 100:
         flash("Starred limit reached")
     
     if load_notification.starred == False:
@@ -113,6 +125,8 @@ def add_quit_starred(notification_id):
         flash("Alerta añadida a destacadas")
     else:
         load_notification.update(set__starred = False)
+        if Notification.objects(user = current_user.email, starred = False).count() > 500:
+                Notification.objects(user = current_user.email, starred=False).order_by('date_time').first().delete()
         flash("Alerta eliminada de destacadas")
         
     return redirect(url_for('alert.notifications'))
