@@ -37,7 +37,7 @@ monitoring_threads = {}
 def index():
     
     cameras = Camera.objects(user=current_user.id).all()
-    modelo_ruta = 'D:\Respaldo\Escuela\Proyecto\AlertAI\Artificial_Intelligence\AlertAI-Deluxe.keras'
+    modelo_ruta = 'D:\Respaldo\Escuela\Proyecto\AlertAI\Artificial_Intelligence\Aria.keras'
     modelo = load_model(modelo_ruta)
     
     monitoring_thread = threading.Thread(target=monitor_notifications, daemon=True)
@@ -226,31 +226,25 @@ def start_camera_monitoring(app, camera, modelo, user_email):
             if not ret:
                 return False
             
-            #Forma comun
-            frame_resized = cv2.resize(frame, (255, 255))
-            image_array = image.img_to_array(frame_resized)
-            imagen_preprocesada = preprocess_input(image_array)
-            
-            predictions = modelo.predict(np.array([imagen_preprocesada]))
-            predicted_classes = np.argmax(predictions, axis=1)
-            
-            #Forma dada por Carlos
-            '''frame_resized = cv2.resize(frame, (256, 256))
+
+            frame_resized = cv2.resize(frame, (256, 256))
             image_array = image.img_to_array(frame_resized)
             image_array = image_array/255.0
             image_array = np.expand_dims(image_array, axis=0)
-            #imagen_preprocesada = preprocess_input(image_array)
             
             predictions = modelo.predict(image_array)
-            predicted_classes = np.argmax(predictions, axis=1)'''
+            predicted_classes = np.argmax(predictions, axis=1)
             
-            if predicted_classes[0] != 11:
+            certainty = predictions[0][predicted_classes[0]]
+            certainty_str = str(certainty)
+            
+            if predicted_classes[0] != 11 and certainty > 0.70:
                 print("Paso algo")
                 arr_check_damage.append(predicted_classes[0])
                 alert_mode = True
                 alert_mode_time = time.time()
-                check_before_notify(frame, camera, user_email)
-            elif (time.time() - alert_mode_time) > 5: #Aqui es 20
+                check_before_notify(frame, camera, user_email, certainty_str)
+            elif (time.time() - alert_mode_time) > 20: #Aqui es 20
                 alert_mode = False
                 arr_check_damage.clear()
             print(predicted_classes)
@@ -258,7 +252,7 @@ def start_camera_monitoring(app, camera, modelo, user_email):
             print(alert_mode)
             return True
         
-        def create_notifications(frame, camera, threat, user_email):
+        def create_notifications(frame, camera, threat, user_email, certainty):
             last_notification = Notification.objects(user = user_email, threat = threat).order_by('-date_time').first()
             if last_notification:
                 if ((datetime.now() - last_notification.date_time).total_seconds())/60 <= 3:
@@ -270,6 +264,7 @@ def start_camera_monitoring(app, camera, modelo, user_email):
             image_data_compressed = output.getvalue()
             
             print(f"Ya entre, creando notificacion de {threat}")
+            print(certainty)
             
             notificacion = Notification(
                 user = user_email,
@@ -277,7 +272,7 @@ def start_camera_monitoring(app, camera, modelo, user_email):
                 place = camera.address,  
                 threat = threat,  
                 camera_name = camera.name, 
-                certainty = 'Certeza por defecto',
+                certainty = certainty,
                 image = image_data_compressed 
             )
             notificacion.save()
@@ -296,9 +291,13 @@ def start_camera_monitoring(app, camera, modelo, user_email):
                        user = info_user, 
                        alert = threat,
                        camera_name = camera.name,
+                       certainty = certainty,
                        time = datetime.now(),
                        link = f"http://127.0.0.1:5000/alert/notifications/view/{notificacion.id}",
                        attachments=attachments)
+            
+            if Notification.objects(user = user_email, starred = False).count() > 500:
+                Notification.objects(user=user_email, starred=False).order_by('date_time').first().delete()
 
             
         
@@ -306,37 +305,43 @@ def start_camera_monitoring(app, camera, modelo, user_email):
             #send_alert_message_sms(camera, threat)
             #flash('Alerta creada correctamente', 'success')
             
-        def check_before_notify(frame, camera, user_email):
+        def check_before_notify(frame, camera, user_email, certainty):
             
             if arr_check_damage.count(1) + arr_check_damage.count(2) +  arr_check_damage.count(5) >= 10:
-                create_notifications(frame, camera, "Armas de fuego", user_email)
+                if camera.has_alert(Alerts.HANDGUN) or camera.has_alert(Alerts.LONG_GUN) or camera.has_alert(Alerts.CANNONING):
+                    create_notifications(frame, camera, "Armas de fuego", user_email, certainty)
                 
             elif arr_check_damage.count(0) >= 10:
-                create_notifications(frame, camera, "Armas blancas", user_email)
+                if camera.has_alert(Alerts.BLADED_WEAPON):
+                    create_notifications(frame, camera, "Armas blancas", user_email, certainty)
                 
             elif arr_check_damage.count(3) >= 15:
-                create_notifications(frame, camera, "Ataque de perros", user_email)
+                if camera.has_alert(Alerts.DOG_ATTACK):
+                    create_notifications(frame, camera, "Ataque de perros", user_email, certainty)
                 
             elif arr_check_damage.count(7) >= 5: #Aqui deben ser 20
                 if camera.has_alert(Alerts.FIRES):
-                    create_notifications(frame, camera, "Incendios", user_email)
+                    create_notifications(frame, camera, "Incendios", user_email, certainty)
                 else:
                     print(Fore.LIGHTRED_EX, "No se hizo por la restriccion")
                     
             elif arr_check_damage.count(4) >= 5: #Aqui deben ser 30
                 if camera.has_alert(Alerts.CAR_ACCIDENT):
-                    create_notifications(frame, camera, "Choques", user_email)
+                    create_notifications(frame, camera, "Choques", user_email, certainty)
                 else:
                     print(Fore.GREEN, "No se hizo por la restriccion")
                     
             elif arr_check_damage.count(9) >= 5: #Tambien aqui
-                create_notifications(frame, camera, "Persona herida", user_email)
+                if camera.has_alert(Alerts.INJURED_PEOPLE):
+                    create_notifications(frame, camera, "Persona herida", user_email, certainty)
                 
             elif arr_check_damage.count(6) + arr_check_damage.count(8) + arr_check_damage.count(10) >= 30:
-                create_notifications(frame, camera, "Pelea", user_email)
+                if camera.has_alert(Alerts.BRAWLS):
+                    create_notifications(frame, camera, "Pelea", user_email, certainty)
                 
             elif arr_check_damage.count(5) >= 10:
-                create_notifications(frame, camera, "Encañonamiento", user_email)
+                if camera.has_alert(Alerts.CANNONING):
+                    create_notifications(frame, camera, "Encañonamiento", user_email, certainty)
             
 
         try:
