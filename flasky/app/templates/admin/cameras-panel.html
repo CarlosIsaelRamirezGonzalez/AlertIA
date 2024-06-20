@@ -6,6 +6,7 @@
     <nav class="navbar-supervisor">
         <button class="navbar-supervisor-button" onclick="redirectToPage('/admin/cameras')">Camera</button>
         <button class="navbar-supervisor-button" onclick="redirectToPage('/admin/reports')">Reports</button>
+        <button class="navbar-supervisor-button" onclick="redirectToPage('/auth/logout')">Log out</button>
     </nav>
     <div class="supervisor-container">
         {% for camera in cameras %}
