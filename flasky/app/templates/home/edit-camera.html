@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+{% block title %}AlertAI - {% if edit_mode %}Edit{% else %}Add{% endif %} Camera{% endblock %}
+
+{% block page_content %}
+<section class="add-camera">
+
+    <div class="add-camera-popup">
+        <i class="fa-solid fa-xmark add-camera-popup-icon" id="close-camera-popup"></i>
+
+        <div class="add-camera-popup-container-map">
+            <input type="text" placeholder="Enter the ubication" class="add-camera-popup-map-input" id="place_input" >
+            <button class="add-camera-popup-map-buttton">Register</button>
+            <div id="map" class="add-camera-popup-map"></div>
+        </div>
+
+
+    </div>
+
+    <form method="post" class="add-camera-form" {% if edit_mode %} action="{{ url_for('home.edit_camera', camera_id=camera.id) }}"{% endif %}>
+        {{ form.csrf_token }}
+
+        <div class="add-camera-form-left-side">
+        
+            <h1 class="add-camera-form-title">Camera Information</h1>
+
+            <i class="fa-solid fa-pencil add-camera-icon"></i>
+            {{ form.name(class='add-camera-input', placeholder="Camera Name", autoComplete="off", value=camera.name) }}
+
+            <i class="fa-solid fa-phone add-camera-icon"></i>
+            {{ form.phone_number(class='add-camera-input', placeholder="Phone Number", maxlength="10", autoComplete="off", value=camera.phone_number) }}
+
+            <i class="fa-solid fa-location-dot add-camera-icon"></i>
+            {{ form.address(placeholder="Location Camera", class="add-camera-input", autoComplete="off", value=camera.address)  }}
+            
+            {{ form.latitude(id="latitude", value=camera.latitude) }}
+            {{ form.longitude(id="longitude", value=camera.longitude) }}
+
+        </div>
+        
+        <div class="add-camera-form-right-side">
+            
+            {{ form.place(class="add-camera-alert-select", id="place-select", value=camera.place) }}
+
+        
+            <h2 class="add-camera-type-camera-question" id="personalized-alert-title">Types of alerts you would like to be notified of</h2>
+        
+            <div class="add-camera-alerts" id="personalized-alert">
+                
+                <label class="add-camera-alert-container" title="This alert is specifically for fires, home fires, forest fires, gas station fires, and others">
+                    <h3 class="add-camera-alert-name">Fires</h3> 
+                    <i class="fa-solid fa-house-fire add-camera-icon-alert"></i>
+                    {{ form.fires(id="fires") }}
+                </label>
+            
+                <label class="add-camera-alert-container" title="This alert is for bladed weapons like knives, axes, machetes, katanas, and razors">
+                    <h3 class="add-camera-alert-name">Bladed weapons</h3>
+                    <i class="fa-solid fa-wand-sparkles add-camera-icon-alert"></i>
+                    {{ form.bladed_weapon(id="bladed_weapon") }}
+                </label>
+            
+                <label class="add-camera-alert-container" title="This alert is for short firearms, like revolvers">
+                    <h3 class="add-camera-alert-name">Hand Gun</h3>
+                    <i class="fa-solid fa-gun add-camera-icon-alert"></i>
+                    {{ form.handgun(id="handgun") }}
+                </label>
+            
+                <label class="add-camera-alert-container" title="This alert is for long firearms, like AK-47 and others">
+                    <h3 class="add-camera-alert-name">Long Gun</h3>
+                    <i class="fa-solid fa-gun add-camera-icon-alert"></i>
+                    {{ form.long_gun(id="long_gun") }}
+                </label>
+            
+                <label class="add-camera-alert-container" title="This alert works when a person points a firearm at another person">
+                    <h3 class="add-camera-alert-name">Cannoning</h3>
+                    <i class="fa-solid fa-people-robbery add-camera-icon-alert"></i>
+                    {{ form.cannoning(id="cannoning") }}
+                </label>
+            
+                <label class="add-camera-alert-container" title="This alert works when one or more cars crash">
+                    <h3 class="add-camera-alert-name">Car Accident</h3>
+                    <i class="fa-solid fa-car-burst add-camera-icon-alert"></i>
+                    {{ form.car_accident(id="car_accident") }}
+                </label>
+            
+                <label class="add-camera-alert-container" title="This alert works when a dog attacks a person or another dog">
+                    <h3 class="add-camera-alert-name">Dog Attack</h3>
+                    <i class="fa-solid fa-paw add-camera-icon-alert"></i>
+                    {{ form.dog_attack(id="dog_attack") }}
+                </label>
+            
+                <label class="add-camera-alert-container" title="This alert works when two people fight, involving hitting, kicking, or struggling">                  
+                    <h3 class="add-camera-alert-name">Brawls</h3>
+                    <i class="fa-solid fa-user-ninja add-camera-icon-alert"></i>
+                    {{ form.brawls(id="brawls") }}
+                </label>
+            
+                <label class="add-camera-alert-container" title="This alert works when a person has exposed wounds, amputations, prominent bleeding, or skin openings where blood oozes">                    
+                    <h3 class="add-camera-alert-name">Injured People</h3>
+                    <i class="fa-solid fa-person-falling-burst add-camera-icon-alert"></i>
+                    {{ form.injured_people(id="injured_people") }}
+                </label>
+                
+        </div> 
+        
+        <div class="add-camera-form-bottom-side">
+            <button class="add-camera-form-button" type="submit">
+                {% if edit_mode %} Update {% else %} Update {% endif %}
+            </button>
+        </div>
+
+    </form>
+
+</section>
+<script src="js/googleMap.js"></script>
+<script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCHOslXEWFjWLvxr2EPcxER3QC44_T1sgY&libraries=places&callback=initMap"></script>
+<script src="{{ url_for('static', filename='Js/addCameraDOM.js') }}"></script>
+<script src="{{ url_for('static', filename='Js/googleMapPopup.js') }}"></script>
+<script src="{{ url_for('static', filename='Js/googleMapService.js') }}"></script>
+<script src="{{ url_for('static', filename='Js/placeCheckBox.js') }}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const webCameraRadio = document.getElementById('WebCamera');
+        const securityCameraRadio = document.getElementById('SecurityCamera');
+        const webcamSelection = document.getElementById('webcam-selection');
+
+        function toggleWebcamSelection() {
+            if (webCameraRadio.checked) {
+                webcamSelection.style.display = 'block';
+            } else {
+                webcamSelection.style.display = 'none';
+            }
+        }
+
+        webCameraRadio.addEventListener('change', toggleWebcamSelection);
+        securityCameraRadio.addEventListener('change', toggleWebcamSelection);
+
+        toggleWebcamSelection(); // Run on page load in case Web Camera is already selected
+    });
+</script>
+
+{% endblock page_content %}
+

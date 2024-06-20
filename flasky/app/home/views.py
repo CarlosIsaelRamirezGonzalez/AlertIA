@@ -37,7 +37,8 @@ monitoring_threads = {}
 def index():
     
     cameras = Camera.objects(user=current_user.id).all()
-    modelo_ruta = 'D:\Respaldo\Escuela\Proyecto\AlertAI\Artificial_Intelligence\Aria.keras'
+    
+    modelo_ruta = 'C:/Users/taqui/OneDrive/Escritorio/Programas/AlertAI/Artificial_Intelligence/ARIA.keras'
     modelo = load_model(modelo_ruta)
     
     monitoring_thread = threading.Thread(target=monitor_notifications, daemon=True)
@@ -57,25 +58,36 @@ def index():
     
     return render_template('home/home.html', cameras=cameras)
 
-@home.route('/reportNotification/<id_notification>/<id_camera>', methods=['GET', 'POST'])
+@home.route('/reportNotification/<id_notification>', methods=['GET', 'POST'])
 @login_required
-def report_notification(id_notification, id_camera):
+def report_notification(id_notification):
     form = ReportNotification()
     notification = Notification.objects(id=id_notification).first()
-    camera = Camera.objects(id=id_camera).first()
+    camera = Camera.objects(name=notification.camera_name).first()
     if not notification:
         flash("That notification doesn't exists")
         return redirect(url_for('home.index'))
     
     if form.validate_on_submit():
+        reports_quantity = Report.objects.count() 
+        if reports_quantity >= 25:
+            oldest_report = Report.objects.order_by('date_time').first()
+            if oldest_report:
+                oldest_report.delete()
         report = Report(title=form.title.data,
                         body=form.description.data,
-                        user = current_user,
+                        date_time=datetime.now(),
+                        label = notification.threat,
+                        user = current_user.username,
                         camera = camera)
+                    
+
         report.save()
         flash("Report done successfully")
+        return redirect(url_for('alert.notifications'))
+
     
-    return render_template('home/report_notigfication.html', form=form)
+    return render_template('home/report_notification.html', form=form)
 
     
 
@@ -99,6 +111,8 @@ def add_camera():
             url = form.url.data, 
             place = form.place.data,
             address = form.address.data, 
+            latitude=form.latitude.data,
+            longitude=form.longitude.data,
             device_id = form.device_id.data, 
             registered = platform.node())
         
@@ -153,21 +167,16 @@ def get_camera_details():
 @home.route('/editCamera/<camera_id>', methods=['GET', 'POST'])
 @login_required
 def edit_camera(camera_id):
-    print("Si entre")
     camera = Camera.objects(id=camera_id).first()
     if not camera:
         flash("Camera not found")
         return redirect(url_for('home.index'))
     
-    
-    
-    form = EditCameraForm(obj=camera)
+    form = EditCameraForm()
     
     if form.validate_on_submit():
         camera.name = form.name.data
         camera.phone_number = form.phone_number.data
-        camera.camera_type = form.camera_type.data
-        camera.url = form.url.data
         camera.place = form.place.data
         camera.address = form.address.data
         
@@ -190,7 +199,7 @@ def edit_camera(camera_id):
             for error in errors:
                 flash(f"Error in the {getattr(form, field).label.text} field - {error}", 'error') 
     
-    return render_template('home/add-camera.html', form=form, edit_mode=True, camera=camera)
+    return render_template('home/edit-camera.html', form=form, camera=camera)
 
 @home.route('/deleteCamera/<camera_id>', methods=['GET', 'POST'])
 @login_required

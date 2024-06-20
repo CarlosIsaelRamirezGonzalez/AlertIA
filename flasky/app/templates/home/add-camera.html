@@ -24,13 +24,16 @@
             <h1 class="add-camera-form-title">Camera Information</h1>
 
             <i class="fa-solid fa-pencil add-camera-icon"></i>
-            {{ form.name(class='add-camera-input', placeholder="Camera Name", autoComplete="off") }}
+            {{ form.name(class='add-camera-input', placeholder="Camera Name", autoComplete="off", required=True) }}
 
             <i class="fa-solid fa-phone add-camera-icon"></i>
-            {{ form.phone_number(class='add-camera-input', placeholder="Phone Number", maxlength="10", autoComplete="off") }}
+            {{ form.phone_number(class='add-camera-input', placeholder="Phone Number", maxlength="10", autoComplete="off", required=True) }}
 
             <i class="fa-solid fa-location-dot add-camera-icon"></i>
             {{ form.address(placeholder="Location Camera", class="add-camera-input", autoComplete="off")  }}
+            
+            {{ form.latitude(id="latitude") }}
+            {{ form.longitude(id="longitude") }}
 
         </div>
         
@@ -66,64 +69,60 @@
         
             <div class="add-camera-alerts" id="personalized-alert">
                 
-            <label class="add-camera-alert-container">
-                <h3 class="add-camera-alert-name">Fires</h3> 
-                <i class="fa-solid fa-house-fire add-camera-icon-alert"></i>
-                {{ form.fires(type="checkbox", **{'title':"This alert is specifically for fires, home fires, forest fires, gas station fires, and others"}) }}
-            </label>
+                <label class="add-camera-alert-container" title="This alert is specifically for fires, home fires, forest fires, gas station fires, and others">
+                    <h3 class="add-camera-alert-name">Fires</h3> 
+                    <i class="fa-solid fa-house-fire add-camera-icon-alert"></i>
+                    {{ form.fires(id="fires") }}
+                </label>
             
-
-
-            <label class="add-camera-alert-container">
-                <h3 class="add-camera-alert-name">Bladed weapons</h3>
-                <i class="fa-solid fa-wand-sparkles add-camera-icon-alert"></i>
-                {{ form.bladed_weapon(type="checkbox", title='This alert is bladed weapons like knifes, axes, machetes, katanas and razors') }}
-            </label>
-
-
-
-            <label class="add-camera-alert-container">
-                <h3 class="add-camera-alert-name">Hand Gun</h3>
-                <i class="fa-solid fa-gun add-camera-icon-alert"></i>
-                {{ form.handgun(type="checkbox", title='This alert is for fire guns, specially for short fire guns, like revolvers') }}
-            </label>
-
-
-            <label class="add-camera-alert-container">
-                <h3 class="add-camera-alert-name">Long Gun</h3>
-                <i class="fa-solid fa-gun add-camera-icon-alert"></i>
-                {{ form.long_gun(type="checkbox", title='This alert is for fire guns, specially for long guns, like ak-47, and others') }}
-            </label>
-
-            <label class="add-camera-alert-container">
-                <h3 class="add-camera-alert-name">Cannoning</h3>
-                <i class="fa-solid fa-people-robbery add-camera-icon-alert"></i>
-                {{ form.cannoning(type="checkbox", **{'title': "This alert works when a person pointed a fire gun to other person, doesn't matter if is a long fire gun or a short fire gun"}) }}
-            </label>
-
-            <label class="add-camera-alert-container">
-                <h3 class="add-camera-alert-name">Car Accident</h3>
-                <i class="fa-solid fa-car-burst add-camera-icon-alert"></i>
-                {{ form.car_accident(type="checkbox", title='This alert works when one or more cars crashed, doesn't matter with what it crashed, only matter that it crashed') }}               
-            </label>
-
-            <label class="add-camera-alert-container">
-                <h3 class="add-camera-alert-name">Dog Atack</h3>
-                <i class="fa-solid fa-paw add-camera-icon-alert"></i>
-                {{ form.dog_attack(type="checkbox", title='This alert works when a dog atack to a person or a other dog') }}
-            </label>
-
-            <label class="add-camera-alert-container">                  
-                <h3 class="add-camera-alert-name">Brawls</h3>
-                <i class="fa-solid fa-user-ninja add-camera-icon-alert"></i>
-                {{ form.brawls(type="checkbox", title='This alert works when two people fight, only works when they hit, kick, or struggle') }}            
-            </label>
-
-            <label class="add-camera-alert-container">                    
-                <h3 class="add-camera-alert-name">Injured People</h3>
-                <i class="fa-solid fa-person-falling-burst add-camera-icon-alert"></i>
-                {{ form.injured_people(type="checkbox", title='This alert works when a person has exposed wounds, whether partial or total amputations of their body, prominent bleeding, or an opening in their skin where blood oozes') }}                
-            </label>
+                <label class="add-camera-alert-container" title="This alert is for bladed weapons like knives, axes, machetes, katanas, and razors">
+                    <h3 class="add-camera-alert-name">Bladed weapons</h3>
+                    <i class="fa-solid fa-wand-sparkles add-camera-icon-alert"></i>
+                    {{ form.bladed_weapon(id="bladed_weapon") }}
+                </label>
+            
+                <label class="add-camera-alert-container" title="This alert is for short firearms, like revolvers">
+                    <h3 class="add-camera-alert-name">Hand Gun</h3>
+                    <i class="fa-solid fa-gun add-camera-icon-alert"></i>
+                    {{ form.handgun(id="handgun") }}
+                </label>
+            
+                <label class="add-camera-alert-container" title="This alert is for long firearms, like AK-47 and others">
+                    <h3 class="add-camera-alert-name">Long Gun</h3>
+                    <i class="fa-solid fa-gun add-camera-icon-alert"></i>
+                    {{ form.long_gun(id="long_gun") }}
+                </label>
+            
+                <label class="add-camera-alert-container" title="This alert works when a person points a firearm at another person">
+                    <h3 class="add-camera-alert-name">Cannoning</h3>
+                    <i class="fa-solid fa-people-robbery add-camera-icon-alert"></i>
+                    {{ form.cannoning(id="cannoning") }}
+                </label>
+            
+                <label class="add-camera-alert-container" title="This alert works when one or more cars crash">
+                    <h3 class="add-camera-alert-name">Car Accident</h3>
+                    <i class="fa-solid fa-car-burst add-camera-icon-alert"></i>
+                    {{ form.car_accident(id="car_accident") }}
+                </label>
+            
+                <label class="add-camera-alert-container" title="This alert works when a dog attacks a person or another dog">
+                    <h3 class="add-camera-alert-name">Dog Attack</h3>
+                    <i class="fa-solid fa-paw add-camera-icon-alert"></i>
+                    {{ form.dog_attack(id="dog_attack") }}
+                </label>
+            
+                <label class="add-camera-alert-container" title="This alert works when two people fight, involving hitting, kicking, or struggling">                  
+                    <h3 class="add-camera-alert-name">Brawls</h3>
+                    <i class="fa-solid fa-user-ninja add-camera-icon-alert"></i>
+                    {{ form.brawls(id="brawls") }}
+                </label>
+            
+                <label class="add-camera-alert-container" title="This alert works when a person has exposed wounds, amputations, prominent bleeding, or skin openings where blood oozes">                    
+                    <h3 class="add-camera-alert-name">Injured People</h3>
+                    <i class="fa-solid fa-person-falling-burst add-camera-icon-alert"></i>
+                    {{ form.injured_people(id="injured_people") }}
+                </label>
+                
         </div> 
         
         <div class="add-camera-form-bottom-side">
@@ -140,6 +139,7 @@
 <script src="{{ url_for('static', filename='Js/addCameraDOM.js') }}"></script>
 <script src="{{ url_for('static', filename='Js/googleMapPopup.js') }}"></script>
 <script src="{{ url_for('static', filename='Js/googleMapService.js') }}"></script>
+<script src="{{ url_for('static', filename='Js/placeCheckBox.js') }}"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const webCameraRadio = document.getElementById('WebCamera');
