@@ -61,6 +61,10 @@
                     <button type="submit" class="btn btn-danger">Borrar</button>
                   </form>
 
+                  <form method="post" action="{{ url_for('home.report_notification', id_notification=notification.id) }}">
+                    <button type="submit" class="btn btn-danger">Reportar</button>
+                  </form>
+
                   <form method="post" action="{{ url_for('alert.add_quit_starred', notification_id = notification.id)}}">
                     <button>
                       {% if notification.starred %}

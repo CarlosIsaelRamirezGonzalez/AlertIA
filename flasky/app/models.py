@@ -96,6 +96,8 @@ class Camera(db.Document):
     place = db.StringField(required=True, choices=["Home", "Building", "Square", "Street", "Personalized"])
     place_default = db.IntField(required = True)
     address = db.StringField(required=True)
+    latitude = db.FloatField()
+    longitude = db.FloatField()
     device_id = db.StringField()
     registered = db.StringField()
     
@@ -167,5 +169,9 @@ class Alerts:
 class Report(db.Document):
     title = db.StringField()
     body = db.StringField()
+    label = db.StringField(required=True)
+    date_time = db.DateTimeField(required=True)
     user = db.ReferenceField(User, reverse_delete_rule=db.CASCADE)
     camera = db.ReferenceField(Camera, reverse_delte_rule=db.CASCADE)
+    # Falta la imagen
+    
