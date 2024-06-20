@@ -3,6 +3,7 @@ from flask_login import login_required
 from ..decorators import admin_required, post_only
 from . import admin
 from ..models import Camera, Report
+import base64
 
 
 @admin.route('/cameras')
@@ -25,6 +26,8 @@ def reports_panel():
 @admin_required
 def report_panel(report_id):
     report = Report.objects(id=report_id).first()
+    image_base64 = base64.b64encode(report.image).decode('utf-8')
+    report.image = image_base64
     return render_template('admin/report-panel.html', report = report)
 
 

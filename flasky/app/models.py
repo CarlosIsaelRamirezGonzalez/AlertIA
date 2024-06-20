@@ -173,5 +173,5 @@ class Report(db.Document):
     date_time = db.DateTimeField(required=True)
     user = db.ReferenceField(User, reverse_delete_rule=db.CASCADE)
     camera = db.ReferenceField(Camera, reverse_delte_rule=db.CASCADE)
-    # Falta la imagen
+    image = db.BinaryField(required=True)
     
