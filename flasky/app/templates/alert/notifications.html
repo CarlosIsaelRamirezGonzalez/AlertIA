@@ -7,7 +7,7 @@
   {% include 'sidebar.html' %}
 
   <div class="container-main">
-    <h1>Blueprint notificaciones</h1>
+    <h1>Notifications</h1>
 
     <form method="post" action="{{ url_for('alert.notifications') }}">
         <button type="submit" class="btn btn-primary">Notificar</button>
@@ -29,58 +29,76 @@
 
     {% if load_notifications %}
 
-        <form method="post" action="{{ url_for('alert.search') }}">
-            <input type="text" name="search" placeholder="Busque aqui :D">
-            <button type="submit" class="btn btn-primary">Buscar</button>
+        <form method="post" action="{{ url_for('alert.search') }}" class="search-form">
+            <input type="text" name="search" placeholder="Busque aqui :D" class="search-input">
+            <button type="submit" class="search-button">
+              <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
         </form>
-        <button onclick="window.location.href='{{ url_for('alert.filter_starred') }}'">
-          Filtrar destacadas
-        </button>
 
-        <a href="{{ url_for('alert.notifications') }}" class="btn btn-primary">Quitar filtros de busqueda</a>
+        <div class="notifications-buttons">
+          <button onclick="window.location.href='{{ url_for('alert.filter_starred') }}'" class="search-button delete-all-notification">
+            Filtrar destacadas 
+            <i class="fa-solid fa-filter"></i>
+          </button>
 
-        <button class="back-face-delete-button" onclick="confirmDeletion('/alert/deleteAllNotifications', 'Do you want delete all notifications?')">
-          Delete all notifications
-          <i class="fa-solid fa-trash-can"></i>
-        </button>
+          <button onclick="redirectToPage('/alert/notifications')" class="search-button delete-all-notification">Quitar filtros de busqueda</button>
 
-        <h2>notificaciones</h2>
-        <ul>
+          <button class="back-face-delete-button delete-all-notification" onclick="confirmDeletion('/alert/deleteAllNotifications', 'Do you want delete all notifications?')">
+            Delete all notifications
+            <i class="fa-solid fa-trash-can"></i>
+          </button>
+        </div>
+
+        <ul class="list_notifications">
             {% for notification in load_notifications %}
 
               {% if notification.read and notification.starred == false%}
-                  <li style="background-color: #808080;" id="notification_{{ notification.id }}" onclick="viewNotification('{{ notification.id }}')">
+                  <li style="background-color: #808080;" class="element_notification">
               {% elif notification.starred %}
-                  <li style="background-color: #FFD700;" id="notification_{{ notification.id }}" onclick="viewNotification('{{ notification.id }}')">
+                  <li style="background-color: #FFD700;" class="element_notification">
               {% else %}
-                  <li style="background-color: #ADD8E6;" id="notification_{{ notification.id }}" onclick="viewNotification('{{ notification.id }}')">
+                  <li style="background-color: #ADD8E6;" class="element_notification">
               {% endif %}
 
-                  {{ notification.camera_name }} - {{ notification.date_time }} 
-                  <form method="post" action="{{ url_for('alert.delete_notification', notification_id=notification.id) }}">
-                    <button type="submit" class="btn btn-danger">Borrar</button>
-                  </form>
+              <div class="span-notification">
+                  <span class="text-notification">{{ notification.camera_name }}</span> 
+                  <span class="text-notification">{{ notification.date_time }}</span>
+                  <span class="text-notification">{{ notification.threat }}</span>
+              </div>
 
-                  <form method="post" action="{{ url_for('alert.add_quit_starred', notification_id = notification.id)}}">
-                    <button>
+                  <div class="buttons_notifications">
+                    <button class="back-face-edit-button" onclick="redirectToPage('/alert/notifications/view/{{notification.id}}')">
+                      <i class="fa-solid fa-eye"></i>
+                    </button>
+  
+                    <button class="starred-button" onclick="redirectToPage('/alert/add-QuitStarred/{{ notification.id }}')">
                       {% if notification.starred %}
-                        Eliminar de destacadas
+                        <i class="fa-solid fa-star"></i>
                       {% else %}
-                        Añadir a destacadas
+                        <i class="fa-regular fa-star"></i>
                       {% endif %}
                     </button>
-                  </form>
+                    <button class="back-face-delete-button" onclick="confirmDeletion('/alert/notifications/delete/{{notification.id}}', 'Do you want delete this notification?')">
+                      <i class="fa-solid fa-trash-can"></i>
+                    </button>
+                  </div> 
+                  
                 </li>
             {% endfor %}
         </ul>
 
         <div class="pagination">
           {% if pagination.has_prev %}
-            <a href="{{ url_for('alert.notifications', page=pagination.prev_num) }}">Anterior</a>
+            <a href="{{ url_for('alert.notifications', page=pagination.prev_num) }}" class="pagination-prev">
+              <i class="fa-solid fa-arrow-left"></i>
+            </a>
           {% endif %}
-          <span> Página {{ pagination.page }} de {{ pagination.pages }} </span>
+          <span class="pagination-text"> Página {{ pagination.page }} de {{ pagination.pages }} </span>
           {% if pagination.has_next %}
-            <a href="{{ url_for('alert.notifications', page=pagination.next_num) }}">Siguiente</a>
+            <a href="{{ url_for('alert.notifications', page=pagination.next_num) }}" class="pagination-next">
+              <i class="fa-solid fa-arrow-right"></i>
+            </a>
           {% endif %}
         </div>
     {% else %}
@@ -92,11 +110,6 @@
 {% endblock %}
 
 {% block scripts %}
-  <script>
-    function viewNotification(notificationId) {
-        window.location.href = "{{ url_for('alert.view_notification', notification_id='') }}" + notificationId;
-    }
-  </script>
   <script src="{{ url_for('static', filename='Js/confirmDelete.js') }}"></script>
     {{ super() }}
 {% endblock %}
