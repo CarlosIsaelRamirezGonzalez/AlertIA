@@ -24,45 +24,22 @@
             <h1 class="add-camera-form-title">Camera Information</h1>
 
             <i class="fa-solid fa-pencil add-camera-icon"></i>
-            {{ form.name(class='add-camera-input', placeholder="Camera Name", autoComplete="off", required=True) }}
+            {{ form.name(class='add-camera-input', placeholder="Camera Name", autoComplete="off", value=camera.name) }}
 
             <i class="fa-solid fa-phone add-camera-icon"></i>
-            {{ form.phone_number(class='add-camera-input', placeholder="Phone Number", maxlength="10", autoComplete="off", required=True) }}
+            {{ form.phone_number(class='add-camera-input', placeholder="Phone Number", maxlength="10", autoComplete="off", value=camera.phone_number) }}
 
             <i class="fa-solid fa-location-dot add-camera-icon"></i>
-            {{ form.address(placeholder="Location Camera", class="add-camera-input", autoComplete="off")  }}
+            {{ form.address(placeholder="Location Camera", class="add-camera-input", autoComplete="off", value=camera.address)  }}
             
-            {{ form.latitude(id="latitude") }}
-            {{ form.longitude(id="longitude") }}
+            {{ form.latitude(id="latitude", value=camera.latitude) }}
+            {{ form.longitude(id="longitude", value=camera.longitude) }}
 
         </div>
         
         <div class="add-camera-form-right-side">
-
-            <h1 class="add-camera-form-title">Camera Configuration</h1>
-
-            <div class="add-camera-type-camera">
-                <h3 class="add-camera-type-camera-question">What type of camera do you want to enter?</h3>
-                <br>   
-                <label class="add-camera-type-camera-selection">
-                    <input type="radio" name="{{ form.camera_type.name }}" value="WebCamera" id="WebCamera"> Web Camera
-                </label>
-                <br>
-                <label class="add-camera-type-camera-selection">
-                    <input type="radio" name="{{ form.camera_type.name }}" value="SecurityCamera" id="SecurityCamera"> Security Camera 
-                </label>
-            </div>
-            <br>
-
-            <!-- Añadir el campo select para mostrar las cámaras web disponibles -->
-            <div class="add-camera-webcam-selection" id="webcam-selection" style="display: none;">
-                <h3 class="add-camera-webcam-question">Select the web camera you want to use</h3>
-                {{ form.device_id(class='add-camera-input') }}
-            </div>
-
-            {{ form.url(placeholder="URL camera", class='add-camera-input', autoComplete="off")  }}
             
-            {{ form.place(class="add-camera-alert-select", id="place-select") }}
+            {{ form.place(class="add-camera-alert-select", id="place-select", value=camera.place) }}
 
         
             <h2 class="add-camera-type-camera-question" id="personalized-alert-title">Types of alerts you would like to be notified of</h2>
@@ -127,7 +104,7 @@
         
         <div class="add-camera-form-bottom-side">
             <button class="add-camera-form-button" type="submit">
-                {% if edit_mode %} Update {% else %} Save {% endif %}
+                {% if edit_mode %} Update {% else %} Update {% endif %}
             </button>
         </div>
 

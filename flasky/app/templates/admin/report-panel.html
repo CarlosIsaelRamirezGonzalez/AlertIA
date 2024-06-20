@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}AlertAI - Login{% endblock %}
+
+{% block page_content %}
+<section class="supervisor-panel">
+
+    <table class="supervisor-report-table">
+        <thead>
+            <tr>
+                <th>Label</th>
+                <th>Date</th>
+                <th>Body</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ report.label }}</td>
+                <td>{{ report.date_time }}</td>
+                <td>{{ report.body }}</td>
+            </tr>
+        </tbody>
+      </table>
+      
+</section>
+{% endblock %}

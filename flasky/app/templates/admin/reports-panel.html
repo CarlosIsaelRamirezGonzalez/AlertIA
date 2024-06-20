@@ -9,7 +9,12 @@
     </nav>
     <div class="supervisor-container">
         {% for report in reports %}
-        <!-- Enrique aqui es lo mismo que en tu html -->
+            {{ report.date_time }}
+            {{ report.label }}
+            <form method="post" action="{{ url_for('admin.report_panel', report_id=report.id) }}">
+                <button type="submit" class="btn btn-danger">Ver</button>
+              </form>
+
         {% endfor %}
     </div>
 </section>
