@@ -38,7 +38,7 @@ def index():
     
     cameras = Camera.objects(user=current_user.id).all()
     
-    modelo_ruta = 'C:/Users/taqui/OneDrive/Escritorio/Programas/AlertAI/Artificial_Intelligence/ARIA.keras'
+    modelo_ruta = 'D:\Respaldo\Escuela\Proyecto\AlertAI\Artificial_Intelligence\ARIA.keras'
     modelo = load_model(modelo_ruta)
     
     monitoring_thread = threading.Thread(target=monitor_notifications, daemon=True)
@@ -245,7 +245,7 @@ def start_camera_monitoring(app, camera, modelo, user_email):
             predicted_classes = np.argmax(predictions, axis=1)
             
             certainty = predictions[0][predicted_classes[0]]
-            certainty_str = str(certainty)
+            certainty_str = f"{certainty * 100:.2f}%"
             
             if predicted_classes[0] != 11 and certainty > 0.70:
                 print("Paso algo")
@@ -328,19 +328,19 @@ def start_camera_monitoring(app, camera, modelo, user_email):
                 if camera.has_alert(Alerts.DOG_ATTACK):
                     create_notifications(frame, camera, "Ataque de perros", user_email, certainty)
                 
-            elif arr_check_damage.count(7) >= 5: #Aqui deben ser 20
+            elif arr_check_damage.count(7) >= 20: #Aqui deben ser 20
                 if camera.has_alert(Alerts.FIRES):
                     create_notifications(frame, camera, "Incendios", user_email, certainty)
                 else:
                     print(Fore.LIGHTRED_EX, "No se hizo por la restriccion")
                     
-            elif arr_check_damage.count(4) >= 5: #Aqui deben ser 30
+            elif arr_check_damage.count(4) >= 30: #Aqui deben ser 30
                 if camera.has_alert(Alerts.CAR_ACCIDENT):
                     create_notifications(frame, camera, "Choques", user_email, certainty)
                 else:
                     print(Fore.GREEN, "No se hizo por la restriccion")
                     
-            elif arr_check_damage.count(9) >= 5: #Tambien aqui
+            elif arr_check_damage.count(9) >= 30: #Tambien aqui
                 if camera.has_alert(Alerts.INJURED_PEOPLE):
                     create_notifications(frame, camera, "Persona herida", user_email, certainty)
                 
