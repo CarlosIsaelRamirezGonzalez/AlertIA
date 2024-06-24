@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %} Help {% endblock title %}
+{% block page_content %}
+<section class="about-us">
+
+    <div class="about-us-content">
+        
+        <h1 class="about-us-heading">Help</h1>
+
+        <div class="underline">
+            <div class="small-underline"></div>
+            <div class="big-underline"></div>
+        </div>    
+
+        <h3 class="sub-heading">Alert AI</h3>
+        <p class="about-us-paragraph">Check the help videos in the following links</p>
+   
+    </div>
+
+    <div class="videos-container">
+        <a href="https://youtu.be/58FyN_VwGyk?si=8saze7-pC9zRzwwy">Video in english</a>
+        <a href="https://youtu.be/4iynr-H0iq8?si=ZiidduU9PE6JjTsm">Video in spanish</a>
+    </div>
+
+
+
+
+
+</section>
+
+{% block scripts %}
+{{ super() }}
+{% endblock scripts %}
+
+{% endblock page_content %}
