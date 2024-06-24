@@ -38,7 +38,7 @@ def index():
     
     cameras = Camera.objects(user=current_user.id).all()
     
-    modelo_ruta = 'C:/Users/taqui/OneDrive/Escritorio/Programas/AlertAI/Artificial_Intelligence/ARIA.keras'
+    modelo_ruta = 'C:/Users/Carlos Ramirez/Desktop/Programas/AlertIA/Artificial_Intelligence/Aria.keras'
     modelo = load_model(modelo_ruta)
     
     monitoring_thread = threading.Thread(target=monitor_notifications, daemon=True)
