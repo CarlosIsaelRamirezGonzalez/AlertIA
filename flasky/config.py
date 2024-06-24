@@ -19,7 +19,7 @@ class Config:
 class DevelopmentConfig(Config):
     DEBUG = True   
     MONGODB_SETTINGS = {
-        'host' : os.environ.get('MONGODB_SETTINGS') or 'localhost',
+        'host' : os.environ.get('MONGODB_SETTINGS') or 'localhost', #'mongodb+srv://enriquerc260:erJvAyN1zF9guAkV@alertai.2fssau2.mongodb.net/?retryWrites=true&w=majority&appName=AlertAI'
         'db' : 'development_db',
         'port' : 27017
     }
