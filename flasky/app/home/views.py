@@ -250,7 +250,7 @@ def start_camera_monitoring(app, camera, modelo, user_email):
             certainty = predictions[0][predicted_classes[0]]
             certainty_str = f"{certainty * 100:.2f}%"
             
-            if predicted_classes[0] != 11 and certainty > 0.85:
+            if predicted_classes[0] != 11 and certainty > 0.95:
                 print("Paso algo")
                 arr_check_damage.append(predicted_classes[0])
                 alert_mode = True
