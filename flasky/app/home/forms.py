@@ -45,7 +45,7 @@ class AddCameraForm(BaseCameraForm):
 class EditCameraForm(FlaskForm):
     name = StringField(validators=[Length(1, 30)])
     phone_number = StringField(validators=[Regexp('^\d{10}$', 0, 'Phone numbers must be exactly 10 digits and contain only numbers.')])
-    place = SelectField(choices=[               ('Home', 'Home'), ('Building', 'Building'), 
+    place = SelectField(choices=[('Home', 'Home'), ('Building', 'Building'), 
                                                 ('Square', 'Square'), ('Street', 'Street'), 
                                                 ('Personalized', 'Personalized'),])
     latitude = HiddenField()
