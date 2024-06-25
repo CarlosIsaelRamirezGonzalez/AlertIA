@@ -7,7 +7,7 @@
   {% include 'sidebar.html' %}
 
   <div class="container-main">
-    <h1>Notifications</h1>
+    <h1 class="title-notifications">Notifications</h1>
 
     <form method="post" action="{{ url_for('alert.notifications') }}">
         <button type="submit" class="btn btn-primary">Notificar</button>
@@ -26,6 +26,7 @@
       {% endif %}
     {% endwith %}
 
+    
 
     {% if load_notifications %}
 
@@ -48,6 +49,20 @@
             Delete all notifications
             <i class="fa-solid fa-trash-can"></i>
           </button>
+        </div>
+
+        <div class="pagination">
+          {% if pagination.has_prev %}
+            <a href="{{ url_for('alert.notifications', page=pagination.prev_num) }}" class="pagination-prev">
+              <i class="fa-solid fa-arrow-left"></i>
+            </a>
+          {% endif %}
+          <span class="pagination-text"> Página {{ pagination.page }} de {{ pagination.pages }} </span>
+          {% if pagination.has_next %}
+            <a href="{{ url_for('alert.notifications', page=pagination.next_num) }}" class="pagination-next">
+              <i class="fa-solid fa-arrow-right"></i>
+            </a>
+          {% endif %}
         </div>
 
         <ul class="list_notifications">

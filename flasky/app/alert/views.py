@@ -33,7 +33,7 @@ def notifications():
         
         notificacion = Notification(
             user = "enriquerc260@gmail.com",
-            date_time=datetime.now(),
+            date_time=datetime.now().strftime('%A, %d. %B %Y %I:%M'),
             place='Lugar por defecto',  
             threat='Ataque de perros',  
             camera_name='Camara 2', 
