@@ -168,12 +168,17 @@ def get_camera_details():
 @home.route('/editCamera/<camera_id>', methods=['GET', 'POST'])
 @login_required
 def edit_camera(camera_id):
+    print("ENTRE")
+    print("/n/n/n/n/n \n \n \n \n ")
     camera = Camera.objects(id=camera_id).first()
     if not camera:
         flash("Camera not found")
         return redirect(url_for('home.index'))
     
-    form = EditCameraForm()
+    form = EditCameraForm(obj=camera)
+    if camera.place == "Personalized":
+        alerts = camera.get_alerts
+        print(alerts)
     
     if form.validate_on_submit():
         submit_type = request.form.get('submit_type')
@@ -181,7 +186,8 @@ def edit_camera(camera_id):
         camera.phone_number = form.phone_number.data
         camera.place = form.place.data
         camera.address = form.address.data
-        
+        print("ENTRE")
+        print(form.place.data)
         if submit_type == 'update_default':
             camera.alerts = camera.place_default
         else:
@@ -315,7 +321,7 @@ def start_camera_monitoring(app, camera, modelo, user_email):
         
             
             # send_alert_message_sms(camera, threat)
-            #flash('Alerta creada correctamente', 'success')
+            # flash('Alerta creada correctamente', 'success')
             
         def check_before_notify(frame, camera, user_email, certainty):
             

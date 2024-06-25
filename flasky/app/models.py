@@ -153,8 +153,7 @@ class Camera(db.Document):
     def reset_alerts(self):
         self.alerts = 0   
         
-    @staticmethod
-    def get_alerts(number):
+    def get_alerts(self):
         alert_dict = {
             'FIRES': Alerts.FIRES,
             'BLADED_WEAPON': Alerts.BLADED_WEAPON,
@@ -169,7 +168,7 @@ class Camera(db.Document):
         }
         active_alerts = []
         for alert_name, alert_value in alert_dict.items():
-            if number & alert_value == alert_value:
+            if self.alerts & alert_value == alert_value:
                 active_alerts.append(alert_name)
         return active_alerts
 

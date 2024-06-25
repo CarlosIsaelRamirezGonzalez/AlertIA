@@ -24,22 +24,22 @@
             <h1 class="add-camera-form-title">Camera Information</h1>
 
             <i class="fa-solid fa-pencil add-camera-icon"></i>
-            {{ form.name(class='add-camera-input', placeholder="Camera Name", autoComplete="off", value=camera.name) }}
+            {{ form.name(class='add-camera-input', placeholder="Camera Name", autoComplete="off") }}
 
             <i class="fa-solid fa-phone add-camera-icon"></i>
-            {{ form.phone_number(class='add-camera-input', placeholder="Phone Number", maxlength="10", autoComplete="off", value=camera.phone_number) }}
+            {{ form.phone_number(class='add-camera-input', placeholder="Phone Number", maxlength="10", autoComplete="off") }}
 
             <i class="fa-solid fa-location-dot add-camera-icon"></i>
-            {{ form.address(placeholder="Location Camera", class="add-camera-input", autoComplete="off", value=camera.address)  }}
+            {{ form.address(placeholder="Location Camera", class="add-camera-input", autoComplete="off")  }}
             
-            {{ form.latitude(id="latitude", value=camera.latitude) }}
-            {{ form.longitude(id="longitude", value=camera.longitude) }}
+            {{ form.latitude(id="latitude") }}
+            {{ form.longitude(id="longitude") }}
 
         </div>
         
         <div class="add-camera-form-right-side">
             
-            {{ form.place(class="add-camera-alert-select", id="place-select", value=camera.place) }}
+            {{ form.place(class="add-camera-alert-select", id="place-select") }}
 
         
             <h2 class="add-camera-type-camera-question" id="personalized-alert-title">Types of alerts you would like to be notified of</h2>
