@@ -94,7 +94,7 @@ class Camera(db.Document):
     camera_type = db.StringField(required=True)
     url = db.StringField()   
     place = db.StringField(required=True, choices=["Home", "Building", "Square", "Street", "Personalized"])
-    place_default = db.IntField(required = True)
+    place_default = db.StringField(required = True)
     address = db.StringField(required=True)
     latitude = db.FloatField()
     longitude = db.FloatField()
@@ -103,7 +103,8 @@ class Camera(db.Document):
     
     
     user = db.ReferenceField(User, reverse_delete_rule=db.CASCADE)
-    alerts = db.IntField(required=True)    
+    alerts = db.IntField(required=True)
+    alerts_default = db.IntField(required=True)
     
     
     def __init__(self, **kargs):

@@ -38,7 +38,7 @@ def index():
     
     cameras = Camera.objects(user=current_user.id).all()
     
-    modelo_ruta = 'C:/Users/Carlos Ramirez/Desktop/Programas/AlertIA/Artificial_Intelligence/Aria.keras'
+    modelo_ruta = 'D:\Respaldo\Escuela\Proyecto\AlertAI\Artificial_Intelligence\Aria.keras'
     modelo = load_model(modelo_ruta)
     
     monitoring_thread = threading.Thread(target=monitor_notifications, daemon=True)
@@ -104,7 +104,6 @@ def add_camera():
     
     if form.validate_on_submit():
         
-        # Borraste a que usuario se conectaba???
         camera = Camera(
             name = form.name.data, 
             phone_number = form.phone_number.data,
@@ -112,8 +111,6 @@ def add_camera():
             url = form.url.data, 
             place = form.place.data,
             address = form.address.data, 
-            latitude=form.latitude.data,
-            longitude=form.longitude.data,
             device_id = form.device_id.data, 
             registered = platform.node())
         
@@ -122,7 +119,8 @@ def add_camera():
             camera.insert_place_alerts(form.place.data)
         else:
             camera.insert_personalized_alerts(form)
-        camera.place_default = camera.alerts
+        camera.alerts_default = camera.alerts
+        camera.place_default = camera.place
         # save model
         if camera.alerts == 0:
             flash('Error: You must select at least one place or alert.')
@@ -189,7 +187,8 @@ def edit_camera(camera_id):
         print("ENTRE")
         print(form.place.data)
         if submit_type == 'update_default':
-            camera.alerts = camera.place_default
+            camera.alerts = camera.alerts_default
+            camera.place = camera.place_default
         else:
             if form.place.data != 'Personalized':
                 camera.insert_place_alerts(form.place.data)
@@ -286,7 +285,7 @@ def start_camera_monitoring(app, camera, modelo, user_email):
             
             notificacion = Notification(
                 user = user_email,
-                date_time = datetime.now(),
+                date_time = datetime.now().strftime("%d-%m-%Y %H:%M"),
                 place = camera.address,  
                 threat = threat,  
                 camera_name = camera.name, 
@@ -310,7 +309,7 @@ def start_camera_monitoring(app, camera, modelo, user_email):
                        alert = threat,
                        camera_name = camera.name,
                        certainty = certainty,
-                       time = datetime.now(),
+                       time = datetime.now().strftime("%d-%m-%Y %H:%M"),
                        link = f"http://127.0.0.1:5000/alert/notifications/view/{notificacion.id}",
                        attachments=attachments)
             
@@ -388,7 +387,7 @@ def start_camera_monitoring(app, camera, modelo, user_email):
                             'alert/email/camera_disconected',
                             user = info_user,  
                             camera_name = camera.name, 
-                            time = datetime.now)
+                            time = datetime.now.strftime('%A, %d. %B %Y %I:%M'))
                         
                         notification_queue.put(f'Camera {camera.name} disconnected')
                         break
