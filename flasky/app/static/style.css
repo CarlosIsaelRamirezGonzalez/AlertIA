@@ -870,6 +870,10 @@ input[type=number]::-webkit-outer-spin-button {
     background-color: black;
 }
 
+.update_default{
+    height: 6.5rem;
+}
+
 
 
 
@@ -2110,4 +2114,8 @@ input[type=number]::-webkit-outer-spin-button {
     color: #ff0000;
     font-size: 14px;
     margin-bottom: 15px;
+}
+
+.title-notifications{
+    margin-top: 0;
 }
