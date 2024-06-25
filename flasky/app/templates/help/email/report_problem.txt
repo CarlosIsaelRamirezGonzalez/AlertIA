@@ -1,0 +1,4 @@
+From {{ username }}
+General Description: {{ general_problem }}
+
+Problem: {{ problem }}

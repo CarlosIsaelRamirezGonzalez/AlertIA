@@ -2,6 +2,8 @@
 
 {% block title %} Help {% endblock title %}
 {% block page_content %}
+{% include 'sidebar.html' %}
+
 <section class="about-us">
 
     <div class="about-us-content">
@@ -15,7 +17,9 @@
 
         <h3 class="sub-heading">Alert AI</h3>
         <p class="about-us-paragraph">Check the help videos in the following links</p>
-   
+
+        <button class="banner-button" onclick="redirectToPage('report_support')">Report Problem</button>
+
     </div>
 
     <div class="videos-container">
