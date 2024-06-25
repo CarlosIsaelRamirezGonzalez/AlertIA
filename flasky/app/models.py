@@ -40,6 +40,7 @@ class User(UserMixin, db.Document):
         data_token = f'{self.email}{self.password_hash}{self.username}'.encode('utf-8')
         hash_result = hashlib.sha256(data_token).hexdigest()
         token = hash_result[:10]
+        token = token.upper()
         return token 
 
     def confirm_token(self, token):
@@ -88,102 +89,97 @@ class Notification(db.Document):
     read = db.BooleanField(default=False)
     starred = db.BooleanField(default=False)
      
+
 class Camera(db.Document):
     name = db.StringField(required=True)
     phone_number = db.StringField(required=True)
     camera_type = db.StringField(required=True)
-    url = db.StringField()   
+    url = db.StringField()
     place = db.StringField(required=True, choices=["Home", "Building", "Square", "Street", "Personalized"])
-    place_default = db.StringField(required = True)
+    place_default = db.StringField(required=True)
     address = db.StringField(required=True)
     latitude = db.FloatField()
     longitude = db.FloatField()
     device_id = db.StringField()
     registered = db.StringField()
-    
-    
+
     user = db.ReferenceField(User, reverse_delete_rule=db.CASCADE)
-    alerts = db.IntField(required=True)
-    alerts_default = db.IntField(required=True)
-    
-    
+    alerts = db.ListField(db.StringField(), required=True)
+    alerts_default = db.ListField(db.StringField(), required=True)
+
     def __init__(self, **kargs):
         super(Camera, self).__init__(**kargs)
         if self.user is None:
             self.user = current_user.id
-    
+
     def __repr__(self):
         return '<Camera %r>' % self.name
-    
+
     def insert_personalized_alerts(self, form):
-        calculated_value = 0
+        self.alerts = []
+        alert_fields = {
+            'fires': form.fires.data,
+            'bladed_weapon': form.bladed_weapon.data,
+            'stabbing': form.stabbing.data,
+            'handgun': form.handgun.data,
+            'long_gun': form.long_gun.data,
+            'cannoning': form.cannoning.data,
+            'dog_attack': form.dog_attack.data,
+            'car_accident': form.car_accident.data,
+            'brawls': form.brawls.data,
+            'injured_people': form.injured_people.data
+        }
         
-        if form.fires.data:
-            calculated_value = 1
-        
-        values = [form.bladed_weapon.data, form.stabbing.data, form.handgun.data, 
-                form.long_gun.data, form.cannoning.data, form.dog_attack.data, 
-                form.car_accident.data, form.brawls.data, form.injured_people.data]
-        
-        for i, val in enumerate(values):
-            if val:
-                calculated_value += 2 ** i    
-        
-        self.alerts = calculated_value
- 
+        for alert, active in alert_fields.items():
+            if active:
+                self.alerts.append(alert)
+    
     def insert_place_alerts(self, place):
-        match place:
-            case "Home": self.alerts = 629
-            case "Building": self.alerts = 871
-            case "Square":  self.alerts = 883
-            case "Street": self.alerts = 1007
-
-
+        place_alerts = {
+            "Home": [Alerts.FIRES, Alerts.BLADED_WEAPON, Alerts.STABBING, Alerts.HANDGUN, Alerts.DOG_ATTACK],
+            "Building": [Alerts.FIRES, Alerts.BLADED_WEAPON, Alerts.HANDGUN, Alerts.LONG_GUN, Alerts.CAR_ACCIDENT],
+            "Square": [Alerts.FIRES, Alerts.BLADED_WEAPON, Alerts.HANDGUN, Alerts.LONG_GUN, Alerts.DOG_ATTACK, Alerts.BRAWLS],
+            "Street": [Alerts.FIRES, Alerts.BLADED_WEAPON, Alerts.STABBING, Alerts.HANDGUN, Alerts.LONG_GUN, Alerts.CANNONING, Alerts.DOG_ATTACK, Alerts.CAR_ACCIDENT, Alerts.BRAWLS]
+        }
+        
+        self.alerts = place_alerts.get(place, [])
 
     def has_alert(self, alert):
-        return self.alerts & alert == alert 
-    
+        return alert in self.alerts
+
     def add_alert(self, alert):
         if not self.has_alert(alert):
-            self.alerts += alert
+            self.alerts.append(alert)
 
     def remove_alert(self, alert):
         if self.has_alert(alert):
-            self.alerts -= alert 
-    
+            self.alerts.remove(alert)
+
     def reset_alerts(self):
-        self.alerts = 0   
-        
+        self.alerts = []
+
     def get_alerts(self):
-        alert_dict = {
-            'FIRES': Alerts.FIRES,
-            'BLADED_WEAPON': Alerts.BLADED_WEAPON,
-            'STABBING': Alerts.STABBING,
-            'HANDGUN': Alerts.HANDGUN,
-            'LONG_GUN': Alerts.LONG_GUN,
-            'CANNONING': Alerts.CANNONING,
-            'DOG_ATTACK': Alerts.DOG_ATTACK,
-            'CAR_ACCIDENT': Alerts.CAR_ACCIDENT,
-            'BRAWLS': Alerts.BRAWLS,
-            'INJURED_PEOPLE': Alerts.INJURED_PEOPLE
-        }
-        active_alerts = []
-        for alert_name, alert_value in alert_dict.items():
-            if self.alerts & alert_value == alert_value:
-                active_alerts.append(alert_name)
-        return active_alerts
+        return self.alerts
 
 class Alerts: 
-    FIRES = 1
-    BLADED_WEAPON = 2
-    STABBING = 4
-    HANDGUN = 8
-    LONG_GUN = 16
-    CANNONING = 32
-    DOG_ATTACK = 64
-    CAR_ACCIDENT = 128
-    BRAWLS = 256
-    INJURED_PEOPLE = 512
+    FIRES = "fires"
+    BLADED_WEAPON = "bladed_weapon"
+    STABBING = "stabbing"
+    HANDGUN = "handgun"
+    LONG_GUN = "long_gun"
+    CANNONING = "cannoning"
+    DOG_ATTACK = "dog_attack"
+    CAR_ACCIDENT = "car_accident"
+    BRAWLS = "brawls"
+    INJURED_PEOPLE = "injured_people"
+
+    @classmethod
+    def all_alerts(cls):
+        return [
+            cls.FIRES, cls.BLADED_WEAPON, cls.STABBING, cls.HANDGUN,
+            cls.LONG_GUN, cls.CANNONING, cls.DOG_ATTACK,
+            cls.CAR_ACCIDENT, cls.BRAWLS, cls.INJURED_PEOPLE
+        ]
     
     
 class Report(db.Document):

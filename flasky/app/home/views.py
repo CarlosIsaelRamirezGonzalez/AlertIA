@@ -38,7 +38,8 @@ def index():
     
     cameras = Camera.objects(user=current_user.id).all()
     
-    modelo_ruta = 'D:\Respaldo\Escuela\Proyecto\AlertAI\Artificial_Intelligence\Aria.keras'
+    # modelo_ruta = 'D:\Respaldo\Escuela\Proyecto\AlertAI\Artificial_Intelligence\Aria.keras'
+    modelo_ruta = 'C:/Users/Carlos Ramirez/Desktop/Programas/AlertIA/Artificial_Intelligence/Aria.keras'
     modelo = load_model(modelo_ruta)
     
     monitoring_thread = threading.Thread(target=monitor_notifications, daemon=True)
@@ -105,24 +106,28 @@ def add_camera():
     if form.validate_on_submit():
         
         camera = Camera(
-            name = form.name.data, 
-            phone_number = form.phone_number.data,
-            camera_type = form.camera_type.data, 
-            url = form.url.data, 
-            place = form.place.data,
-            address = form.address.data, 
-            device_id = form.device_id.data, 
-            registered = platform.node())
-        
+            name=form.name.data, 
+            phone_number=form.phone_number.data,
+            camera_type=form.camera_type.data, 
+            url=form.url.data, 
+            place=form.place.data,
+            address=form.address.data, 
+            latitude=form.latitude.data,
+            longitude=form.longitude.data,
+            device_id=form.device_id.data, 
+            registered=platform.node()
+        )
         
         if form.place.data != 'Personalized':
             camera.insert_place_alerts(form.place.data)
         else:
             camera.insert_personalized_alerts(form)
-        camera.alerts_default = camera.alerts
+        
+        camera.alerts_default = camera.alerts.copy()
         camera.place_default = camera.place
+        
         # save model
-        if camera.alerts == 0:
+        if not camera.alerts:
             flash('Error: You must select at least one place or alert.')
         else:
             camera.save()
@@ -134,6 +139,7 @@ def add_camera():
                 flash(f"Error in the {getattr(form, field).label.text} field - {error}", 'error')     
      
     return render_template('home/add-camera.html', form=form)
+
 
 def get_camera_details():
     pythoncom.CoInitialize()
@@ -175,7 +181,7 @@ def edit_camera(camera_id):
     
     form = EditCameraForm(obj=camera)
     if camera.place == "Personalized":
-        alerts = camera.get_alerts
+        alerts = camera.get_alerts()
         print(alerts)
     
     if form.validate_on_submit():
@@ -187,7 +193,7 @@ def edit_camera(camera_id):
         print("ENTRE")
         print(form.place.data)
         if submit_type == 'update_default':
-            camera.alerts = camera.alerts_default
+            camera.alerts = camera.alerts_default.copy()
             camera.place = camera.place_default
         else:
             if form.place.data != 'Personalized':
@@ -196,7 +202,7 @@ def edit_camera(camera_id):
                 camera.insert_personalized_alerts(form)
         
         # save model
-        if camera.alerts == 0:
+        if not camera.alerts:
             flash('Error: You must select at least one place or alert.')
         else:
             camera.save()
@@ -208,6 +214,7 @@ def edit_camera(camera_id):
                 flash(f"Error in the {getattr(form, field).label.text} field - {error}", 'error') 
     
     return render_template('home/edit-camera.html', form=form, camera=camera)
+
 
 @home.route('/deleteCamera/<camera_id>', methods=['GET', 'POST'])
 @login_required
@@ -331,10 +338,14 @@ def start_camera_monitoring(app, camera, modelo, user_email):
             elif arr_check_damage.count(0) >= 10:
                 if camera.has_alert(Alerts.BLADED_WEAPON):
                     create_notifications(frame, camera, "Armas blancas", user_email, certainty)
+                else:
+                    print(Fore.LIGHTRED_EX, "No se hizo por la restriccion")
                 
             elif arr_check_damage.count(3) >= 15:
                 if camera.has_alert(Alerts.DOG_ATTACK):
                     create_notifications(frame, camera, "Ataque de perros", user_email, certainty)
+                else:
+                    print(Fore.LIGHTRED_EX, "No se hizo por la restriccion")
                 
             elif arr_check_damage.count(7) >= 20: #Aqui deben ser 20
                 if camera.has_alert(Alerts.FIRES):
