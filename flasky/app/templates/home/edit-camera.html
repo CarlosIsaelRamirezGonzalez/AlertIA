@@ -103,8 +103,11 @@
         </div> 
         
         <div class="add-camera-form-bottom-side">
-            <button class="add-camera-form-button" type="submit">
+            <button class="add-camera-form-button" type="submit" name="submit_type" value="update">
                 {% if edit_mode %} Update {% else %} Update {% endif %}
+            </button>
+            <button class="add-camera-form-button" type="submit" name="submit_type" value="update_default">
+                Update with default notifications
             </button>
         </div>
 

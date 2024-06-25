@@ -2,7 +2,7 @@ from tensorflow.keras.preprocessing import image
 from tensorflow.keras.applications.mobilenet_v2 import preprocess_input
 from tensorflow.keras.models import load_model
 
-from flask import render_template, flash, url_for, redirect, current_app
+from flask import render_template, flash, url_for, redirect, current_app, request
 from flask_login import login_required, current_user
 from ..decorators import post_only
 from ..models import Camera, Notification, Report, User, Alerts
@@ -176,17 +176,19 @@ def edit_camera(camera_id):
     form = EditCameraForm()
     
     if form.validate_on_submit():
+        submit_type = request.form.get('submit_type')
         camera.name = form.name.data
         camera.phone_number = form.phone_number.data
         camera.place = form.place.data
         camera.address = form.address.data
         
-        if form.place.data != 'Personalized':
-            camera.insert_place_alerts(form.place.data)
-        elif form.place.data == 'Default':
+        if submit_type == 'update_default':
             camera.alerts = camera.place_default
         else:
-            camera.insert_personalized_alerts(form)
+            if form.place.data != 'Personalized':
+                camera.insert_place_alerts(form.place.data)
+            else:
+                camera.insert_personalized_alerts(form)
         
         # save model
         if camera.alerts == 0:
