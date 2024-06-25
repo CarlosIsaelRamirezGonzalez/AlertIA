@@ -16,7 +16,7 @@
         <form method="post" class="token-form">
             {{ form.csrf_token }}
 
-            {{ form.token(id="otp-input", type="text", autocomplete="one-time-code", inputmode="numeric", maxlength="5") }}
+            {{ form.token(id="otp-input", type="text", autocomplete="one-time-code", inputmode="numeric", maxlength="10") }}
 
             <button class="token-button" type="submit">Confirm Token</button>
         </form>

@@ -39,7 +39,7 @@ class User(UserMixin, db.Document):
     def generate_confirmation_token(self):
         data_token = f'{self.email}{self.password_hash}{self.username}'.encode('utf-8')
         hash_result = hashlib.sha256(data_token).hexdigest()
-        token = hash_result[:5]
+        token = hash_result[:10]
         return token 
 
     def confirm_token(self, token):

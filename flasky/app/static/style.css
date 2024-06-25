@@ -430,7 +430,7 @@ input[type=number]::-webkit-outer-spin-button {
 
 
 :where([autocomplete=one-time-code]) {
-    --otp-digits: 5;
+    --otp-digits: 10;
     --otp-ls: 10rem;
     --otp-gap: 1.25; 
   
@@ -2049,4 +2049,65 @@ input[type=number]::-webkit-outer-spin-button {
 }
 .videos-container a:hover {
     background-color: #0056b3;
+}
+
+
+.report-notification-form {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-family: 'Arial', sans-serif;
+}
+
+/* Input and TextArea styles */
+.report-notification-form-input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 16px;
+    color: #333;
+    transition: border-color 0.3s;
+}
+
+/* Focus state styles */
+.report-notification-form-input:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+/* Placeholder styles */
+.report-notification-form-input::placeholder {
+    color: #aaa;
+    font-style: italic;
+}
+
+/* Button styles */
+.report-notification-form-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-size: 16px;
+}
+
+/* Button hover state */
+.report-notification-form-button:hover {
+    background-color: #0056b3;
+}
+
+/* Error message styles */
+.form-error {
+    color: #ff0000;
+    font-size: 14px;
+    margin-bottom: 15px;
 }

@@ -248,7 +248,7 @@ def start_camera_monitoring(app, camera, modelo, user_email):
             certainty = predictions[0][predicted_classes[0]]
             certainty_str = f"{certainty * 100:.2f}%"
             
-            if predicted_classes[0] != 11 and certainty > 0.70:
+            if predicted_classes[0] != 11 and certainty > 0.85:
                 print("Paso algo")
                 arr_check_damage.append(predicted_classes[0])
                 alert_mode = True
@@ -312,7 +312,7 @@ def start_camera_monitoring(app, camera, modelo, user_email):
             
         
             
-            #send_alert_message_sms(camera, threat)
+            # send_alert_message_sms(camera, threat)
             #flash('Alerta creada correctamente', 'success')
             
         def check_before_notify(frame, camera, user_email, certainty):
