@@ -112,8 +112,8 @@ def add_camera():
             url=form.url.data, 
             place=form.place.data,
             address=form.address.data, 
-            latitude=form.latitude.data,
-            longitude=form.longitude.data,
+            latitude=str(form.latitude.data),
+            longitude=str(form.longitude.data),
             device_id=form.device_id.data, 
             registered=platform.node()
         )
@@ -169,6 +169,7 @@ def get_camera_details():
         index += 1
     return camera_details
 
+
 @home.route('/editCamera/<camera_id>', methods=['GET', 'POST'])
 @login_required
 def edit_camera(camera_id):
@@ -180,10 +181,30 @@ def edit_camera(camera_id):
         return redirect(url_for('home.index'))
     
     form = EditCameraForm(obj=camera)
+
     if camera.place == "Personalized":
         alerts = camera.get_alerts()
         print(alerts)
-    
+        # Definimos el diccionario que mapea las alertas a los campos del formulario
+        alert_dict = {
+            'fires': 'fires',
+            'bladed_weapon': 'bladed_weapon',
+            'stabbing': 'stabbing',
+            'handgun': 'handgun',
+            'long_gun': 'long_gun',
+            'cannoning': 'cannoning',
+            'dog_attack': 'dog_attack',
+            'car_accident': 'car_accident',
+            'brawls': 'brawls',
+            'injured_people': 'injured_people'
+        }
+        # Establecemos manualmente cada campo en True si la alerta está presente
+        for alert in alerts:
+            print(alert)
+            if alert in alert_dict:
+                print(alert + "True")
+                # setattr(form, alert_dict[alert], True)
+
     if form.validate_on_submit():
         submit_type = request.form.get('submit_type')
         camera.name = form.name.data
@@ -411,6 +432,14 @@ def start_camera_monitoring(app, camera, modelo, user_email):
                 del active_cameras[camera.name]
         except Exception as e:
             print(Fore.RED, f"Exception in start_camera_monitoring for camera {camera.name}: {e}")
+            info_user = User.objects.get(email = user_email)
+            send_email(user_email,
+                            'Camera disconected', 
+                            'alert/email/camera_disconected',
+                            user = info_user,  
+                            camera_name = camera.name, 
+                            time = datetime.now.strftime('%A, %d. %B %Y %I:%M'))
+            
             
 def monitor_notifications():
     while True:
