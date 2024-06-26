@@ -98,8 +98,8 @@ class Camera(db.Document):
     place = db.StringField(required=True, choices=["Home", "Building", "Square", "Street", "Personalized"])
     place_default = db.StringField(required=True)
     address = db.StringField(required=True)
-    latitude = db.FloatField()
-    longitude = db.FloatField()
+    latitude = db.StringField()
+    longitude = db.StringField()
     device_id = db.StringField()
     registered = db.StringField()
 
