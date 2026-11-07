@@ -1,5 +1,8 @@
+"""Página pública de presentación."""
+
 from flask import Blueprint
 
 main = Blueprint('main', __name__)
 
-from . import views
+# Las vistas se importan al final porque usan el blueprint de arriba.
+from . import views  # noqa: E402,F401

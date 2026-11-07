@@ -135,7 +135,7 @@
 
 </section>
 <script src="js/googleMap.js"></script>
-<script async src="https://maps.googleapis.com/maps/api/js?key=REDACTED&libraries=places&callback=initMap"></script>
+<script async src="https://maps.googleapis.com/maps/api/js?key={{ config.GOOGLE_MAPS_API_KEY }}&libraries=places&callback=initMap"></script>
 <script src="{{ url_for('static', filename='Js/addCameraDOM.js') }}"></script>
 <script src="{{ url_for('static', filename='Js/googleMapPopup.js') }}"></script>
 <script src="{{ url_for('static', filename='Js/googleMapService.js') }}"></script>

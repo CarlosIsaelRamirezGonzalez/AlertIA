@@ -8,7 +8,7 @@
     <h1 class="details-header">Sección de detalles</h1>
 
     <div class="notification-info">
-        <h4>Fecha y Hora: {{ load_notification.date_time }}</h4>
+        <h4>Fecha y Hora: {{ load_notification.date_time | fecha }}</h4>
         <h4>Lugar: {{ load_notification.place }}</h4>
         <h4>Amenaza: {{ load_notification.threat }}</h4>
         <h4>Nombre de la Cámara: {{ load_notification.camera_name }}</h4>

@@ -1,134 +1,158 @@
-from flask import render_template, request, redirect, url_for, flash
+"""Vistas de notificaciones: lista, detalle, búsqueda, destacadas y borrado."""
+
+from flask import render_template, request, redirect, url_for, flash, abort
 from . import alert
-from ..models import Notification, Camera, User
-from datetime import datetime
-from PIL import Image
-import cv2
-import io
+from ..models import Notification
+from ..decorators import csrf_post
 import base64
-from flask import request
 from mongoengine import Q
 from flask_login import current_user, login_required
 
+PER_PAGE = 25
+MAX_STARRED = 100
+MAX_UNSTARRED = 500
 
-@alert.route('/notifications', methods=['GET', 'POST'])
+
+def get_own_notification(notification_id):
+    """Busca una notificación del usuario de la sesión.
+
+    Args:
+        notification_id: Identificador de la notificación.
+
+    Returns:
+        La notificación.
+
+    Raises:
+        NotFound: Si no existe o es de otra persona (responde 404).
+    """
+    notification = Notification.objects(id=notification_id, user=current_user.email).first()
+    if not notification:
+        abort(404)
+    return notification
+
+
+@alert.route('/notifications')
+@login_required
 def notifications():
-    if request.method == 'POST':
-        
-        cap = cv2.VideoCapture(0)
-        
-        if not cap.isOpened():
-            print("Error al abrir la cámara")
-            
-        ret, frame = cap.read()
-        
-        if not ret:
-            print("Error al capturar la imagen")
+    """Muestra las notificaciones del usuario, de la más nueva a la más vieja.
 
-        image = Image.fromarray(frame)
-        output = io.BytesIO()
-        image.save(output, format='PNG')
-        image_data_compressed = output.getvalue()
-        
-        
-        notificacion = Notification(
-            user = "enriquerc260@gmail.com",
-            date_time=datetime.now().strftime('%A, %d. %B %Y %I:%M'),
-            place='Lugar por defecto',  
-            threat='Ataque de perros',  
-            camera_name='Camara 2', 
-            certainty='Certeza por defecto',
-            image=image_data_compressed 
-        )
-        notificacion.save()
-        cap.release()
-        flash('Alerta creada correctamente', 'success')
-        
+    Returns:
+        La página.
+    """
     page = request.args.get('page', 1, type=int)
-    per_page = 25
-    pagination = Notification.objects(user=current_user.email).paginate(page=page, per_page=per_page)
-    load_notifications = pagination.items
-        
-    #load_notifications = Notification.objects(user=current_user.email)
-        
-    return render_template('alert/notifications.html', load_notifications = load_notifications, pagination=pagination)
+    pagination = Notification.objects(user=current_user.email).order_by('-date_time').paginate(page=page, per_page=PER_PAGE)
+    return render_template('alert/notifications.html', load_notifications=pagination.items, pagination=pagination)
 
-@alert.route('/notifications/delete/<notification_id>', methods=['GET', 'POST'])
+
+@alert.route('/notifications/delete/<notification_id>', methods=['POST'])
+@login_required
+@csrf_post
 def delete_notification(notification_id):
-    notification = Notification.objects.get(id=notification_id)
-    print(notification_id)
-    notification.delete()
+    """Borra una notificación del usuario.
+
+    Args:
+        notification_id: Identificador de la notificación.
+
+    Returns:
+        Una redirección a la lista.
+    """
+    get_own_notification(notification_id).delete()
     flash('Notificación eliminada correctamente', 'success')
     return redirect(url_for('alert.notifications'))
 
+
 @alert.route('/notifications/search_notifications', methods=['GET', 'POST'])
+@login_required
 def search():
+    """Busca entre las notificaciones del usuario por lugar, amenaza, cámara o certeza.
+
+    Returns:
+        La lista filtrada, o una redirección a la lista completa si no se buscó nada.
+    """
     filter_value = request.form.get('search', '')
     if filter_value == '':
         return redirect(url_for('alert.notifications'))
-    
-    
-    load_notifications = Notification.objects.filter(Q(place__icontains=filter_value) |
-                                                     Q(threat__icontains=filter_value) |
-                                                     Q(camera_name__icontains=filter_value) |
-                                                     Q(certainty__icontains=filter_value),
-                                                     user=current_user.email)
-    
+
     page = request.args.get('page', 1, type=int)
-    per_page = 25
     pagination = Notification.objects.filter(Q(place__icontains=filter_value) |
-                                                     Q(threat__icontains=filter_value) |
-                                                     Q(camera_name__icontains=filter_value) |
-                                                     Q(certainty__icontains=filter_value),
-                                                     user=current_user.email).paginate(page=page, per_page=per_page)
-    load_notifications = pagination.items
-    
-    return render_template('alert/notifications.html', load_notifications = load_notifications, pagination=pagination)
-    
-@alert.route('/notifications/view/<notification_id>', methods=['GET', 'POST'])
+                                             Q(threat__icontains=filter_value) |
+                                             Q(camera_name__icontains=filter_value) |
+                                             Q(certainty__icontains=filter_value),
+                                             user=current_user.email).paginate(page=page, per_page=PER_PAGE)
+    return render_template('alert/notifications.html', load_notifications=pagination.items, pagination=pagination)
+
+
+@alert.route('/notifications/view/<notification_id>')
 @login_required
 def view_notification(notification_id):
-    load_notification = Notification.objects.get(id=notification_id)
-    if load_notification.read == False:
+    """Muestra una notificación con su foto y la marca como leída.
+
+    Args:
+        notification_id: Identificador de la notificación.
+
+    Returns:
+        La página.
+    """
+    load_notification = get_own_notification(notification_id)
+    if not load_notification.read:
         load_notification.update(set__read=True)
-    image_base64 = base64.b64encode(load_notification.image).decode('utf-8')
-    load_notification.image = image_base64
+    # La plantilla muestra la foto incrustada en base64.
+    load_notification.image = base64.b64encode(load_notification.image).decode('utf-8')
     return render_template('alert/details.html', load_notification=load_notification)
 
-@alert.route('/filterStarred', methods=['GET', 'POST'])
-def filter_starred():
-    page = request.args.get('page', 1, type=int)
-    per_page = 25
-    pagination = Notification.objects(user=current_user.email, starred = True).paginate(page=page, per_page=per_page)
-    load_notifications = pagination.items
-        
-    return render_template('alert/notifications.html', load_notifications = load_notifications, pagination=pagination)
 
-@alert.route('/deleteAllNotifications', methods=['GET', 'POST'])
+@alert.route('/filterStarred')
+@login_required
+def filter_starred():
+    """Muestra solo las notificaciones destacadas.
+
+    Returns:
+        La página.
+    """
+    page = request.args.get('page', 1, type=int)
+    pagination = Notification.objects(user=current_user.email, starred=True).paginate(page=page, per_page=PER_PAGE)
+    return render_template('alert/notifications.html', load_notifications=pagination.items, pagination=pagination)
+
+
+@alert.route('/deleteAllNotifications', methods=['POST'])
+@login_required
+@csrf_post
 def delete_all_notifications():
-    notifications = Notification.objects(user = current_user.email, starred = False)
-    
-    notifications.delete()
-    
+    """Borra las notificaciones del usuario que no están destacadas.
+
+    Returns:
+        Una redirección a la lista.
+    """
+    Notification.objects(user=current_user.email, starred=False).delete()
     flash('Notificaciones eliminadas correctamente', 'success')
     return redirect(url_for('alert.notifications'))
 
-@alert.route('/add-QuitStarred/<notification_id>', methods=['GET', 'POST'])
+
+@alert.route('/add-QuitStarred/<notification_id>')
+@login_required
 def add_quit_starred(notification_id):
-    load_notification = Notification.objects.get(id = notification_id)
-    notifications_amount = Notification.objects(starred = True).count()
-    if notifications_amount > 100:
-        flash("Starred limit reached")
-    
-    if load_notification.starred == False:
-        load_notification.update(set__starred = True)
-        flash("Alerta añadida a destacadas")
+    """Destaca una notificación o le quita lo destacado.
+
+    Args:
+        notification_id: Identificador de la notificación.
+
+    Returns:
+        Una redirección a la lista.
+    """
+    load_notification = get_own_notification(notification_id)
+
+    if not load_notification.starred:
+        # El límite es por usuario, y ahora sí impide destacar más.
+        if Notification.objects(user=current_user.email, starred=True).count() >= MAX_STARRED:
+            flash("Starred limit reached")
+        else:
+            load_notification.update(set__starred=True)
+            flash("Alerta añadida a destacadas")
     else:
-        load_notification.update(set__starred = False)
-        if Notification.objects(user = current_user.email, starred = False).count() > 500:
-                Notification.objects(user = current_user.email, starred=False).order_by('date_time').first().delete()
+        load_notification.update(set__starred=False)
+        unstarred = Notification.objects(user=current_user.email, starred=False)
+        if unstarred.count() > MAX_UNSTARRED:
+            unstarred.order_by('date_time').first().delete()
         flash("Alerta eliminada de destacadas")
-        
+
     return redirect(url_for('alert.notifications'))
-        
-        

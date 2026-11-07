@@ -16,7 +16,7 @@
         <tbody>
             <tr>
                 <td>{{ report.label }}</td>
-                <td>{{ report.date_time }}</td>
+                <td>{{ report.date_time | fecha }}</td>
                 <td>{{ report.body }}</td>
                 <td><img src="data:image/png;base64,{{ report.image }}" alt="Imagen de la notificación"></td>
             </tr>

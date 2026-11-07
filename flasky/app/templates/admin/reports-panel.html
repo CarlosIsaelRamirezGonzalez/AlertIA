@@ -11,7 +11,7 @@
     <ul class="list_notifications">
         {% for report in reports %}
         <li class="element_notification" style="background-color: #f0f0f0;">
-            <span class="text-notification">{{ report.date_time }}</span>
+            <span class="text-notification">{{ report.date_time | fecha }}</span>
             <span class="text-notification">{{ report.label }}</span>
             <form method="post" action="{{ url_for('admin.report_panel', report_id=report.id) }}">
                 <button type="submit" class="back-face-edit-button">Ver</button>

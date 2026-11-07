@@ -59,3 +59,13 @@ ipython_config.py
 #   git rm -r .ipynb_checkpoints/
 
 # End of https://www.toptal.com/developers/gitignore/api/jupyternotebooks
+
+# Secretos locales: nunca se suben
+.env
+commands.txt
+
+# Notebooks: el código vive en Artificial_Intelligence/scripts
+*.ipynb
+
+# macOS
+.DS_Store

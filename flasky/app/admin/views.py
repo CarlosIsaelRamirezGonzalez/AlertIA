@@ -1,8 +1,11 @@
-from flask import render_template, flash, url_for, redirect, jsonify
+"""Panel del administrador: todas las cámaras y los reportes de los usuarios."""
+
+from flask import render_template, flash, url_for, redirect, jsonify, abort
 from flask_login import login_required
-from ..decorators import admin_required, post_only
+from ..decorators import admin_required, csrf_post
 from . import admin
 from ..models import Camera, Report
+from ..schemas import ApiMessage
 import base64
 
 
@@ -10,6 +13,11 @@ import base64
 @login_required
 @admin_required
 def cameras_panel():
+    """Muestra todas las cámaras registradas.
+
+    Returns:
+        La página.
+    """
     cameras = Camera.objects.all()
     return render_template('admin/cameras-panel.html', cameras = cameras)
 
@@ -17,6 +25,11 @@ def cameras_panel():
 @login_required
 @admin_required
 def reports_panel():
+    """Muestra los reportes de notificaciones erróneas.
+
+    Returns:
+        La página.
+    """
     reports = Report.objects.all()
     return render_template('admin/reports-panel.html', reports = reports)
 
@@ -25,23 +38,42 @@ def reports_panel():
 @login_required
 @admin_required
 def report_panel(report_id):
+    """Muestra un reporte con su foto.
+
+    Args:
+        report_id: Identificador del reporte.
+
+    Returns:
+        La página.
+    """
     report = Report.objects(id=report_id).first()
-    image_base64 = base64.b64encode(report.image).decode('utf-8')
-    report.image = image_base64
+    if not report:
+        abort(404)
+    # La plantilla muestra la foto incrustada en base64.
+    report.image = base64.b64encode(report.image).decode('utf-8')
     return render_template('admin/report-panel.html', report = report)
 
 
-# Is this necessary?
-@admin.route('/delete/<id_camera>')
+@admin.route('/delete/<id_camera>', methods=['POST'])
 @login_required
 @admin_required
-@post_only
+@csrf_post
 def delete_camera_admin(id_camera):
+    """Borra cualquier cámara.
+
+    Args:
+        id_camera: Identificador de la cámara.
+
+    Returns:
+        Una respuesta JSON con el resultado.
+    """
     try:
-        camera = Camera.query.filter_by(id=id_camera).first()
+        camera = Camera.objects(id=id_camera).first()
+        # jsonify exige un diccionario: el modelo se convierte solo en este punto.
         if not camera:
-            return jsonify({'error': 'Camera not found.'}), 404
+            return jsonify(ApiMessage(error='Camera not found.').model_dump(exclude_none=True)), 404
         camera.delete()
-        return jsonify({'message': 'Camera deleted successfully.'}), 200
-    except Exception as e:
-        return jsonify({'error': 'An error occurred while deleting the camera.', 'details': str(e)}), 500
+        return jsonify(ApiMessage(message='Camera deleted successfully.').model_dump(exclude_none=True)), 200
+    except Exception as error:
+        body = ApiMessage(error='An error occurred while deleting the camera.', details=str(error))
+        return jsonify(body.model_dump(exclude_none=True)), 500

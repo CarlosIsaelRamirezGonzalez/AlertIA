@@ -1,10 +1,12 @@
+"""Formulario para reportar un problema."""
+
 from flask_wtf import FlaskForm
-from wtforms import StringField, BooleanField, ValidationError, SelectField, RadioField, TextAreaField, HiddenField
-from wtforms.validators import DataRequired, Length, Regexp
-from flask_login import current_user
+from wtforms import StringField, TextAreaField
+from wtforms.validators import Length
 
 
 class ReportProblemEmailForm(FlaskForm):
-    general_description = StringField(validators=[Length(1,80)])
-    description = TextAreaField(validators=[Length(1,200)])
-    
+    """Problema que el usuario reporta al equipo de soporte."""
+
+    general_description = StringField(validators=[Length(1, 80)])
+    description = TextAreaField(validators=[Length(1, 200)])
