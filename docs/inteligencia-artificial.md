@@ -50,11 +50,20 @@ El código original se perdió. `scripts/train.py` lo reconstruye:
 - **Igual que el original:** la arquitectura, capa por capa (comprobado contra el archivo), el optimizador, la pérdida y la métrica.
 - **Supuestos:** imágenes escaladas de 0 a 1 antes de entrar, porque la app divide entre 255 y el modelo no tiene capa de escala; lotes de 32; 20 % de validación; hasta 20 épocas con parada temprana; y se guarda el modelo con mejor exactitud de validación.
 
-Para limpiar el dataset antes de entrenar existe `clean_dataset.py`, que viene de `pipeline.ipynb`:
+Para limpiar el dataset antes de entrenar existe `clean_dataset.py`. Nunca toca la carpeta original:
+escribe un dataset nuevo y un reporte JSON con cada archivo descartado y el motivo.
 
-1. Borra los archivos que no son JPEG, JPG, BMP o PNG.
-2. Borra las imágenes repetidas.
-3. Renombra todo como `IMAGENV1.jpg`, `IMAGENV2.jpg`, etc.
+1. **Descarta** la basura del sistema (`.DS_Store`, `desktop.ini`…), lo que no es imagen, las imágenes
+   dañadas o truncadas y las de menos de 64 px de lado.
+2. **Quita repetidas:** duplicados exactos y casi duplicados (la misma foto con otra compresión,
+   tamaño o formato, detectada con una huella visual). De cada grupo se queda la de mayor resolución.
+3. **Conflictos:** si la misma foto está en dos clases, no se queda en ninguna y aparece en el reporte
+   como `conflicto-entre-clases` para revisarla a mano.
+4. **Normaliza:** JPEG RGB, orientación corregida, sin metadatos y con el lado más largo en 512 px.
+   Con las imágenes actuales, 1.3 GB bajan a unos 220 MB.
+5. **Clases:** une los nombres de carpeta con los del modelo ("Armas blancas" → "Arma blanca",
+   "Negativos dificiles" → "Normalidad") y reconoce carpetas con acentos dañados por un ZIP.
+   "Carpeta general" se excluye; se puede incluir con `--include "Carpeta general"`.
 
 ## Scripts
 
@@ -64,8 +73,14 @@ Los notebooks se convirtieron en scripts sin rutas fijas de ninguna computadora:
 # Entrenar de nuevo (reconstrucción)
 python Artificial_Intelligence/scripts/train.py C:\ruta\al\dataset --output Artificial_Intelligence/Aria.keras
 
-# Limpiar un dataset (modifica los archivos: haz un respaldo)
-python Artificial_Intelligence/scripts/clean_dataset.py C:\ruta\al\dataset
+# Revisar el dataset sin escribir nada (solo reporte)
+python Artificial_Intelligence/scripts/clean_dataset.py AlertIA-images
+
+# Escribir el dataset limpio en una carpeta nueva
+python Artificial_Intelligence/scripts/clean_dataset.py AlertIA-images --output AlertIA-limpio
+
+# Empaquetar el dataset limpio para Kaggle (ZIP, labels.csv, ficha y metadatos)
+python Artificial_Intelligence/scripts/package_dataset.py AlertIA-limpio --owner TU_USUARIO_DE_KAGGLE
 
 # Probar con una imagen
 python Artificial_Intelligence/scripts/predict.py imagen "Artificial_Intelligence/Imagenes/Incendio.jpg"

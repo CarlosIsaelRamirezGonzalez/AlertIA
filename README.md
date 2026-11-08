@@ -38,7 +38,8 @@ AlertIA/
 │   ├── Aria.keras            # Modelo entrenado (12 clases)
 │   ├── Imagenes/             # Imágenes de ejemplo para probarlo
 │   └── scripts/
-│       ├── clean_dataset.py  # Limpia un dataset antes de entrenar
+│       ├── clean_dataset.py  # Revisa y normaliza el dataset en una carpeta nueva
+│       ├── package_dataset.py # Empaqueta el dataset limpio para Kaggle
 │       ├── train.py          # Entrena el modelo (reconstrucción)
 │       └── predict.py        # Prueba el modelo con una imagen o la cámara
 ├── flasky/

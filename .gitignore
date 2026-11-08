@@ -69,3 +69,10 @@ commands.txt
 
 # macOS
 .DS_Store
+
+# Imágenes de entrenamiento: pesan GB y no van al repositorio
+AlertIA-images/
+*-limpio/
+*-limpio-reporte.json
+reporte-limpieza.json
+AlertIA-kaggle/
