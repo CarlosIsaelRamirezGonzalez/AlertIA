@@ -13,6 +13,8 @@ MONGODB_URI = (
 )
 DEFAULT_MODEL_PATH = os.path.join(os.path.dirname(__file__), '..', 'Artificial_Intelligence', 'Aria.keras')
 TEN_DAYS_SECONDS = 10 * 24 * 3600
+# Solo para desarrollo local: cualquiera puede leerla en el código, así que nunca protege nada real.
+DEVELOPMENT_SECRET_KEY = 'solo-para-desarrollo-local'
 
 
 class MongoSettings(BaseModel):
@@ -48,8 +50,8 @@ def mongo_settings(database: str) -> MongoSettings:
 class Config:
     """Configuración común a todos los entornos."""
 
-    # Antes se usó SECRET; se sigue aceptando. En producción debe definirse siempre.
-    SECRET_KEY = os.environ.get('SECRET_KEY') or os.environ.get('SECRET') or 'Hard to guess'
+    # Antes se usó SECRET; se sigue aceptando. Fuera de desarrollo es obligatoria.
+    SECRET_KEY = os.environ.get('SECRET_KEY') or os.environ.get('SECRET')
     REMEMBER_COOKIE_DURATION = int(os.environ.get('REMEMBER_COOKIE_DURATION', TEN_DAYS_SECONDS))
 
     # Correo
@@ -70,17 +72,24 @@ class Config:
 
     @staticmethod
     def init_app(app):
-        """Permite que cada entorno prepare la aplicación; por ahora no hace nada.
+        """Revisa la configuración antes de arrancar.
 
         Args:
             app: Aplicación de Flask.
+
+        Raises:
+            RuntimeError: Si falta `SECRET_KEY`: sin ella, cualquiera podría falsificar sesiones.
         """
+        if not app.config.get('SECRET_KEY'):
+            raise RuntimeError('Falta SECRET_KEY. Defínela en el entorno o en flasky/.env (ver .env.example).')
 
 
 class DevelopmentConfig(Config):
     """Desarrollo: modo de depuración y base `development_db`."""
 
     DEBUG = True
+    # En desarrollo se puede arrancar sin definirla; en pruebas y producción no.
+    SECRET_KEY = Config.SECRET_KEY or DEVELOPMENT_SECRET_KEY
     # Flask-MongoEngine exige un diccionario: se convierte solo en este punto.
     MONGODB_SETTINGS = mongo_settings('development_db').model_dump()
 

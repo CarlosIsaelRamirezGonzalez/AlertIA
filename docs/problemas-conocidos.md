@@ -33,3 +33,5 @@
 | 18 | La validación de URL repetida buscaba un campo `ip` que no existe | Revisa `url` |
 | 19 | Fechas guardadas como texto y mostradas sin formato | Se guardan como fecha y se muestran como `07-11-2026 15:21` |
 | 20 | Notebooks, `commands.txt` con credenciales, ruta del modelo y clave de Maps fijas, modelo duplicado | Scripts, `.env.example` y variables de entorno; historial limpio |
+| 21 | Sin `SECRET_KEY`, la app usaba la clave fija "Hard to guess", con la que cualquiera podría falsificar sesiones | Fuera de desarrollo, la app no arranca si falta `SECRET_KEY`; en desarrollo usa una clave local. Tiene pruebas en `tests/test_config.py` |
+| 22 | Las pruebas solo se corrían a mano | GitHub Actions las corre en cada push y cada PR |
