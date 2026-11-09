@@ -1,8 +1,37 @@
 # AlertAI
 
+[![Pruebas](https://github.com/CarlosIsaelRamirezGonzalez/AlertIA/actions/workflows/tests.yml/badge.svg)](https://github.com/CarlosIsaelRamirezGonzalez/AlertIA/actions/workflows/tests.yml)
+![Python](https://img.shields.io/badge/Python-3.12-0C1730?logo=python&logoColor=46D2E1)
+![Flask](https://img.shields.io/badge/Flask-1.1-0C1730?logo=flask&logoColor=46D2E1)
+![MongoDB](https://img.shields.io/badge/MongoDB-MongoEngine-0C1730?logo=mongodb&logoColor=46D2E1)
+![TensorFlow](https://img.shields.io/badge/TensorFlow-Keras-0C1730?logo=tensorflow&logoColor=46D2E1)
+![Proyecto](https://img.shields.io/badge/CETI-2023--2024-0C1730)
+
 AlertAI vigila cámaras con inteligencia artificial y avisa por correo cuando detecta una situación de riesgo: armas, incendios, peleas, choques, ataques de perro o personas heridas.
 
 Es una aplicación web en **Flask** con **MongoDB**. Cada usuario registra sus cámaras, que pueden ser webcams o cámaras de seguridad por URL, y elige qué alertas quiere recibir según el lugar. Mientras tiene la página de inicio abierta, un modelo de **TensorFlow/Keras** analiza cada cámara cuadro por cuadro. Cuando detecta una amenaza varias veces seguidas, guarda una notificación con la foto y envía un correo.
+
+<!-- TODO: captura del panel con las cámaras (docs/assets/panel.png) -->
+<!-- TODO: captura de una notificación con su foto (docs/assets/notificacion.png) -->
+<!-- TODO: captura del correo de alerta (docs/assets/correo.png) -->
+
+## Cómo funciona una alerta
+
+```mermaid
+flowchart LR
+    Camera["Cámara<br/>webcam o URL"] --> Thread["Hilo por cámara<br/>OpenCV, cuadro a RGB"]
+    Thread --> Model["Modelo Keras<br/>Aria.keras · 12 clases"]
+    Model --> Certain{"¿≥ 95 % de certeza<br/>y no es Normalidad?"}
+    Certain -- no --> Thread
+    Certain -- sí --> Rule{"Regla de confirmación<br/>armas: 10 detecciones<br/>choques y peleas: 30"}
+    Rule -- "aún no" --> Thread
+    Rule -- confirmada --> Enabled{"¿El usuario activó<br/>esa alerta para<br/>el lugar?"}
+    Enabled -- sí --> Notify["Notificación con foto<br/>en MongoDB"]
+    Notify --> Mail["Correo con la foto<br/>Flask-Mail"]
+    Notify -. "no se repite<br/>en 3 minutos" .-> Thread
+```
+
+Las reglas están en `flasky/app/detection.py` y tienen pruebas en `flasky/tests/`. El envío de SMS con Twilio existe en el código, pero está desactivado.
 
 ## Documentación
 
