@@ -4,7 +4,7 @@
 
 1. **El monitoreo solo corre mientras el servidor está prendido y alguien abrió `/home`.** No hay un proceso o servicio independiente que vigile las cámaras.
 2. **`Notification.user` guarda el correo como texto** en vez de una referencia al usuario. Si un usuario cambia de correo, pierde sus notificaciones. Corregirlo requiere migrar los datos que ya hay en MongoDB.
-3. **Dependencias viejas:** Flask 1.1, Werkzeug 1.0 y Jinja2 2.11 ya no reciben parches de seguridad. Actualizarlas requiere probar la app completa.
+3. **Flask no puede pasar de 2.2:** `flask_mongoengine` 1.0, su última versión, no funciona con Flask 2.3 o más nuevo (usa `flask.json.JSONEncoder`, que se quitó). Flask 2.2 ya no recibe parches. Para llegar a Flask 3 hay que cambiar `flask_mongoengine` por `mongoengine` directo: conectar con `mongoengine.connect()` y que los modelos hereden de `mongoengine.Document` en vez de `db.Document`.
 4. **Las cámaras USB con nombre de Windows no abren directo:** OpenCV abre las cámaras por número, así que una cámara registrada por su identificador de Windows usa la cámara 0.
 5. **La regla de "Encañonamiento" casi nunca se alcanza:** la clase 5 también cuenta para "Armas de fuego", que se revisa antes con el mismo umbral.
 6. **El modelo no se ha vuelto a entrenar:** el código original se perdió, y `train.py` es una reconstrucción que no se ha probado con datos.
@@ -35,3 +35,4 @@
 | 20 | Notebooks, `commands.txt` con credenciales, ruta del modelo y clave de Maps fijas, modelo duplicado | Scripts, `.env.example` y variables de entorno; historial limpio |
 | 21 | Sin `SECRET_KEY`, la app usaba la clave fija "Hard to guess", con la que cualquiera podría falsificar sesiones | Fuera de desarrollo, la app no arranca si falta `SECRET_KEY`; en desarrollo usa una clave local. Tiene pruebas en `tests/test_config.py` |
 | 22 | Las pruebas solo se corrían a mano | GitHub Actions las corre en cada push y cada PR |
+| 23 | Flask 1.1, Werkzeug 1.0 y Jinja2 2.11 sin parches de seguridad; Werkzeug 1.0 no arranca en Python 3.12 | Flask 2.2.5, Werkzeug 2.3.8, Jinja2 3.1.6, WTForms 3.3, pymongo 4.19 y demás al día. Se quitaron `alembic` y `six`, que no se usaban |
